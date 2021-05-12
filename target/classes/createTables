@@ -1,11 +1,10 @@
-# DROP TABLE IF EXISTS customer, company, user CASCADE;
 CREATE TABLE IF NOT EXISTS user
 (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    role INT NOT NULL,
-    client_id INT NOT NULL,
-    email      VARCHAR(45) NOT NULL,
-    password   VARCHAR(45) NOT NULL
+    id        INT PRIMARY KEY AUTO_INCREMENT,
+    role      INT         NOT NULL,
+    client_id INT         NOT NULL,
+    email     VARCHAR(45) NOT NULL,
+    password  VARCHAR(45) NOT NULL
 );
 CREATE TABLE IF NOT EXISTS company
 (
@@ -20,4 +19,21 @@ CREATE TABLE IF NOT EXISTS customer
     last_name  VARCHAR(45) NOT NULL,
     email      VARCHAR(45) NOT NULL,
     password   VARCHAR(45) NOT NULL
+);
+CREATE TABLE IF NOT EXISTS coupon
+(
+    id          INT PRIMARY KEY AUTO_INCREMENT,
+    company_id  INT,
+    title       VARCHAR(255) NOT NULL,
+    startDate   DATETIME DEFAULT CURRENT_TIMESTAMP,
+    description VARCHAR(255) NOT NULL,
+    FOREIGN KEY (company_id) REFERENCES company (id)
+);
+CREATE TABLE IF NOT EXISTS customer_coupon
+(
+    customer_id INT NOT NULL,
+    coupon_id   INT NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customer (id),
+    FOREIGN KEY (coupon_id) REFERENCES coupon (id),
+    PRIMARY KEY (customer_id, coupon_id)
 );

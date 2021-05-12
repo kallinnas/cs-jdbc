@@ -2,26 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d369484d-6f7d-48d4-b066-8ee288fae1f6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Serhii.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Java_EE_6_Java_EE_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Company.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Coupon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/Customer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/ConnectionPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/ConnectionPool.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ex/SystemMalfunctionException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/common/SystemMalfunctionException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Company.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Company.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Coupon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Coupon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/createTables" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/createTables" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/createTables" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/createTables" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/db/ConnectionPool.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/ConnectionPool.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/db/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/ex/SystemMalfunctionException.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ex/SystemMalfunctionException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ex/SystemMalfunctionException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Company.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Company.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Coupon.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Coupon.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/Customer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Customer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/User.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,6 +59,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -94,19 +92,22 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="database.main" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="ex" />
+      <recent name="model" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\MY PROJECT\cs-jdbc\src\main\resources" />
       <recent name="D:\MY PROJECT\cs-jdbc\src\main\java\model" />
-    </key>
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="model" />
-      <recent name="ex" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -167,7 +168,10 @@
       <workItem from="1620623342202" duration="4222000" />
       <workItem from="1620631735436" duration="333000" />
       <workItem from="1620730977405" duration="11068000" />
-      <workItem from="1620751244424" duration="9881000" />
+      <workItem from="1620751244424" duration="10451000" />
+      <workItem from="1620801557793" duration="3418000" />
+      <workItem from="1620807850781" duration="950000" />
+      <workItem from="1620809415309" duration="9858000" />
     </task>
     <servers />
   </component>

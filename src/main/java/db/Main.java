@@ -1,28 +1,31 @@
 package db;
 
-import ex.SystemMalfunctionException;
+import common.SystemMalfunctionException;
+import db.dao.CompanyDBDao;
+import db.dao.CompanyDao;
+import ex.NoSuchCompanyException;
+import model.Company;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Main {
-    public static void main(String[] args) throws SystemMalfunctionException, SQLException {
-        ConnectionPool pool = ConnectionPool.getInstance();
-        Connection connection = pool.getConnection();
-        Statement statement = connection.createStatement();
+    public static void main(String[] args) throws NoSuchCompanyException {
+        CompanyDao dao = new CompanyDBDao();
+        Company company = new Company();
 
-        connection.close();
-        statement.close();
-//        String q = "SELECT * FROM companies;";
-//        ResultSet resultSet = statement.executeQuery(q);
-//
-//
-//        while (resultSet.next()) {
-//            Object object = resultSet.getObject(1);
-//            System.out.println(object);
-//        }
-        System.out.println(connection);
+        /*CREATE*/
+//        company.setId(0);
+//        company.setName("Super");
+//        company.setImageURL("DUper");
+//        dao.createCompany(company);
+
+        //DELETE
+//        dao.removeCompany(14);
+
+        //Update
+//        company.setId(15);
+//        company.setName("High 5");
+//        company.setImageURL("fivelogo");
+//        dao.updateCompany(company);
     }
 }
