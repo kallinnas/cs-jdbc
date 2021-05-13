@@ -2,6 +2,9 @@ package db.dao;
 
 import ex.NoSuchCompanyException;
 import model.Company;
+import model.Coupon;
+
+import java.util.Collection;
 
 public interface CompanyDao {
 
@@ -10,4 +13,8 @@ public interface CompanyDao {
     void removeCompany(long id) throws NoSuchCompanyException;
 
     Company updateCompany(Company company) throws NoSuchCompanyException;
+
+    Collection<Coupon> getCompanyCoupons(long id) throws NoSuchCompanyException;
+
+    Coupon createCoupon(Coupon coupon);
 }

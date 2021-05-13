@@ -2,8 +2,8 @@ package model;
 
 import lombok.*;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +19,6 @@ class Company extends Client {
         this.coupons = new HashSet<>();
     }
 
-    private Set<Coupon> coupons;
+    private Collection<Coupon> coupons;
 
 }

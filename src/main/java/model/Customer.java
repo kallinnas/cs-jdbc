@@ -1,10 +1,8 @@
 package model;
 
 import lombok.*;
-
-import javax.persistence.Table;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -16,7 +14,7 @@ class Customer extends Client {
     private String email;
     private String password;
 
-    private Set<Coupon> coupons;
+    private Collection<Coupon> coupons;
 
     Customer() {
         coupons = new HashSet<>();

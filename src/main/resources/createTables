@@ -26,7 +26,9 @@ CREATE TABLE IF NOT EXISTS coupon
     company_id  INT,
     title       VARCHAR(255) NOT NULL,
     startDate   DATETIME DEFAULT CURRENT_TIMESTAMP,
+    price       DOUBLE       NOT NULL,
     description VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
     FOREIGN KEY (company_id) REFERENCES company (id)
 );
 CREATE TABLE IF NOT EXISTS customer_coupon
