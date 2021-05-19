@@ -10,4 +10,6 @@ public interface CouponDao {
     Coupon getCouponByTitle(String title);
 
     Collection<Coupon> getCouponsByCompanyId(long id);
+
+    void removeCoupon(long id);
 }

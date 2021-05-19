@@ -2,25 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d369484d-6f7d-48d4-b066-8ee288fae1f6" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Serhii.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Serhii.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/db/Schema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Schema.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDBDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDBDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/CouponDBDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/CouponDBDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/CouponDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/CouponDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/facade/AdminFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/AdminFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/db/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/db/Schema.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/Schema.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/db/dao/CompanyDBDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/dao/CompanyDBDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/db/dao/CompanyDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/dao/CompanyDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/db/dao/CouponDBDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/dao/CouponDBDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/db/dao/CouponDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/dao/CouponDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/AbsFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AbsFacade.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/facade/AdminFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AdminFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/User.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -95,7 +87,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
@@ -179,7 +171,7 @@
       <workItem from="1620963240042" duration="4860000" />
       <workItem from="1621144182946" duration="1507000" />
       <workItem from="1621411070058" duration="16361000" />
-      <workItem from="1621439221165" duration="1239000" />
+      <workItem from="1621439221165" duration="9422000" />
     </task>
     <servers />
   </component>
@@ -204,27 +196,27 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/db/Main.java</url>
-          <line>23</line>
+          <line>19</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/db/Main.java</url>
-          <line>22</line>
+          <line>18</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/db/Main.java</url>
-          <line>19</line>
+          <line>15</line>
           <option name="timeStamp" value="28" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/db/Main.java</url>
-          <line>18</line>
+          <line>14</line>
           <option name="timeStamp" value="29" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/db/Main.java</url>
-          <line>17</line>
+          <line>13</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
       </breakpoints>

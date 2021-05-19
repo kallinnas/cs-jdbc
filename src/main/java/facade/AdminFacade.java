@@ -31,6 +31,8 @@ public class AdminFacade extends AbsFacade {
     }
 
     public void removeCompany(long id){
-        Collection<Coupon> coupons = couponDao.getCouponsByCompanyId(id);
+        for (Coupon coupon : couponDao.getCouponsByCompanyId(id)) {
+            couponDao.removeCoupon(coupon.getId());
+        }
     }
 }

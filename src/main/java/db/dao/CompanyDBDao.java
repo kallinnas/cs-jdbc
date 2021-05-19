@@ -3,6 +3,7 @@ package db.dao;
 import common.StatementUtils;
 import common.SystemMalfunctionException;
 import db.ConnectionPool;
+import db.DBUtilSetter;
 import db.Schema;
 import ex.NoSuchCompanyException;
 import model.Company;
@@ -23,7 +24,7 @@ public class CompanyDBDao implements CompanyDao {
         try {
             connection = ConnectionPool.getInstance().getConnection();
             stmt = connection.prepareStatement(Schema.INSERT_COMPANY);
-            applyCompanyValuesOnStatement(stmt, company);
+            DBUtilSetter.applyCompanyValuesOnStatement(stmt, company);
             stmt.executeUpdate();
         } catch (SQLException e) {
             String msg = String.format("Unable to create new company! (%s) ", e.getMessage());
@@ -58,7 +59,7 @@ public class CompanyDBDao implements CompanyDao {
         try {
             connection = ConnectionPool.getInstance().getConnection();
             stmt = connection.prepareStatement(Schema.UPDATE_COMPANY);
-            applyCompanyValuesOnStatement(stmt, company);
+            DBUtilSetter.applyCompanyValuesOnStatement(stmt, company);
             stmt.setLong(3, company.getId());
             if (stmt.executeUpdate() == 0) {
                 throw new NoSuchCompanyException("No company with such id#" + company.getId());
@@ -81,7 +82,7 @@ public class CompanyDBDao implements CompanyDao {
             stmt = connection.prepareStatement(Schema.SELECT_COMPANY_COUPONS);
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
-            coupons = CouponDBDao.resultSetToCouponSet(rs);
+            coupons = DBUtilSetter.resultSetToCouponSet(rs);
         } catch (SQLException e) {
             String msg = String.format("Unable to update company by id#(%d)! (%s) ", id, e.getMessage());
             throw new SystemMalfunctionException(msg);
@@ -98,18 +99,14 @@ public class CompanyDBDao implements CompanyDao {
         CallableStatement cstmt;
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            Statement stmt = connection.createStatement();
-            stmt.execute(Schema.CREATE_PROC_GET_ALL_COMPANIES);
+//            Statement stmt = connection.createStatement();
+//            stmt.execute(Schema.CREATE_PROC_GET_ALL_COMPANIES);
             cstmt = connection.prepareCall("{call get_companies()}");
             boolean hasResult = cstmt.execute();
             if (hasResult) {
                 ResultSet rs = cstmt.getResultSet();
                 while (rs.next()) {
-                    Company company = new Company();
-                    company.setId(rs.getLong(1));
-                    company.setName(rs.getString(2));
-                    company.setImageURL(rs.getString(3));
-                    companies.add(company);
+                    companies.add(DBUtilSetter.resultSetToCompany(rs, 1));
                 }
             }
         } catch (SQLException e) {
@@ -127,8 +124,8 @@ public class CompanyDBDao implements CompanyDao {
         CallableStatement cstmt;
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            Statement stmt = connection.createStatement();
-            stmt.execute(Schema.CREATE_PROC_GET_ALL_COMPANIES_AND_COUPONS);
+//            Statement stmt = connection.createStatement();
+//            stmt.execute(Schema.CREATE_PROC_GET_ALL_COMPANIES_AND_COUPONS);
             cstmt = connection.prepareCall("{call get_companies_and_coupons()}");
             boolean hasResult = cstmt.execute();
             if (hasResult) {
@@ -136,16 +133,13 @@ public class CompanyDBDao implements CompanyDao {
                 Company company = new Company();
                 while (resultRow.next()) {
                     if (company.getId() != resultRow.getLong(8)) {
-                        company = new Company();
-                        company.setId(resultRow.getLong(8));
-                        company.setName(resultRow.getString(9));
-                        company.setImageURL(resultRow.getString(10));
-
-                        Coupon coupon = CouponDBDao.resultSetToCoupon(resultRow);
+                        Coupon coupon = DBUtilSetter.resultSetToCoupon(resultRow);
+                        /* Scroll in current table will be set on column number startOrderNum */
+                        company = DBUtilSetter.resultSetToCompany(resultRow, 8);
                         company.getCoupons().add(coupon);
                         companies.add(company);
                     } else {
-                        company.getCoupons().add(CouponDBDao.resultSetToCoupon(resultRow));
+                        company.getCoupons().add(DBUtilSetter.resultSetToCoupon(resultRow));
                     }
                 }
             }
@@ -164,12 +158,12 @@ public class CompanyDBDao implements CompanyDao {
         try {
             connection = ConnectionPool.getInstance().getConnection();
             stmt = connection.prepareStatement(Schema.CREATE_COUPON);
-            applyCouponValuesOnStatement(stmt, coupon);
+            DBUtilSetter.applyCouponValuesOnStatement(stmt, coupon);
             stmt.executeUpdate();
             stmt = connection.prepareStatement(Schema.SELECT_COUPON_BY_TITLE);
             stmt.setString(1, coupon.getTitle());
             ResultSet rs = stmt.executeQuery();
-            coupons = CouponDBDao.resultSetToCouponSet(rs);
+            coupons = DBUtilSetter.resultSetToCouponSet(rs);
         } catch (SQLException e) {
             String msg = String.format("Unable to create new coupon! (%s) ", e.getMessage());
             throw new SystemMalfunctionException(msg);
@@ -180,17 +174,7 @@ public class CompanyDBDao implements CompanyDao {
         return coupons.iterator().next();
     }
 
-    private void applyCouponValuesOnStatement(PreparedStatement stmt, Coupon coupon) throws SQLException {
-        stmt.setLong(1, coupon.getCompanyId());
-        stmt.setString(2, coupon.getTitle());
-        stmt.setDate(3, Date.valueOf(coupon.getStartDate()));
-        stmt.setDouble(4, coupon.getPrice());
-        stmt.setString(5, coupon.getDescription());
-        stmt.setString(6, coupon.getImageURL());
-    }
 
-    private void applyCompanyValuesOnStatement(PreparedStatement stmt, Company company) throws SQLException {
-        stmt.setString(1, company.getName());
-        stmt.setString(2, company.getImageURL());
-    }
+
+
 }

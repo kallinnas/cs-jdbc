@@ -5,16 +5,12 @@ import db.dao.CompanyDao;
 import db.dao.CouponDBDao;
 import db.dao.CouponDao;
 import ex.NoSuchCompanyException;
-import facade.AbsFacade;
-import facade.AdminFacade;
 import model.Company;
-import model.Coupon;
-
-import java.util.Collection;
 
 public class Main {
 
     public static void main(String[] args) throws NoSuchCompanyException {
+        StoredProceduresLoaderDB.storeProceduresIntoDB();
         CompanyDao daoCompany = new CompanyDBDao();
         CouponDao daoCoupon = new CouponDBDao();
         Company company = new Company();
@@ -26,13 +22,13 @@ public class Main {
 //        }
 
         /* CALLABLE STMT AND STORED PROCEDURE */
-//        for (Company company1 : daoCompany.getAllCompaniesAndCoupons()) {
-//            System.out.println(company1);
-//        }
+        for (Company company1 : daoCompany.getAllCompaniesAndCoupons()) {
+            System.out.println(company1);
+        }
         /*CREATE*/
 //        company.setId(0);
-//        company.setName("Super");
-//        company.setImageURL("DUper");
+//        company.setName("Super14");
+//        company.setImageURL("Opppp");
 //        daoCompany.createCompany(company);
 
         //DELETE
