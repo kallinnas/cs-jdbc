@@ -14,7 +14,11 @@ public interface CompanyDao {
 
     Company updateCompany(Company company) throws NoSuchCompanyException;
 
+    Coupon createCoupon(Coupon coupon);
+
     Collection<Coupon> getCompanyCoupons(long id) throws NoSuchCompanyException;
 
-    Coupon createCoupon(Coupon coupon);
+    Collection<Company> getAllCompanies();
+
+    Collection<Company> getAllCompaniesAndCoupons();
 }

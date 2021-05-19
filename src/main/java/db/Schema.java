@@ -33,9 +33,28 @@ public class Schema {
             + " (" + COL_COMPANY_ID + "," + COL_TITLE + "," + COL_DATE + ","
             + COL_PRICE + "," + COL_DESCRIPTION + "," + COL_IMAGE_URL
             + ") VALUES(?,?,?,?,?,?)";
-    public static final String CC = "INSERT INTO coupon" +
-            "(company_id,title,startDate, price, description,image_url) VALUES(?,?,?,?,?,?)";
 
     public static final String SELECT_COUPON_BY_TITLE = "SELECT * FROM " + TABLE_NAME_COUPON
             + " WHERE " + COL_TITLE + "=?";
+
+    /* STORED PROCEDURES */
+    public static final String CREATE_PROC_GET_ALL_COMPANIES = "DROP PROCEDURE IF EXISTS `get_companies`; " +
+            "CREATE PROCEDURE `get_companies`() " +
+            "BEGIN " +
+            " SELECT * FROM " + TABLE_NAME_COMPANY + "; " +
+            "END";
+
+    public static final String CREATE_PROC_GET_ALL_COMPANIES_AND_COUPONS = "DROP PROCEDURE IF EXISTS `get_companies_and_coupons`; " +
+            "CREATE PROCEDURE `get_companies_and_coupons`() " +
+            "BEGIN " +
+            " SELECT * FROM " + TABLE_NAME_COUPON +
+            " JOIN " + TABLE_NAME_COMPANY +
+            " ON " + TABLE_NAME_COUPON +
+            "." + COL_COMPANY_ID +
+            " = " + TABLE_NAME_COMPANY +
+            "." + COL_ID +
+            " ORDER BY " + COL_COMPANY_ID + ";" +
+            "END";
+
+
 }
