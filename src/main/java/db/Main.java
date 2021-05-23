@@ -4,16 +4,27 @@ import db.dao.CompanyDBDao;
 import db.dao.CompanyDao;
 import db.dao.CouponDBDao;
 import db.dao.CouponDao;
+import ex.InvalidLoginException;
 import ex.NoSuchCompanyException;
+import facade.AdminFacade;
 import model.Company;
+
+import java.sql.SQLException;
 
 public class Main {
 
-    public static void main(String[] args) throws NoSuchCompanyException {
+    public static void main(String[] args) throws NoSuchCompanyException, SQLException, InvalidLoginException {
         StoredProceduresLoaderDB.storeProceduresIntoDB();
         CompanyDao daoCompany = new CompanyDBDao();
         CouponDao daoCoupon = new CouponDBDao();
         Company company = new Company();
+        AdminFacade a = AdminFacade.performLogin("admin", "777");
+
+        /* delete COMPANY*/
+        a.removeCompany(2);
+
+        /*del coupon*/
+//        daoCoupon.removeCoupon(4);
 
         /* getCouponsByCompanyId */
 //        Collection<Coupon> couponsByCompanyId = daoCoupon.getCouponsByCompanyId(1);
@@ -22,17 +33,14 @@ public class Main {
 //        }
 
         /* CALLABLE STMT AND STORED PROCEDURE */
-        for (Company company1 : daoCompany.getAllCompaniesAndCoupons()) {
-            System.out.println(company1);
-        }
+//        for (Company company1 : daoCompany.getAllCompaniesAndCoupons()) {
+//            System.out.println(company1);
+//        }
         /*CREATE*/
 //        company.setId(0);
 //        company.setName("Super14");
 //        company.setImageURL("Opppp");
 //        daoCompany.createCompany(company);
-
-        //DELETE
-//        daoCompany.removeCompany(14);
 
         //Update
 //        company.setId(15);

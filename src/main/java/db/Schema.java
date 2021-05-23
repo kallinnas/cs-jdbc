@@ -37,14 +37,23 @@ public class Schema {
     public static final String SELECT_COUPON_BY_TITLE = "SELECT * FROM " + TABLE_NAME_COUPON
             + " WHERE " + COL_TITLE + "=?";
 
+    /* COUPON */
+    public static final String DELETE_COUPON = "DELETE FROM " + TABLE_NAME_COUPON + " WHERE " + COL_ID + "=?";
+
     /* STORED PROCEDURES */
-    public static final String CREATE_PROC_GET_ALL_COMPANIES = "DROP PROCEDURE IF EXISTS `get_companies`; " +
+    public static final String GENERATE_PROC_DELETE_COUPON = "DROP PROCEDURE IF EXISTS `delete_coupon`; " +
+            "CREATE PROCEDURE `delete_coupon`(IN COU_ID INT)" +
+            "BEGIN " +
+            "DELETE FROM " + TABLE_NAME_COUPON + " WHERE " + COL_ID + "=COU_ID; " +
+            "END";
+
+    public static final String GENERATE_PROC_GET_ALL_COMPANIES = "DROP PROCEDURE IF EXISTS `get_companies`; " +
             "CREATE PROCEDURE `get_companies`() " +
             "BEGIN " +
             " SELECT * FROM " + TABLE_NAME_COMPANY + "; " +
             "END";
 
-    public static final String CREATE_PROC_GET_ALL_COMPANIES_AND_COUPONS = "DROP PROCEDURE IF EXISTS `get_companies_and_coupons`; " +
+    public static final String GENERATE_PROC_GET_ALL_COMPANIES_AND_COUPONS = "DROP PROCEDURE IF EXISTS `get_companies_and_coupons`; " +
             "CREATE PROCEDURE `get_companies_and_coupons`() " +
             "BEGIN " +
             " SELECT * FROM " + TABLE_NAME_COUPON +

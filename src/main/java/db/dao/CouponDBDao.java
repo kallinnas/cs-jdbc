@@ -15,6 +15,7 @@ public class CouponDBDao implements CouponDao {
 
     private Connection connection = null;
     private PreparedStatement preStmt = null;
+    private CallableStatement callStmt = null;
 
     @Override
     public Coupon createCoupon(Coupon coupon) {
@@ -74,11 +75,17 @@ public class CouponDBDao implements CouponDao {
     @Override
     public void removeCoupon(long id) {
         connection = ConnectionPool.getInstance().getConnection();
-//        try {
-//            connection.prepareCall("{call remove_coupon}");
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            callStmt = connection.prepareCall("{call delete_coupon(?)}");
+            callStmt.setLong(1, id);
+            callStmt.execute();
+        } catch (SQLException e) {
+            String msg = String.format("Unable to remove coupon with id (%d)! (%s) ", id, e.getMessage());
+            throw new SystemMalfunctionException(msg);
+        } finally {
+            ConnectionPool.getInstance().putConnection(connection);
+            StatementUtils.closeAll(callStmt);
+        }
     }
 
 

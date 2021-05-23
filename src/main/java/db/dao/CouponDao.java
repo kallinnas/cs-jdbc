@@ -2,6 +2,7 @@ package db.dao;
 
 import model.Coupon;
 
+import java.sql.SQLException;
 import java.util.Collection;
 
 public interface CouponDao {
@@ -11,5 +12,5 @@ public interface CouponDao {
 
     Collection<Coupon> getCouponsByCompanyId(long id);
 
-    void removeCoupon(long id);
+    void removeCoupon(long id) throws SQLException;
 }

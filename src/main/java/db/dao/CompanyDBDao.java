@@ -99,8 +99,6 @@ public class CompanyDBDao implements CompanyDao {
         CallableStatement cstmt;
         try {
             connection = ConnectionPool.getInstance().getConnection();
-//            Statement stmt = connection.createStatement();
-//            stmt.execute(Schema.CREATE_PROC_GET_ALL_COMPANIES);
             cstmt = connection.prepareCall("{call get_companies()}");
             boolean hasResult = cstmt.execute();
             if (hasResult) {

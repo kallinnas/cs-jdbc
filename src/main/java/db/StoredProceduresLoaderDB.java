@@ -14,10 +14,11 @@ public class StoredProceduresLoaderDB {
         Statement stmt = null;
         try {
             stmt = connection.createStatement();
-            stmt.execute(Schema.CREATE_PROC_GET_ALL_COMPANIES_AND_COUPONS);
-            stmt.execute(Schema.CREATE_PROC_GET_ALL_COMPANIES);
+            stmt.execute(Schema.GENERATE_PROC_GET_ALL_COMPANIES_AND_COUPONS);
+            stmt.execute(Schema.GENERATE_PROC_GET_ALL_COMPANIES);
+            stmt.execute(Schema.GENERATE_PROC_DELETE_COUPON);
         } catch (SQLException e) {
-            throw new SystemMalfunctionException("Unable to get all companies! " + e.getMessage());
+            throw new SystemMalfunctionException("Unable to upload procedures to DB! " + e.getMessage());
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
             StatementUtils.closeAll(stmt);
