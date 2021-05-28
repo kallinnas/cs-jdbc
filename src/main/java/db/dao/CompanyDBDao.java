@@ -75,7 +75,7 @@ public class CompanyDBDao implements CompanyDao {
     }
 
     @Override
-    public Collection<Coupon> getCompanyCoupons(long id) throws NoSuchCompanyException {
+    public Collection<Coupon> getCompanyCoupons(long id) {
         Set<Coupon> coupons;
         try {
             connection = ConnectionPool.getInstance().getConnection();
@@ -122,8 +122,6 @@ public class CompanyDBDao implements CompanyDao {
         CallableStatement cstmt;
         try {
             connection = ConnectionPool.getInstance().getConnection();
-//            Statement stmt = connection.createStatement();
-//            stmt.execute(Schema.CREATE_PROC_GET_ALL_COMPANIES_AND_COUPONS);
             cstmt = connection.prepareCall("{call get_companies_and_coupons()}");
             boolean hasResult = cstmt.execute();
             if (hasResult) {

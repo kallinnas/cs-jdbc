@@ -7,6 +7,7 @@ import java.util.HashSet;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public
 class Company extends Client {
@@ -14,11 +15,5 @@ class Company extends Client {
     private long id;
     private String name;
     private String imageURL;
-
-    public Company() {
-        this.coupons = new HashSet<>();
-    }
-
-    private Collection<Coupon> coupons;
-
+    private final Collection<Coupon> coupons = new HashSet<>();
 }

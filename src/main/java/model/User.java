@@ -2,17 +2,12 @@ package model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 @Data
-
 public class User {
 
     private long id;
     private String email;
     private String password;
-
     private Client client;
 
     public User(String email, String password, int role) {

@@ -11,6 +11,7 @@ import model.Coupon;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Optional;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +30,7 @@ public class AdminFacade extends AbsFacade {
             throw new InvalidLoginException(String.format("Unable to login with email: %s and password %s", email, password));
     }
 
+    /* COMPANY */
     public void createCompany(Company company) throws CompanyAlreadyExistException {
         for (Company existCompany : companyDao.getAllCompanies()) {
             if (!existCompany.getName().equals(company.getName())) companyDao.createCompany(company);
@@ -42,5 +44,24 @@ public class AdminFacade extends AbsFacade {
             couponDao.removeCoupon(coupon.getId());
         }
         companyDao.removeCompany(id);
+    }
+
+    public void updateCompany(Company company) throws NoSuchCompanyException {
+        Optional<Company> any = companyDao.getAllCompanies().stream()
+                .filter(c -> c.getId() == company.getId())
+                .findAny();
+        if (any.isPresent()) companyDao.updateCompany(company);
+    }
+
+    public Collection<Company> getAllCompanies() {
+        return companyDao.getAllCompanies();
+    }
+
+    public Company getCompanyById(long id) throws NoSuchCompanyException {
+        Optional<Company> company = companyDao.getAllCompaniesAndCoupons().stream()
+                .filter(c -> c.getId() == id)
+                .findAny();
+        if (company.isPresent()) return company.get();
+        else throw new NoSuchCompanyException("Company with id " + id + " is not exist!");
     }
 }

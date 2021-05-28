@@ -6,8 +6,10 @@ import db.dao.CouponDBDao;
 import db.dao.CouponDao;
 import ex.InvalidLoginException;
 import ex.NoSuchCompanyException;
+import facade.AbsFacade;
 import facade.AdminFacade;
 import model.Company;
+import model.LoginType;
 
 import java.sql.SQLException;
 
@@ -18,10 +20,23 @@ public class Main {
         CompanyDao daoCompany = new CompanyDBDao();
         CouponDao daoCoupon = new CouponDBDao();
         Company company = new Company();
-        AdminFacade a = AdminFacade.performLogin("admin", "777");
+        AbsFacade af = new AbsFacade();
+//        af.login("ww", "1", LoginType.CUSTOMER);
+//        AdminFacade a = AdminFacade.performLogin("admin", "777");
 
-        /* delete COMPANY*/
-        a.removeCompany(2);
+
+        /* get company*/
+//        Company c = a.getCompanyById(1);
+//        System.out.println(c);
+//        c.getCoupons().forEach(System.out::println);
+
+        /* delete/update COMPANY*/
+//        Company ass = new Company();
+//        ass.setName("onlyMe");
+//        ass.setId(1);
+//        ass.setImageURL("LML");
+//        a.updateCompany(ass);
+//        a.removeCompany(2);
 
         /*del coupon*/
 //        daoCoupon.removeCoupon(4);

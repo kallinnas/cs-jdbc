@@ -17,6 +17,7 @@ public class StoredProceduresLoaderDB {
             stmt.execute(Schema.GENERATE_PROC_GET_ALL_COMPANIES_AND_COUPONS);
             stmt.execute(Schema.GENERATE_PROC_GET_ALL_COMPANIES);
             stmt.execute(Schema.GENERATE_PROC_DELETE_COUPON);
+            stmt.execute(Schema.GENERATE_PROC_USER_LOGIN);
         } catch (SQLException e) {
             throw new SystemMalfunctionException("Unable to upload procedures to DB! " + e.getMessage());
         } finally {

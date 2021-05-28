@@ -1,18 +1,28 @@
 package db;
 
+import model.Client;
 import model.Company;
 import model.Coupon;
+import model.User;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
 public class DBUtilSetter {
 
     /* CONVERTERS */
+    public static User resultSetToUser(ResultSet rs) throws SQLException {
+        User user = new User(rs.getString(4),
+                rs.getString(5), rs.getInt(2));
+        user.setId(rs.getLong(1));
+        Client client = user.getClient();
+        client.setId(rs.getLong(3));
+        user.setClient(client);
+        System.out.println(user);
+        return user;
+    }
+
     public static Set<Coupon> resultSetToCouponSet(ResultSet resultRow) throws SQLException {
         Set<Coupon> coupons = new HashSet<>();
         while (resultRow.next()) {
@@ -55,6 +65,5 @@ public class DBUtilSetter {
         stmt.setString(1, company.getName());
         stmt.setString(2, company.getImageURL());
     }
-
 
 }
