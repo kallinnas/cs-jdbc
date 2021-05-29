@@ -52,18 +52,22 @@ public class DBUtilSetter {
     }
 
     /* STMT SETTERS */
-    public static void applyCouponValuesOnStatement(PreparedStatement stmt, Coupon coupon) throws SQLException {
-        stmt.setLong(1, coupon.getCompanyId());
-        stmt.setString(2, coupon.getTitle());
-        stmt.setDate(3, Date.valueOf(coupon.getStartDate()));
-        stmt.setDouble(4, coupon.getPrice());
-        stmt.setString(5, coupon.getDescription());
-        stmt.setString(6, coupon.getImageURL());
+    public static void applyCouponValuesOnStatement(PreparedStatement preStmt, Coupon coupon) throws SQLException {
+        preStmt.setLong(1, coupon.getCompanyId());
+        preStmt.setString(2, coupon.getTitle());
+        preStmt.setDate(3, Date.valueOf(coupon.getStartDate()));
+        preStmt.setDouble(4, coupon.getPrice());
+        preStmt.setString(5, coupon.getDescription());
+        preStmt.setString(6, coupon.getImageURL());
     }
 
-    public static void applyCompanyValuesOnStatement(PreparedStatement stmt, Company company) throws SQLException {
-        stmt.setString(1, company.getName());
-        stmt.setString(2, company.getImageURL());
+    public static void applyCompanyValuesOnStatement(PreparedStatement preStmt, Company company) throws SQLException {
+        preStmt.setString(1, company.getName());
+        preStmt.setString(2, company.getImageURL());
     }
 
+    public static void applyUserCompanyValuesOnStmt(PreparedStatement preStmt, User user) throws SQLException {
+        preStmt.setString(1, user.getEmail());
+        preStmt.setString(2, user.getPassword());
+    }
 }

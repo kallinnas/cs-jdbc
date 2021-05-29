@@ -16,4 +16,9 @@ public class AbsFacade {
                 throw new InvalidLoginException("Unable to recognize login type!");
         }
     }
+
+    public AbsFacade register(String email, String password, LoginType type) throws InvalidLoginException {
+        UserFacade.registrationNewUser(email, password, type);
+        return new AbsFacade();
+    }
 }

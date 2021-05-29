@@ -6,32 +6,13 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/Schema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Schema.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/db/StoredProceduresLoaderDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/StoredProceduresLoaderDB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDBDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDBDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/UserDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/facade/AbsFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/AbsFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facade/AdminFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/AdminFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facade/CompanyFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/CompanyFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facade/CustomerFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/CustomerFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Company.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Company.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/facade/GuestFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/UserFacade.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/createTables" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/createTables" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/createTables" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/createTables" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/db/DBUtilSetter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/DBUtilSetter.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/db/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/db/Schema.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/Schema.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/db/StoredProceduresLoaderDB.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/StoredProceduresLoaderDB.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/db/dao/CompanyDBDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/dao/CompanyDBDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/db/dao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/dao/UserDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/AbsFacade$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AbsFacade$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/facade/AbsFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AbsFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/AdminFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AdminFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/CompanyFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/CompanyFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/CustomerFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/CustomerFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Company.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Company.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Customer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/Customer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/User.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -87,6 +68,13 @@
       </set>
     </option>
   </component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="true" />
+    <option name="FILTER_DEBUG" value="true" />
+    <option name="CUSTOM_FILTER" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
@@ -106,7 +94,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Facets" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="restartRequiresConfirmation" value="false" />
@@ -114,14 +102,14 @@
     <property name="settings.editor.selected.configurable" value="reference.idesettings.debugger.capture" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\MY PROJECT\cs-jdbc\src\main\resources" />
-      <recent name="D:\MY PROJECT\cs-jdbc\src\main\java\model" />
-    </key>
     <key name="CreateClassDialog.RecentsKey">
       <recent name="ex" />
       <recent name="facade" />
       <recent name="model" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\MY PROJECT\cs-jdbc\src\main\resources" />
+      <recent name="D:\MY PROJECT\cs-jdbc\src\main\java\model" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -197,6 +185,7 @@
       <workItem from="1622043193548" duration="18156000" />
       <workItem from="1622134357068" duration="5148000" />
       <workItem from="1622139556404" duration="4360000" />
+      <workItem from="1622269971533" duration="3882000" />
     </task>
     <servers />
   </component>
@@ -220,21 +209,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java</url>
-          <line>15</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/db/Main.java</url>
-          <line>23</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/facade/AbsFacade.java</url>
-          <line>13</line>
-          <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/facade/CompanyFacade.java</url>
           <line>13</line>
           <option name="timeStamp" value="19" />
@@ -253,19 +227,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/facade/CompanyFacade.java</url>
           <line>14</line>
           <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/model/User.java</url>
-          <line>19</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/model/User.java</url>
-          <line>12</line>
-          <properties class="model.User" method="&lt;init&gt;">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="28" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

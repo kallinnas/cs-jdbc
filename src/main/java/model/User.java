@@ -23,4 +23,17 @@ public class User {
         }
     }
 
+    public User(String email, String password, LoginType type) {
+        this.id = 0;
+        this.email = email;
+        this.password = password;
+        if (type == LoginType.CUSTOMER) {
+            this.client = new Customer();
+            this.client.setId(0);
+        } else if (type == LoginType.COMPANY) {
+            this.client = new Company();
+            this.client.setId(0);
+        }
+    }
+
 }

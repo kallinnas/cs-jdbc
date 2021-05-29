@@ -17,10 +17,10 @@ public class Main {
 
     public static void main(String[] args) throws NoSuchCompanyException, SQLException, InvalidLoginException {
         StoredProceduresLoaderDB.storeProceduresIntoDB();
-        CompanyDao daoCompany = new CompanyDBDao();
-        CouponDao daoCoupon = new CouponDBDao();
-        Company company = new Company();
-        AbsFacade af = new AbsFacade();
+        AbsFacade facade = new AbsFacade();
+
+        facade.register("email", "pass", LoginType.COMPANY);
+
 //        af.login("ww", "1", LoginType.CUSTOMER);
 //        AdminFacade a = AdminFacade.performLogin("admin", "777");
 
