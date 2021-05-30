@@ -15,6 +15,8 @@ public class Schema {
     private static final String COL_PASSWORD = "password";
     private static final String COL_ROLE = "role";
     private static final String COL_NAME = "name";
+    private static final String COL_FIRST_NAME = "first_name";
+    private static final String COL_LAST_NAME = "last_name";
     private static final String COL_COMPANY_ID = "company_id";
     private static final String COL_TITLE = "title";
     private static final String COL_DATE = "startDate";
@@ -26,7 +28,7 @@ public class Schema {
     private static final String DROP_IF = "DROP PROCEDURE IF EXISTS";
 
     /* COMPANY */
-    public static final String INSERT_COMPANY = "INSERT INTO " +
+    public static final String INSERT_COMPANY_NAME_LOGO = "INSERT INTO " +
             TABLE_NAME_COMPANY + " (" +
             COL_NAME + "," +
             COL_IMAGE_URL + ") VALUES(?,?)";
@@ -63,11 +65,21 @@ public class Schema {
     public static final String SELECT_USER_BY_EMAIL = "SELECT * FROM " +
             TABLE_NAME_USER + " WHERE " + COL_EMAIL + "=?";
 
-    public static final String INSERT_USER = "INSERT INTO " +
-            TABLE_NAME_USER + " (" + COL_EMAIL + "," +
-            COL_PASSWORD + "," + COL_ROLE + ") VALUES(?,?,?)";
+    public static final String INSERT_USER_CUSTOMER = "BEGIN;" +
+            "INSERT INTO " +
+            TABLE_NAME_CUSTOMER + " (" +
+            COL_FIRST_NAME + "," +
+            COL_LAST_NAME + ") VALUES('','');" +
+            "INSERT INTO " + TABLE_NAME_USER + "(" +
+            COL_ROLE + "," +
+            COL_CLIENT_ID + "," +
+            COL_EMAIL + "," +
+            COL_PASSWORD + ") VALUES(1,LAST_INSERT_ID(),?,?);" +
+            "SELECT * FROM " + TABLE_NAME_USER +
+            " WHERE " + COL_ID + "=LAST_INSERT_ID();" +
+            "COMMIT;";
 
-    public static final String INSERT_NEW_COMPANY = "BEGIN;" +
+    public static final String INSERT_USER_COMPANY = "BEGIN;" +
             "INSERT INTO " +
             TABLE_NAME_COMPANY + " (" +
             COL_NAME + "," +

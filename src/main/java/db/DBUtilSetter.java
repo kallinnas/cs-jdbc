@@ -66,8 +66,8 @@ public class DBUtilSetter {
         preStmt.setString(2, company.getImageURL());
     }
 
-    public static void applyUserCompanyValuesOnStmt(PreparedStatement preStmt, User user) throws SQLException {
-        preStmt.setString(1, user.getEmail());
-        preStmt.setString(2, user.getPassword());
+    public static void applyUserValuesOnStmt(PreparedStatement preStmt, String email, String password) throws SQLException {
+        preStmt.setString(1, email);
+        preStmt.setString(2, password);
     }
 }

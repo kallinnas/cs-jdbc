@@ -2,17 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d369484d-6f7d-48d4-b066-8ee288fae1f6" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Serhii.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Serhii.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/Schema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Schema.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDBDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDBDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/UserDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/facade/AbsFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/AbsFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facade/GuestFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/UserFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/facade/UserFacade.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/db/DBUtilSetter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/DBUtilSetter.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/db/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/db/Schema.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/Schema.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/db/dao/UserDBDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/dao/UserDBDao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/db/dao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/dao/UserDao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/facade/AbsFacade$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AbsFacade$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/facade/AbsFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AbsFacade.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/facade/UserFacade.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/User.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -102,14 +111,14 @@
     <property name="settings.editor.selected.configurable" value="reference.idesettings.debugger.capture" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\MY PROJECT\cs-jdbc\src\main\resources" />
+      <recent name="D:\MY PROJECT\cs-jdbc\src\main\java\model" />
+    </key>
     <key name="CreateClassDialog.RecentsKey">
       <recent name="ex" />
       <recent name="facade" />
       <recent name="model" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\MY PROJECT\cs-jdbc\src\main\resources" />
-      <recent name="D:\MY PROJECT\cs-jdbc\src\main\java\model" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -185,7 +194,8 @@
       <workItem from="1622043193548" duration="18156000" />
       <workItem from="1622134357068" duration="5148000" />
       <workItem from="1622139556404" duration="4360000" />
-      <workItem from="1622269971533" duration="3882000" />
+      <workItem from="1622269971533" duration="6636000" />
+      <workItem from="1622355928542" duration="5342000" />
     </task>
     <servers />
   </component>
@@ -227,6 +237,14 @@
           <url>file://$PROJECT_DIR$/src/main/java/facade/CompanyFacade.java</url>
           <line>14</line>
           <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java</url>
+          <line>37</line>
+          <properties class="db.dao.UserDBDao" method="createUserCustomer">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

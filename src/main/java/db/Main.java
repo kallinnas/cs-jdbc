@@ -6,6 +6,7 @@ import db.dao.CouponDBDao;
 import db.dao.CouponDao;
 import ex.InvalidLoginException;
 import ex.NoSuchCompanyException;
+import ex.UserAlreadyExistException;
 import facade.AbsFacade;
 import facade.AdminFacade;
 import model.Company;
@@ -15,11 +16,11 @@ import java.sql.SQLException;
 
 public class Main {
 
-    public static void main(String[] args) throws NoSuchCompanyException, SQLException, InvalidLoginException {
+    public static void main(String[] args) throws UserAlreadyExistException {
         StoredProceduresLoaderDB.storeProceduresIntoDB();
         AbsFacade facade = new AbsFacade();
 
-        facade.register("email", "pass", LoginType.COMPANY);
+        facade.register("kallinnas11", "1234", LoginType.COMPANY);
 
 //        af.login("ww", "1", LoginType.CUSTOMER);
 //        AdminFacade a = AdminFacade.performLogin("admin", "777");

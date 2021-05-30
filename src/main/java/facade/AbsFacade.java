@@ -1,5 +1,7 @@
 package facade;
 
+import db.dao.UserDBDao;
+import db.dao.UserDao;
 import ex.InvalidLoginException;
 import model.LoginType;
 
@@ -17,8 +19,18 @@ public class AbsFacade {
         }
     }
 
-    public AbsFacade register(String email, String password, LoginType type) throws InvalidLoginException {
-        UserFacade.registrationNewUser(email, password, type);
+    public AbsFacade register(String email, String password, LoginType type) {
+        UserDao userDao = new UserDBDao();
+        if (!userDao.userEmailIsPresent(email)) {
+            switch (type) {
+                case COMPANY:
+                    userDao.createUserCompany(email, password);
+                    break;
+                case CUSTOMER:
+                    userDao.createUserCustomer(email, password);
+                    break;
+            }
+        }
         return new AbsFacade();
     }
 }

@@ -23,7 +23,7 @@ public class CompanyDBDao implements CompanyDao {
     public Company createCompany(Company company) {
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            stmt = connection.prepareStatement(Schema.INSERT_COMPANY);
+            stmt = connection.prepareStatement(Schema.INSERT_COMPANY_NAME_LOGO);
             DBUtilSetter.applyCompanyValuesOnStatement(stmt, company);
             stmt.executeUpdate();
         } catch (SQLException e) {
