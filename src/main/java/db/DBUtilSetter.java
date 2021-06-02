@@ -19,7 +19,6 @@ public class DBUtilSetter {
         Client client = user.getClient();
         client.setId(rs.getLong(3));
         user.setClient(client);
-        System.out.println(user);
         return user;
     }
 
@@ -64,6 +63,7 @@ public class DBUtilSetter {
     public static void applyCompanyValuesOnStatement(PreparedStatement preStmt, Company company) throws SQLException {
         preStmt.setString(1, company.getName());
         preStmt.setString(2, company.getImageURL());
+        preStmt.setLong(3, company.getId());
     }
 
     public static void applyUserValuesOnStmt(PreparedStatement preStmt, String email, String password) throws SQLException {

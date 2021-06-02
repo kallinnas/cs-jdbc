@@ -1,30 +1,22 @@
 package db;
 
-import db.dao.CompanyDBDao;
-import db.dao.CompanyDao;
-import db.dao.CouponDBDao;
-import db.dao.CouponDao;
 import ex.InvalidLoginException;
-import ex.NoSuchCompanyException;
 import ex.UserAlreadyExistException;
 import facade.AbsFacade;
-import facade.AdminFacade;
-import model.Company;
 import model.LoginType;
 
-import java.sql.SQLException;
 
 public class Main {
 
-    public static void main(String[] args) throws UserAlreadyExistException {
+    public static void main(String[] args) throws InvalidLoginException, UserAlreadyExistException {
         StoredProceduresLoaderDB.storeProceduresIntoDB();
         AbsFacade facade = new AbsFacade();
 
-        facade.register("kallinnas11", "1234", LoginType.COMPANY);
+        /* CREATE USER */
+//        facade.registerUser("mamon", "abc", LoginType.COMPANY);
 
-//        af.login("ww", "1", LoginType.CUSTOMER);
-//        AdminFacade a = AdminFacade.performLogin("admin", "777");
-
+        /* LOGIN */
+//        facade.login("kallinnas", "1234", LoginType.COMPANY);
 
         /* get company*/
 //        Company c = a.getCompanyById(1);

@@ -3,9 +3,15 @@ package facade;
 import db.dao.UserDBDao;
 import db.dao.UserDao;
 import ex.InvalidLoginException;
+import ex.UserAlreadyExistException;
+import lombok.Getter;
 import model.LoginType;
 
 public class AbsFacade {
+
+    @Getter
+    private AbsFacade absFacade;
+
     public AbsFacade login(String email, String password, LoginType type) throws InvalidLoginException {
         switch (type) {
             case ADMIN:
@@ -19,18 +25,19 @@ public class AbsFacade {
         }
     }
 
-    public AbsFacade register(String email, String password, LoginType type) {
+    public void registerUser(String email, String password, LoginType type) throws InvalidLoginException, UserAlreadyExistException {
         UserDao userDao = new UserDBDao();
         if (!userDao.userEmailIsPresent(email)) {
             switch (type) {
                 case COMPANY:
                     userDao.createUserCompany(email, password);
+                    absFacade = login(email, password, type);
                     break;
                 case CUSTOMER:
                     userDao.createUserCustomer(email, password);
+                    absFacade = login(email, password, type);
                     break;
             }
-        }
-        return new AbsFacade();
+        } else throw new UserAlreadyExistException("User with such email *" + email + "* already exist in DB");
     }
 }

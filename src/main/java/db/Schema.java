@@ -65,21 +65,11 @@ public class Schema {
     public static final String SELECT_USER_BY_EMAIL = "SELECT * FROM " +
             TABLE_NAME_USER + " WHERE " + COL_EMAIL + "=?";
 
-    public static final String INSERT_USER_CUSTOMER = "BEGIN;" +
-            "INSERT INTO " +
-            TABLE_NAME_CUSTOMER + " (" +
-            COL_FIRST_NAME + "," +
-            COL_LAST_NAME + ") VALUES('','');" +
-            "INSERT INTO " + TABLE_NAME_USER + "(" +
-            COL_ROLE + "," +
-            COL_CLIENT_ID + "," +
-            COL_EMAIL + "," +
-            COL_PASSWORD + ") VALUES(1,LAST_INSERT_ID(),?,?);" +
-            "SELECT * FROM " + TABLE_NAME_USER +
-            " WHERE " + COL_ID + "=LAST_INSERT_ID();" +
-            "COMMIT;";
 
-    public static final String INSERT_USER_COMPANY = "BEGIN;" +
+    /*             ****************** STORED PROCEDURES*******************      */
+    public static final String INSERT_USER_COMPANY = DROP_IF + " `insert_user_company`; " +
+            "CREATE PROCEDURE `insert_user_company`(IN USER_EMAIL VARCHAR(255), IN USER_PASSWORD VARCHAR(255)) " +
+            "BEGIN " +
             "INSERT INTO " +
             TABLE_NAME_COMPANY + " (" +
             COL_NAME + "," +
@@ -88,11 +78,27 @@ public class Schema {
             COL_ROLE + "," +
             COL_CLIENT_ID + "," +
             COL_EMAIL + "," +
-            COL_PASSWORD + ") VALUES(2,LAST_INSERT_ID(),?,?);"
-            + "COMMIT;";
+            COL_PASSWORD + ") VALUES(2,LAST_INSERT_ID(),USER_EMAIL,USER_PASSWORD);" +
+            "SELECT * FROM " + TABLE_NAME_USER +
+            " WHERE " + COL_ID + "=LAST_INSERT_ID();" +
+            "END";
 
+    public static final String INSERT_USER_CUSTOMER = DROP_IF + " `insert_user_customer`; " +
+            "CREATE PROCEDURE `insert_user_customer`(IN USER_EMAIL VARCHAR(255), IN USER_PASSWORD VARCHAR(255)) " +
+            "BEGIN " +
+            "INSERT INTO " +
+            TABLE_NAME_CUSTOMER + " (" +
+            COL_FIRST_NAME + "," +
+            COL_LAST_NAME + ") VALUES('','');" +
+            "INSERT INTO " + TABLE_NAME_USER + "(" +
+            COL_ROLE + "," +
+            COL_CLIENT_ID + "," +
+            COL_EMAIL + "," +
+            COL_PASSWORD + ") VALUES(1,LAST_INSERT_ID(),USER_EMAIL,USER_PASSWORD);" +
+            "SELECT * FROM " + TABLE_NAME_USER +
+            " WHERE " + COL_ID + "=LAST_INSERT_ID();" +
+            "END";
 
-    /* STORED PROCEDURES */
     public static final String GENERATE_PROC_DELETE_COUPON = DROP_IF + " `delete_coupon`; " +
             "CREATE PROCEDURE `delete_coupon`(IN COU_ID INT)" +
             "BEGIN " +
@@ -100,11 +106,11 @@ public class Schema {
             "END";
 
     public static final String GENERATE_PROC_USER_LOGIN = DROP_IF + "`user_login`; " +
-            "CREATE PROCEDURE `user_login`(IN EMAIL VARCHAR(255), IN PASSWORD VARCHAR(255))" +
+            "CREATE PROCEDURE `user_login`(IN USER_EMAIL VARCHAR(255), IN USER_PSWD VARCHAR(255)) " +
             "BEGIN " +
             " SELECT * FROM " + TABLE_NAME_USER +
-            " WHERE " + COL_EMAIL + "=EMAIL" +
-            " AND " + COL_PASSWORD + "=PASSWORD; " +
+            " WHERE " + COL_EMAIL + "=USER_EMAIL" +
+            " AND " + COL_PASSWORD + "=USER_PSWD; " +
             "END";
 
     public static final String GENERATE_PROC_GET_ALL_COMPANIES = DROP_IF + " `get_companies`; " +
@@ -116,13 +122,14 @@ public class Schema {
     public static final String GENERATE_PROC_GET_ALL_COMPANIES_AND_COUPONS = DROP_IF + " `get_companies_and_coupons`; " +
             "CREATE PROCEDURE `get_companies_and_coupons`() " +
             "BEGIN " +
-            " SELECT * FROM " + TABLE_NAME_COUPON +
-            " JOIN " + TABLE_NAME_COMPANY +
-            " ON " + TABLE_NAME_COUPON +
-            "." + COL_COMPANY_ID +
-            " = " + TABLE_NAME_COMPANY +
-            "." + COL_ID +
-            " ORDER BY " + COL_COMPANY_ID + ";" +
+            " SELECT * FROM " +
+            TABLE_NAME_COUPON + " JOIN " +
+            TABLE_NAME_COMPANY + " ON " +
+            TABLE_NAME_COUPON + "." +
+            COL_COMPANY_ID + " = " +
+            TABLE_NAME_COMPANY + "." +
+            COL_ID + " ORDER BY " +
+            COL_COMPANY_ID + ";" +
             "END";
 
 }

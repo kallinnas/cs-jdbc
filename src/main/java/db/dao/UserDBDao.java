@@ -5,9 +5,6 @@ import common.SystemMalfunctionException;
 import db.ConnectionPool;
 import db.DBUtilSetter;
 import db.Schema;
-import ex.UserAlreadyExistException;
-import model.Client;
-import model.LoginType;
 import model.User;
 
 import java.sql.*;
@@ -23,11 +20,13 @@ public class UserDBDao implements UserDao {
     public void createUserCompany(String email, String password) {
         connection = ConnectionPool.getInstance().getConnection();
         try {
-            preStmt = connection.prepareStatement(Schema.INSERT_USER_COMPANY);
-            DBUtilSetter.applyUserValuesOnStmt(preStmt, email, password);
-            preStmt.execute();
+            callStmt = connection.prepareCall("{call insert_user_company(?,?)}");
+            DBUtilSetter.applyUserValuesOnStmt(callStmt, email, password);
+            ResultSet rs = callStmt.executeQuery();
+            rs.next();
+            System.out.println("New company with email *" + rs.getString(4) + "* was created under #" + rs.getInt(1) + " successfully!");
         } catch (SQLException e) {
-            throw new SystemMalfunctionException("\"Unable to registrate new user-company!\n" + e.getMessage());
+            throw new SystemMalfunctionException("Unable to insert new user-company!\n" + e.getMessage());
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
             StatementUtils.closeAll(callStmt);
@@ -38,15 +37,11 @@ public class UserDBDao implements UserDao {
     public void createUserCustomer(String email, String password) {
         connection = ConnectionPool.getInstance().getConnection();
         try {
-            preStmt = connection.prepareStatement(Schema.INSERT_USER_CUSTOMER);
-            DBUtilSetter.applyUserValuesOnStmt(preStmt, email, password);
-            ResultSet rs = preStmt.executeQuery();
-            while (rs.next()) {
-                /* 4-email; 5-password; 2-role; 1-user_id; 3-customer_id */
-                user = new User(rs.getString(4), rs.getString(5), rs.getInt(2));
-                user.setId(rs.getLong(1));
-                user.getClient().setId(rs.getLong(3));
-            }
+            callStmt = connection.prepareCall("{call insert_user_customer(?,?)}");
+            DBUtilSetter.applyUserValuesOnStmt(callStmt, email, password);
+            ResultSet rs = callStmt.executeQuery();
+            rs.next();
+            System.out.println("New customer with email *" + rs.getString(4) + "* was created under #" + rs.getInt(1) + " successfully!");
         } catch (SQLException e) {
             throw new SystemMalfunctionException("Unable to registrate new user-customer!\n" + e.getMessage());
         } finally {
@@ -58,7 +53,6 @@ public class UserDBDao implements UserDao {
     @Override
     public User getUserByEmailAndPassword(String email, String password) {
         connection = ConnectionPool.getInstance().getConnection();
-        User user = null;
         ResultSet rs;
         try {
             callStmt = connection.prepareCall("{call user_login(?,?)}");
@@ -66,7 +60,7 @@ public class UserDBDao implements UserDao {
             callStmt.execute();
             rs = callStmt.getResultSet();
             while (rs.next()) {
-                user = DBUtilSetter.resultSetToUser(rs);
+            user = DBUtilSetter.resultSetToUser(rs);
             }
         } catch (SQLException e) {
             throw new SystemMalfunctionException("Unable to find user with such email *" + email + "*! " + e.getMessage());

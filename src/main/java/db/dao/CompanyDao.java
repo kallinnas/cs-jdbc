@@ -8,8 +8,6 @@ import java.util.Collection;
 
 public interface CompanyDao {
 
-    Company createCompany(Company company);
-
     void removeCompany(long id) throws NoSuchCompanyException;
 
     Company updateCompany(Company company) throws NoSuchCompanyException;

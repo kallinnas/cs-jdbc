@@ -19,15 +19,22 @@ public class CompanyDBDao implements CompanyDao {
     private Connection connection = null;
     private PreparedStatement stmt = null;
 
+    /**
+     * @return Exist company after update its name and imageURL for logo.
+     * @param company initialized with id, name, imageURL to update company
+     *                with same company_id.
+     */
     @Override
-    public Company createCompany(Company company) {
+    public Company updateCompany(Company company) throws NoSuchCompanyException {
+        connection = ConnectionPool.getInstance().getConnection();
         try {
-            connection = ConnectionPool.getInstance().getConnection();
-            stmt = connection.prepareStatement(Schema.INSERT_COMPANY_NAME_LOGO);
+            stmt = connection.prepareStatement(Schema.UPDATE_COMPANY);
             DBUtilSetter.applyCompanyValuesOnStatement(stmt, company);
-            stmt.executeUpdate();
+            if (stmt.executeUpdate() == 0) {
+                throw new NoSuchCompanyException("No company with such id#" + company.getId());
+            }
         } catch (SQLException e) {
-            String msg = String.format("Unable to create new company! (%s) ", e.getMessage());
+            String msg = String.format("Unable to update company by id#(%d)! (%s) ", company.getId(), e.getMessage());
             throw new SystemMalfunctionException(msg);
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
@@ -52,26 +59,6 @@ public class CompanyDBDao implements CompanyDao {
             ConnectionPool.getInstance().putConnection(connection);
             StatementUtils.closeAll(stmt);
         }
-    }
-
-    @Override
-    public Company updateCompany(Company company) throws NoSuchCompanyException {
-        try {
-            connection = ConnectionPool.getInstance().getConnection();
-            stmt = connection.prepareStatement(Schema.UPDATE_COMPANY);
-            DBUtilSetter.applyCompanyValuesOnStatement(stmt, company);
-            stmt.setLong(3, company.getId());
-            if (stmt.executeUpdate() == 0) {
-                throw new NoSuchCompanyException("No company with such id#" + company.getId());
-            }
-        } catch (SQLException e) {
-            String msg = String.format("Unable to update company by id#(%d)! (%s) ", company.getId(), e.getMessage());
-            throw new SystemMalfunctionException(msg);
-        } finally {
-            ConnectionPool.getInstance().putConnection(connection);
-            StatementUtils.closeAll(stmt);
-        }
-        return company;
     }
 
     @Override
@@ -169,8 +156,6 @@ public class CompanyDBDao implements CompanyDao {
         }
         return coupons.iterator().next();
     }
-
-
 
 
 }

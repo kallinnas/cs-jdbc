@@ -13,7 +13,7 @@ public class CompanyFacade extends AbsFacade{
     public static AbsFacade performLogin(String email, String password) throws InvalidLoginException {
         UserDao userDao = new UserDBDao();
         User user = userDao.getUserByEmailAndPassword(email, password);
-        if (user.getEmail() == email && user.getPassword() == password) return new CompanyFacade(new CompanyDBDao(), new CouponDBDao());
+        if (user != null) return new CompanyFacade(new CompanyDBDao(), new CouponDBDao());
         else throw new InvalidLoginException("No user with such email " + email + "!");
     }
 }

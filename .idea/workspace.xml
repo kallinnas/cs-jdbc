@@ -7,21 +7,15 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/Schema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Schema.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/db/StoredProceduresLoaderDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/StoredProceduresLoaderDB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDBDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDBDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/CompanyDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/UserDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/UserDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ex/UserAlreadyExistException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ex/UserAlreadyExistException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/facade/AbsFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/AbsFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facade/UserFacade.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/db/DBUtilSetter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/DBUtilSetter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/facade/CompanyFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/CompanyFacade.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/db/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/db/Schema.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/Schema.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/db/dao/UserDBDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/dao/UserDBDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/db/dao/UserDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/db/dao/UserDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/AbsFacade$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AbsFacade$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/AbsFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AbsFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/UserFacade.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/model/User.class" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -196,6 +190,10 @@
       <workItem from="1622139556404" duration="4360000" />
       <workItem from="1622269971533" duration="6636000" />
       <workItem from="1622355928542" duration="5342000" />
+      <workItem from="1622389029737" duration="351000" />
+      <workItem from="1622399524562" duration="3401000" />
+      <workItem from="1622466366299" duration="639000" />
+      <workItem from="1622628472837" duration="17193000" />
     </task>
     <servers />
   </component>
@@ -238,13 +236,67 @@
           <line>14</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/db/Main.java</url>
+          <line>15</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/db/Main.java</url>
+          <line>18</line>
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java</url>
-          <line>37</line>
-          <properties class="db.dao.UserDBDao" method="createUserCustomer">
+          <line>42</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java</url>
+          <line>43</line>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java</url>
+          <line>40</line>
+          <option name="timeStamp" value="32" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java</url>
+          <line>14</line>
+          <properties class="db.DBUtilSetter" method="resultSetToUser">
             <option name="EMULATED" value="true" />
           </properties>
-          <option name="timeStamp" value="23" />
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java</url>
+          <line>68</line>
+          <properties class="db.DBUtilSetter" method="applyUserValuesOnStmt">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java</url>
+          <line>53</line>
+          <properties class="db.dao.UserDBDao" method="getUserByEmailAndPassword">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="34" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/db/dao/UserDBDao.java</url>
+          <line>19</line>
+          <properties class="db.dao.UserDBDao" method="createUserCompany">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
