@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public class StoredProceduresLoaderDB {
 
-    static void storeProceduresIntoDB() {
+    public static void storeProceduresIntoDB() {
         Connection connection = ConnectionPool.getInstance().getConnection();
         Statement stmt = null;
         try {

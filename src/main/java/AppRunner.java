@@ -1,22 +1,29 @@
-package db;
-
+import db.StoredProceduresLoaderDB;
 import ex.InvalidLoginException;
 import ex.UserAlreadyExistException;
-import facade.AbsFacade;
-import model.LoginType;
+import ui.RunUI;
+
+import java.io.IOException;
+
+public class AppRunner {
+
+    public static void main(String[] args) throws InvalidLoginException, UserAlreadyExistException, InterruptedException, IOException {
+        RunUI.run();
 
 
-public class Main {
-
-    public static void main(String[] args) throws InvalidLoginException, UserAlreadyExistException {
         StoredProceduresLoaderDB.storeProceduresIntoDB();
-        AbsFacade facade = new AbsFacade();
 
         /* CREATE USER */
-//        facade.registerUser("mamon", "abc", LoginType.COMPANY);
+//        facade.registerUser("Serhii@", "abc", LoginType.COMPANY);
 
         /* LOGIN */
-//        facade.login("kallinnas", "1234", LoginType.COMPANY);
+//        facade.login("kallinnas", "1234", LoginType.CUSTOMER);
+
+//        CustomerFacade cusF = null;
+//        CompanyFacade comF = null;
+
+
+
 
         /* get company*/
 //        Company c = a.getCompanyById(1);

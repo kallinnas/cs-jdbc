@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import model.Company;
 import model.Coupon;
+import model.User;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -22,19 +23,20 @@ public class AdminFacade extends AbsFacade {
     private CouponDao couponDao;
     private CompanyDao companyDao;
     private CustomerDao customerDao;
+    private UserDao userDao;
 
     public static AdminFacade performLogin(String email, String password) throws InvalidLoginException {
         if (email.equals(LOGIN) && password.equals(PASSWORD))
-            return new AdminFacade(new CouponDBDao(), new CompanyDBDao(), new CustomerDBDao());
+            return new AdminFacade(new CouponDBDao(), new CompanyDBDao(), new CustomerDBDao(), new UserDBDao());
         else
             throw new InvalidLoginException(String.format("Unable to login with email: %s and password %s", email, password));
     }
 
     /* COMPANY */
-    public void createCompany(Company company) throws CompanyAlreadyExistException {
-        for (Company existCompany : companyDao.getAllCompanies()) {
-            if (!existCompany.getName().equals(company.getName())) companyDao.createCompany(company);
-            else throw new CompanyAlreadyExistException("Company " + company.getName() + " already exist!");
+    public void createCompany(User user) throws CompanyAlreadyExistException {
+        if (!userDao.userEmailIsPresent(user.getEmail())){
+            userDao.createUserCompany(user.getEmail(), user.getPassword());
+
         }
     }
 

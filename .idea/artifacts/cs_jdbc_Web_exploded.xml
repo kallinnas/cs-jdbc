@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="cs-jdbc:Web exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/cs_jdbc_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="cs-jdbc/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="cs-jdbc" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.1" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

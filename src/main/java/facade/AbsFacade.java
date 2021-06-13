@@ -1,18 +1,15 @@
 package facade;
 
+import common.SystemMalfunctionException;
 import db.dao.UserDBDao;
 import db.dao.UserDao;
 import ex.InvalidLoginException;
 import ex.UserAlreadyExistException;
-import lombok.Getter;
 import model.LoginType;
 
-public class AbsFacade {
+public abstract class AbsFacade {
 
-    @Getter
-    private AbsFacade absFacade;
-
-    public AbsFacade login(String email, String password, LoginType type) throws InvalidLoginException {
+    public static AbsFacade login(String email, String password, LoginType type) throws InvalidLoginException {
         switch (type) {
             case ADMIN:
                 return AdminFacade.performLogin(email, password);
@@ -21,7 +18,7 @@ public class AbsFacade {
             case COMPANY:
                 return CompanyFacade.performLogin(email, password);
             default:
-                throw new InvalidLoginException("Unable to recognize login type!");
+                throw new SystemMalfunctionException("Unable to recognize such login type for current credentials!");
         }
     }
 
@@ -31,13 +28,17 @@ public class AbsFacade {
             switch (type) {
                 case COMPANY:
                     userDao.createUserCompany(email, password);
-                    absFacade = login(email, password, type);
+                    login(email, password, type);
                     break;
                 case CUSTOMER:
                     userDao.createUserCustomer(email, password);
-                    absFacade = login(email, password, type);
+                    login(email, password, type);
                     break;
             }
         } else throw new UserAlreadyExistException("User with such email *" + email + "* already exist in DB");
+    }
+
+    public static LoginType userRole(String email) {
+        return new UserDBDao().getUserRoleByEmail(email);
     }
 }

@@ -6,6 +6,7 @@ import model.Coupon;
 import model.User;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,6 +43,7 @@ public class DBUtilSetter {
         return coupon;
     }
 
+    /* There is method getAllCompaniesAndCoupons where company's columns take different place in resultSet */
     public static Company resultSetToCompany(ResultSet resultRow, int startOrderNum) throws SQLException {
         Company company = new Company();
         company.setId(resultRow.getLong(startOrderNum));
@@ -54,7 +56,7 @@ public class DBUtilSetter {
     public static void applyCouponValuesOnStatement(PreparedStatement preStmt, Coupon coupon) throws SQLException {
         preStmt.setLong(1, coupon.getCompanyId());
         preStmt.setString(2, coupon.getTitle());
-        preStmt.setDate(3, Date.valueOf(coupon.getStartDate()));
+        preStmt.setDate(3, Date.valueOf(LocalDate.now()));
         preStmt.setDouble(4, coupon.getPrice());
         preStmt.setString(5, coupon.getDescription());
         preStmt.setString(6, coupon.getImageURL());

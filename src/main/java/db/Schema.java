@@ -28,6 +28,10 @@ public class Schema {
     private static final String DROP_IF = "DROP PROCEDURE IF EXISTS";
 
     /* COMPANY */
+    public static final String SELECT_COMPANY_BY_ID = "SELECT * FROM " +
+            TABLE_NAME_COMPANY + " WHERE " +
+            COL_ID + "=?";
+
     public static final String INSERT_COMPANY_NAME_LOGO = "INSERT INTO " +
             TABLE_NAME_COMPANY + " (" +
             COL_NAME + "," +
@@ -48,7 +52,8 @@ public class Schema {
             COL_ID + "=?";
 
     public static final String CREATE_COUPON = "INSERT INTO " +
-            TABLE_NAME_COUPON + " (" + COL_COMPANY_ID + "," +
+            TABLE_NAME_COUPON + " (" +
+            COL_COMPANY_ID + "," +
             COL_TITLE + "," + COL_DATE + "," +
             COL_PRICE + "," + COL_DESCRIPTION + "," +
             COL_IMAGE_URL + ") VALUES(?,?,?,?,?,?)";
@@ -58,6 +63,26 @@ public class Schema {
             COL_TITLE + "=?";
 
     /* COUPON */
+    public static final String SELECT_COUPONS_BY_PRICE_LESS_THAN = "SELECT * FROM " +
+            TABLE_NAME_COUPON + " WHERE " +
+            COL_PRICE + "<=?";
+
+    public static final String SELECT_COUPONS_BY_PRICE_MORE_THAN = "SELECT * FROM " +
+            TABLE_NAME_COUPON + " WHERE " +
+            COL_PRICE + ">=?";
+
+    public static final String SELECT_COUPONS_START_FROM_DATE = "SELECT * FROM " +
+            TABLE_NAME_COUPON + " WHERE " +
+            COL_DATE + ">=?";
+
+    public static final String SELECT_COUPONS_START_BEFORE_DATE = "SELECT * FROM " +
+            TABLE_NAME_COUPON + " WHERE " +
+            COL_DATE + "<=?";
+
+    public static final String SELECT_COUPON_BY_ID = "SELECT * FROM " +
+            TABLE_NAME_COUPON + " WHERE " +
+            COL_ID + "=?";
+
     public static final String DELETE_COUPON = "DELETE FROM " +
             TABLE_NAME_COUPON + " WHERE " + COL_ID + "=?";
 
@@ -65,6 +90,8 @@ public class Schema {
     public static final String SELECT_USER_BY_EMAIL = "SELECT * FROM " +
             TABLE_NAME_USER + " WHERE " + COL_EMAIL + "=?";
 
+    public static final String SELECT_USER_ROLE_BY_EMAIL = "SELECT " + COL_ROLE + " FROM " +
+            TABLE_NAME_USER + " WHERE " + COL_EMAIL + "=?";
 
     /*             ****************** STORED PROCEDURES*******************      */
     public static final String INSERT_USER_COMPANY = DROP_IF + " `insert_user_company`; " +

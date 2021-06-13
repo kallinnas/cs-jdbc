@@ -6,6 +6,7 @@ import db.ConnectionPool;
 import db.DBUtilSetter;
 import db.Schema;
 import ex.NoSuchCompanyException;
+import facade.CompanyFacade;
 import model.Company;
 import model.Coupon;
 
@@ -18,6 +19,7 @@ public class CompanyDBDao implements CompanyDao {
 
     private Connection connection = null;
     private PreparedStatement stmt = null;
+    private Company company = null;
 
     /**
      * @return Exist company after update its name and imageURL for logo.
@@ -36,6 +38,24 @@ public class CompanyDBDao implements CompanyDao {
         } catch (SQLException e) {
             String msg = String.format("Unable to update company by id#(%d)! (%s) ", company.getId(), e.getMessage());
             throw new SystemMalfunctionException(msg);
+        } finally {
+            ConnectionPool.getInstance().putConnection(connection);
+            StatementUtils.closeAll(stmt);
+        }
+        return company;
+    }
+
+    @Override
+    public Company getCompany() {
+        connection = ConnectionPool.getInstance().getConnection();
+        try {
+            stmt = connection.prepareStatement(Schema.SELECT_COMPANY_BY_ID);
+            stmt.setLong(1, CompanyFacade.getUser().getClient().getId());
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            company = DBUtilSetter.resultSetToCompany(rs, 1);
+        } catch (SQLException e) {
+            throw new SystemMalfunctionException("Unable to get company!");
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
             StatementUtils.closeAll(stmt);
