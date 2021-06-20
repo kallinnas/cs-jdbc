@@ -25,11 +25,15 @@ public class AdminFacade extends AbsFacade {
     private CustomerDao customerDao;
     private UserDao userDao;
 
-    public static AdminFacade performLogin(String email, String password) throws InvalidLoginException {
+    AdminFacade performLogin(String email, String password) throws InvalidLoginException {
         if (email.equals(LOGIN) && password.equals(PASSWORD))
             return new AdminFacade(new CouponDBDao(), new CompanyDBDao(), new CustomerDBDao(), new UserDBDao());
         else
             throw new InvalidLoginException(String.format("Unable to login with email: %s and password %s", email, password));
+    }
+
+    public void runAdminFacade() {
+
     }
 
     /* COMPANY */
@@ -66,4 +70,6 @@ public class AdminFacade extends AbsFacade {
         if (company.isPresent()) return company.get();
         else throw new NoSuchCompanyException("Company with id " + id + " is not exist!");
     }
+
+
 }

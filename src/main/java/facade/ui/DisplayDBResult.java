@@ -1,4 +1,4 @@
-package ui;
+package facade.ui;
 
 import model.Coupon;
 

@@ -1,9 +1,6 @@
 package db;
 
-import model.Client;
-import model.Company;
-import model.Coupon;
-import model.User;
+import model.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -52,6 +49,14 @@ public class DBUtilSetter {
         return company;
     }
 
+    public static Customer resultSetToCustomer(ResultSet resultRow) throws SQLException {
+        Customer customer =new Customer();
+        customer.setId(resultRow.getLong(1));
+        customer.setFirstName(resultRow.getString(2));
+        customer.setLastName(resultRow.getString(3));
+        return customer;
+    }
+
     /* STMT SETTERS */
     public static void applyCouponValuesOnStatement(PreparedStatement preStmt, Coupon coupon) throws SQLException {
         preStmt.setLong(1, coupon.getCompanyId());
@@ -71,5 +76,19 @@ public class DBUtilSetter {
     public static void applyUserValuesOnStmt(PreparedStatement preStmt, String email, String password) throws SQLException {
         preStmt.setString(1, email);
         preStmt.setString(2, password);
+    }
+
+    public static void applyCustomerValuesOnStatement(PreparedStatement preStmt, Customer customer) throws SQLException {
+        preStmt.setString(1, customer.getFirstName());
+        preStmt.setString(2, customer.getLastName());
+        preStmt.setLong(3, customer.getId());
+    }
+
+    public static void applyUpdatedCouponValuesOnStatement(PreparedStatement preStmt, Coupon coupon) throws SQLException {
+        preStmt.setString(1, coupon.getTitle());
+        preStmt.setDouble(2, coupon.getPrice());
+        preStmt.setString(3, coupon.getDescription());
+        preStmt.setString(4, coupon.getImageURL());
+        preStmt.setLong(5, coupon.getCompanyId());
     }
 }

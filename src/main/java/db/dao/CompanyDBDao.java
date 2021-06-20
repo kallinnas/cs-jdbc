@@ -6,7 +6,8 @@ import db.ConnectionPool;
 import db.DBUtilSetter;
 import db.Schema;
 import ex.NoSuchCompanyException;
-import facade.CompanyFacade;
+import lombok.Data;
+import lombok.Setter;
 import model.Company;
 import model.Coupon;
 
@@ -17,9 +18,12 @@ import java.util.Set;
 
 public class CompanyDBDao implements CompanyDao {
 
+    @Setter
+    private Company company;
+    private Coupon coupon;
+    private Collection<Coupon> coupons;
     private Connection connection = null;
-    private PreparedStatement stmt = null;
-    private Company company = null;
+    private PreparedStatement preStmt = null;
 
     /**
      * @return Exist company after update its name and imageURL for logo.
@@ -30,9 +34,9 @@ public class CompanyDBDao implements CompanyDao {
     public Company updateCompany(Company company) throws NoSuchCompanyException {
         connection = ConnectionPool.getInstance().getConnection();
         try {
-            stmt = connection.prepareStatement(Schema.UPDATE_COMPANY);
-            DBUtilSetter.applyCompanyValuesOnStatement(stmt, company);
-            if (stmt.executeUpdate() == 0) {
+            preStmt = connection.prepareStatement(Schema.UPDATE_COMPANY);
+            DBUtilSetter.applyCompanyValuesOnStatement(preStmt, company);
+            if (preStmt.executeUpdate() == 0) {
                 throw new NoSuchCompanyException("No company with such id#" + company.getId());
             }
         } catch (SQLException e) {
@@ -40,7 +44,7 @@ public class CompanyDBDao implements CompanyDao {
             throw new SystemMalfunctionException(msg);
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
-            StatementUtils.closeAll(stmt);
+            StatementUtils.closeAll(preStmt);
         }
         return company;
     }
@@ -49,16 +53,16 @@ public class CompanyDBDao implements CompanyDao {
     public Company getCompany() {
         connection = ConnectionPool.getInstance().getConnection();
         try {
-            stmt = connection.prepareStatement(Schema.SELECT_COMPANY_BY_ID);
-            stmt.setLong(1, CompanyFacade.getUser().getClient().getId());
-            ResultSet rs = stmt.executeQuery();
+            preStmt = connection.prepareStatement(Schema.SELECT_COMPANY_BY_ID);
+            preStmt.setLong(1, company.getId());
+            ResultSet rs = preStmt.executeQuery();
             rs.next();
             company = DBUtilSetter.resultSetToCompany(rs, 1);
         } catch (SQLException e) {
             throw new SystemMalfunctionException("Unable to get company!");
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
-            StatementUtils.closeAll(stmt);
+            StatementUtils.closeAll(preStmt);
         }
         return company;
     }
@@ -67,9 +71,9 @@ public class CompanyDBDao implements CompanyDao {
     public void removeCompany(long id) throws NoSuchCompanyException {
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            stmt = connection.prepareStatement(Schema.DELETE_COMPANY);
-            stmt.setLong(1, id);
-            if (stmt.executeUpdate() == 0) {
+            preStmt = connection.prepareStatement(Schema.DELETE_COMPANY);
+            preStmt.setLong(1, id);
+            if (preStmt.executeUpdate() == 0) {
                 throw new NoSuchCompanyException("No company with such id#" + id);
             }
         } catch (SQLException e) {
@@ -77,39 +81,37 @@ public class CompanyDBDao implements CompanyDao {
             throw new SystemMalfunctionException(msg);
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
-            StatementUtils.closeAll(stmt);
+            StatementUtils.closeAll(preStmt);
         }
     }
 
     @Override
     public Collection<Coupon> getCompanyCoupons(long id) {
-        Set<Coupon> coupons;
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            stmt = connection.prepareStatement(Schema.SELECT_COMPANY_COUPONS);
-            stmt.setLong(1, id);
-            ResultSet rs = stmt.executeQuery();
+            preStmt = connection.prepareStatement(Schema.SELECT_COMPANY_COUPONS);
+            preStmt.setLong(1, id);
+            ResultSet rs = preStmt.executeQuery();
             coupons = DBUtilSetter.resultSetToCouponSet(rs);
         } catch (SQLException e) {
             String msg = String.format("Unable to update company by id#(%d)! (%s) ", id, e.getMessage());
             throw new SystemMalfunctionException(msg);
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
-            StatementUtils.closeAll(stmt);
+            StatementUtils.closeAll(preStmt);
         }
         return coupons;
     }
-
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      Check and change to the local variable callStmt */
     @Override
     public Collection<Company> getAllCompanies() {
         Set<Company> companies = new HashSet<>();
-        CallableStatement cstmt;
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            cstmt = connection.prepareCall("{call get_companies()}");
-            boolean hasResult = cstmt.execute();
+            preStmt = connection.prepareCall("{call get_companies()}");
+            boolean hasResult = preStmt.execute();
             if (hasResult) {
-                ResultSet rs = cstmt.getResultSet();
+                ResultSet rs = preStmt.getResultSet();
                 while (rs.next()) {
                     companies.add(DBUtilSetter.resultSetToCompany(rs, 1));
                 }
@@ -118,7 +120,7 @@ public class CompanyDBDao implements CompanyDao {
             throw new SystemMalfunctionException("Unable to get all companies! " + e.getMessage());
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
-            StatementUtils.closeAll(stmt);
+            StatementUtils.closeAll(preStmt);
         }
         return companies;
     }
@@ -150,31 +152,48 @@ public class CompanyDBDao implements CompanyDao {
             throw new SystemMalfunctionException("Unable to get all companies! " + e.getMessage());
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
-            StatementUtils.closeAll(stmt);
+            StatementUtils.closeAll(preStmt);
         }
         return companies;
     }
 
     @Override
+    public Company getCompanyById(long id) {
+        connection = ConnectionPool.getInstance().getConnection();
+        try {
+            preStmt = connection.prepareStatement(Schema.SELECT_COMPANY_BY_ID);
+            preStmt.setLong(1, id);
+            ResultSet rs = preStmt.executeQuery();
+            rs.next();
+            company = DBUtilSetter.resultSetToCompany(rs, 1);
+        } catch (SQLException e) {
+            throw new SystemMalfunctionException("Unable to get company!");
+        } finally {
+            ConnectionPool.getInstance().putConnection(connection);
+            StatementUtils.closeAll(preStmt);
+        }
+        return company;
+    }
+
+    @Override
     public Coupon createCoupon(Coupon coupon) {
-        Set<Coupon> coupons;
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            stmt = connection.prepareStatement(Schema.CREATE_COUPON);
-            DBUtilSetter.applyCouponValuesOnStatement(stmt, coupon);
-            stmt.executeUpdate();
-            stmt = connection.prepareStatement(Schema.SELECT_COUPON_BY_TITLE);
-            stmt.setString(1, coupon.getTitle());
-            ResultSet rs = stmt.executeQuery();
-            coupons = DBUtilSetter.resultSetToCouponSet(rs);
+            preStmt = connection.prepareStatement(Schema.CREATE_COUPON);
+            DBUtilSetter.applyCouponValuesOnStatement(preStmt, coupon);
+            preStmt.executeUpdate();
+            preStmt = connection.prepareStatement(Schema.SELECT_COUPON_BY_TITLE);
+            preStmt.setString(1, coupon.getTitle());
+            ResultSet rs = preStmt.executeQuery();
+            coupon = DBUtilSetter.resultSetToCoupon(rs);
         } catch (SQLException e) {
             String msg = String.format("Unable to create new coupon! (%s) ", e.getMessage());
             throw new SystemMalfunctionException(msg);
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
-            StatementUtils.closeAll(stmt);
+            StatementUtils.closeAll(preStmt);
         }
-        return coupons.iterator().next();
+        return coupon;
     }
 
 

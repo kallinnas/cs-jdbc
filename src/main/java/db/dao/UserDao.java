@@ -12,4 +12,6 @@ public interface UserDao {
     boolean userEmailIsPresent(String email);
 
     void createUserCustomer(String email, String password);
+
+    LoginType getUserRoleByEmail(String email);
 }

@@ -8,6 +8,8 @@ import java.util.Collection;
 
 public interface CompanyDao {
 
+    void setCompany(Company company);
+
     Company getCompany();
 
     void removeCompany(long id) throws NoSuchCompanyException;
@@ -21,4 +23,6 @@ public interface CompanyDao {
     Collection<Company> getAllCompanies();
 
     Collection<Company> getAllCompaniesAndCoupons();
+
+    Company getCompanyById(long id);
 }

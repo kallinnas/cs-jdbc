@@ -8,15 +8,9 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 public interface CouponDao {
-    Coupon createCoupon(Coupon coupon);
-
-    Coupon getCouponByTitle(String title) throws NoSuchCouponException;
 
     Collection<Coupon> getCouponsByCompanyId(long id);
 
-    void removeCoupon(long id) throws SQLException;
-
-    Coupon getCouponById(long id) throws NoSuchCouponException;
 
     Collection<Coupon> getCouponsStartFromDate(LocalDate startDate);
 
@@ -25,4 +19,22 @@ public interface CouponDao {
     Collection<Coupon> getCouponsByPriceLessThan(double price);
 
     Collection<Coupon> getCouponsByPriceMoreThan(double price);
+
+    Collection<Coupon> getAllCoupons();
+
+    Collection<Coupon> getCouponsByCustomerId(long id);
+
+    Coupon getCouponById(long id) throws NoSuchCouponException;
+
+    Coupon createCoupon(Coupon coupon);
+
+    Coupon getCouponByTitle(String title) throws NoSuchCouponException;
+
+    Coupon updateCoupon(Coupon coupon);
+
+    Coupon purchaseCoupon(long customer_id, long coupon_id);
+
+    void removeCouponFromCustomer(long customer_id, long coupon_id);
+
+    void removeCoupon(long id) throws SQLException;
 }

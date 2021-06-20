@@ -1,17 +1,18 @@
 import db.StoredProceduresLoaderDB;
 import ex.InvalidLoginException;
 import ex.UserAlreadyExistException;
-import ui.RunUI;
+import facade.ui.LoginController;
 
 import java.io.IOException;
 
 public class AppRunner {
 
     public static void main(String[] args) throws InvalidLoginException, UserAlreadyExistException, InterruptedException, IOException {
-        RunUI.run();
-
-
         StoredProceduresLoaderDB.storeProceduresIntoDB();
+        LoginController controller = new LoginController();
+        controller.run();
+
+
 
         /* CREATE USER */
 //        facade.registerUser("Serhii@", "abc", LoginType.COMPANY);

@@ -11,6 +11,8 @@ public class Schema {
     /* Columns */
     private static final String COL_ID = "id";
     private static final String COL_CLIENT_ID = "client_id";
+    private static final String COL_CUSTOMER_ID = "customer_id";
+    private static final String COL_COUPON_ID = "coupon_id";
     private static final String COL_EMAIL = "email";
     private static final String COL_PASSWORD = "password";
     private static final String COL_ROLE = "role";
@@ -63,6 +65,15 @@ public class Schema {
             COL_TITLE + "=?";
 
     /* COUPON */
+
+
+    public static final String SELECT_COUPON_BY_CUSTOMER_ID = "SELECT * FROM " +
+            TABLE_NAME_CUSTOMER_COUPON + " WHERE " +
+            COL_CUSTOMER_ID + "=?";
+
+    public static final String SELECT_COUPONS = "SELECT * FROM " +
+            TABLE_NAME_COUPON;
+
     public static final String SELECT_COUPONS_BY_PRICE_LESS_THAN = "SELECT * FROM " +
             TABLE_NAME_COUPON + " WHERE " +
             COL_PRICE + "<=?";
@@ -86,6 +97,22 @@ public class Schema {
     public static final String DELETE_COUPON = "DELETE FROM " +
             TABLE_NAME_COUPON + " WHERE " + COL_ID + "=?";
 
+    /* CUSTOMER */
+    public static final String UPDATE_CUSTOMER = "UPDATE " +
+            TABLE_NAME_CUSTOMER + " SET " +
+            COL_FIRST_NAME + "=?," +
+            COL_LAST_NAME + "=? WHERE " +
+            COL_ID + "=?";
+
+    public static final String SELECT_CUSTOMER_BY_ID = "SELECT * FROM " +
+            TABLE_NAME_CUSTOMER + " WHERE " + COL_ID + "=?";
+
+    /* CUSTOMER_COUPON */
+
+    public static final String DELETE_COUPON_FROM_CUSTOMER = "DELETE FROM " +
+            TABLE_NAME_CUSTOMER_COUPON + " WHERE " +
+            COL_CUSTOMER_ID + "=? AND " + COL_COUPON_ID + "=?";
+
     /* USER */
     public static final String SELECT_USER_BY_EMAIL = "SELECT * FROM " +
             TABLE_NAME_USER + " WHERE " + COL_EMAIL + "=?";
@@ -94,7 +121,34 @@ public class Schema {
             TABLE_NAME_USER + " WHERE " + COL_EMAIL + "=?";
 
     /*             ****************** STORED PROCEDURES*******************      */
-    public static final String INSERT_USER_COMPANY = DROP_IF + " `insert_user_company`; " +
+
+    public static final String GENERATE_UPDATE_COUPON_OWNER = DROP_IF + " `update_coupon_owner`; " +
+            "CREATE PROCEDURE `update_coupon_owner`(IN CUSTOMER_ID INT, IN COUPON_ID INT) " +
+            "BEGIN " +
+            "UPDATE " +
+            TABLE_NAME_CUSTOMER_COUPON + " SET " +
+            COL_CUSTOMER_ID + "=CUSTOMER_ID," +
+            COL_COUPON_ID + "=COUPON_ID;" +
+            "SELECT * FROM " + TABLE_NAME_COUPON +
+            " WHERE " + COL_ID + "=LAST_INSERT_ID();" +
+            "END;";
+
+    public static final String GENERATE_UPDATE_COUPON = DROP_IF + " `update_coupon`; " +
+            "CREATE PROCEDURE `update_coupon`(IN COUPON_TITLE VARCHAR(255), IN COUPON_PRICE DOUBLE, " +
+            "IN COUPON_DESCRIPTION VARCHAR(255), IN COUPON_IMAGE_URL VARCHAR(255), IN COUPON_ID INT) " +
+            "BEGIN " +
+            "UPDATE " +
+            TABLE_NAME_COUPON + " SET " +
+            COL_TITLE + "=COUPON_TITLE," +
+            COL_PRICE + "=COUPON_PRICE," +
+            COL_DESCRIPTION + "=COUPON_DESCRIPTION," +
+            COL_IMAGE_URL + "=COUPON_IMAGE_URL" + " WHERE " +
+            COL_ID + "=COUPON_ID;" +
+            "SELECT * FROM " + TABLE_NAME_COUPON +
+            " WHERE " + COL_ID + "=LAST_INSERT_ID();" +
+            "END;";
+
+    public static final String GENERATE_INSERT_USER_COMPANY = DROP_IF + " `insert_user_company`; " +
             "CREATE PROCEDURE `insert_user_company`(IN USER_EMAIL VARCHAR(255), IN USER_PASSWORD VARCHAR(255)) " +
             "BEGIN " +
             "INSERT INTO " +
@@ -110,7 +164,7 @@ public class Schema {
             " WHERE " + COL_ID + "=LAST_INSERT_ID();" +
             "END";
 
-    public static final String INSERT_USER_CUSTOMER = DROP_IF + " `insert_user_customer`; " +
+    public static final String GENERATE_INSERT_USER_CUSTOMER = DROP_IF + " `insert_user_customer`; " +
             "CREATE PROCEDURE `insert_user_customer`(IN USER_EMAIL VARCHAR(255), IN USER_PASSWORD VARCHAR(255)) " +
             "BEGIN " +
             "INSERT INTO " +
