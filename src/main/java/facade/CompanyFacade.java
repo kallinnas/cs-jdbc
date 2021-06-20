@@ -9,15 +9,14 @@ import model.Company;
 import model.Coupon;
 import model.User;
 import facade.ui.CompanyMenuUI;
-import facade.ui.DisplayDBResult;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-//@Getter
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class CompanyFacade extends AbsFacade {
@@ -28,23 +27,28 @@ public class CompanyFacade extends AbsFacade {
     @NonNull
     private CompanyMenuUI ui;
     @NonNull
-    private CouponDao couponDao = new CouponDBDao();
-    private final CompanyDao companyDao = new CompanyDBDao();
+    private CouponDao couponDao;
+    @NonNull
+    private CompanyDao companyDao;
     private boolean isNotRequiredType;
 
     AbsFacade initFacade(String email, String password) throws InvalidLoginException {
         user = new UserDBDao().getUserByEmailAndPassword(email, password);
+        initThis(new CompanyMenuUI(), new CouponDBDao(), new CompanyDBDao());
         company = companyDao.getCompanyById(user.getClient().getId());
         companyDao.setCompany(company);
-        // every userInterface needs to have certain facade
-        ui = new CompanyMenuUI();
         ui.setFacade(this);
         if (user != null) return this;
         else throw new InvalidLoginException("No user with such email " + email + "!");
     }
 
+    private void initThis(CompanyMenuUI ui, CouponDBDao couponDBDao, CompanyDBDao companyDBDao) {
+        this.ui = ui;
+        this.couponDao = couponDBDao;
+        this.companyDao = companyDBDao;
+    }
+
     public void runCompanyFacade() {
-        company = companyDao.getCompany();
         if (company.getName() == null || company.getName().equals("")) updateCompany();
         System.out.println("Welcome to " + company.getName() + " DataBase! ");
         ui.mainMenu();
@@ -54,7 +58,7 @@ public class CompanyFacade extends AbsFacade {
         try {
             System.out.print("Lets set a name for your company: ");
             company.setName(AbsFacade.reader.readLine());
-            System.out.print("What about the logo? Add url: ");
+            System.out.print("\nWhat about the logo? Add url: ");
             company.setImageURL(reader.readLine());
             try {
                 company = companyDao.updateCompany(company);
@@ -77,13 +81,86 @@ public class CompanyFacade extends AbsFacade {
     }
 
     public void removeCoupon() {
+        isNotRequiredType = true;
+        long id = 0;
+        try {
+            while (isNotRequiredType) {
+                System.out.print("Insert id of coupon that you want to delete:");
+                long idToDelete = Long.parseLong(reader.readLine());
+                if (couponDao.getCouponsByCompanyId(company.getId()).stream().noneMatch(c -> c.getId() == idToDelete)) {
+                    System.out.println(company.getName() + " has no coupon with such id " + id + ".");
+                } else {
+                    coupon = couponDao.getCouponsByCompanyId(company.getId()).stream()
+                            .filter(c -> c.getId() == idToDelete)
+                            .findFirst()
+                            .get();
+                    isNotRequiredType = false;
+                    id = idToDelete;
+                }
+            }
+            DisplayDBResult.showCouponResult(Collections.singleton(coupon));
+            beforeRemove(id);
+        } catch (IOException | SQLException e) {
+            System.out.print("No coupon with such id or wrong insert.");
+            removeCoupon();
+        }
+        closeMenu();
+        ui.couponMenu();
+    }
 
-
+    private void beforeRemove(long id) throws IOException, SQLException {
+        System.out.print("Are you sure that you want to delete this coupon? Y/N ");
+        String userAnswer = reader.readLine();
+        switch (userAnswer.toLowerCase()) {
+            case "y":
+                couponDao.removeCoupon(id);
+                System.out.println("Coupon was removed successfully!");
+                break;
+            case "n":
+                System.out.println("Coupon was not removed.");
+                break;
+            default:
+                System.out.println(WRONG_INSERT_MSG);
+                beforeRemove(id);
+        }
     }
 
     public void updateCoupon() {
-
-
+        isNotRequiredType = true;
+        try {
+            while (isNotRequiredType) {
+                System.out.print("Insert id of coupon that you want to update:");
+                long id = Long.parseLong(reader.readLine());
+                if (couponDao.getCouponsByCompanyId(company.getId()).stream().noneMatch(c -> c.getId() == id)) {
+                    System.out.println(company.getName() + " has no coupon with such id " + id + ".");
+                } else {
+                    coupon = couponDao.getCouponsByCompanyId(company.getId()).stream()
+                            .filter(c -> c.getId() == id)
+                            .findFirst()
+                            .get();
+                isNotRequiredType = false;
+                }
+            }
+            System.out.print("Update coupon title from " + coupon.getTitle() + " to:");
+            coupon.setTitle(reader.readLine());
+            isNotRequiredType = true;
+            while (isNotRequiredType) {
+                System.out.print("Update coupon price from " + coupon.getPrice() + " to:");
+                double price = Double.parseDouble(reader.readLine());
+                coupon.setPrice(price);
+                isNotRequiredType = false;
+            }
+            System.out.print("Update coupon description " + coupon.getDescription() + " to:");
+            coupon.setDescription(reader.readLine());
+            System.out.print("Update coupon image from " + coupon.getImageURL() + " to:");
+            coupon.setImageURL(reader.readLine());
+        } catch (IOException e) {
+            System.out.print("No coupon with such id or wrong insert.");
+            updateCoupon();
+        }
+        DisplayDBResult.showCouponResult(Collections.singleton(couponDao.updateCoupon(coupon)));
+        closeMenu();
+        ui.couponMenu();
     }
 
     public void createCompanyCoupon() {
@@ -108,6 +185,7 @@ public class CompanyFacade extends AbsFacade {
         }
         Coupon c = couponDao.createCoupon(coupon);
         System.out.println("New coupon #" + c.getId() + " " + c.getTitle() + " was created successfully!");
+        closeMenu();
         ui.couponMenu();
     }
 
@@ -136,7 +214,7 @@ public class CompanyFacade extends AbsFacade {
                 id = Long.parseLong(reader.readLine());
                 isNotRequiredType = false;
                 coupon = couponDao.getCouponById(id);
-                System.out.println(coupon);
+                DisplayDBResult.showCouponResult(Collections.singleton(coupon));
                 closeMenu();
             } catch (IOException | NumberFormatException e) {
                 System.out.println(WRONG_INSERT_MSG);

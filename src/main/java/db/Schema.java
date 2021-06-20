@@ -145,8 +145,8 @@ public class Schema {
             COL_IMAGE_URL + "=COUPON_IMAGE_URL" + " WHERE " +
             COL_ID + "=COUPON_ID;" +
             "SELECT * FROM " + TABLE_NAME_COUPON +
-            " WHERE " + COL_ID + "=LAST_INSERT_ID();" +
-            "END;";
+            " WHERE " + COL_ID + "=COUPON_ID;" +
+            "END";
 
     public static final String GENERATE_INSERT_USER_COMPANY = DROP_IF + " `insert_user_company`; " +
             "CREATE PROCEDURE `insert_user_company`(IN USER_EMAIL VARCHAR(255), IN USER_PASSWORD VARCHAR(255)) " +

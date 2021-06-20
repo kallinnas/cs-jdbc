@@ -52,20 +52,8 @@ public class LoginController {
 
     void logout() {
         loginIn = false;
-        switch (type) {
-            case ADMIN:
-                adminMenuUI.setFacade(null);
-                break;
-            case CUSTOMER:
-                customerMenuUI.setFacade(null);
-                break;
-            case COMPANY:
-                companyMenuUI.setFacade(null);
-                break;
-            default:
-                System.out.println("Can't make logout!");
-        }
         type = null;
+        authorisationUser();
     }
 
     static void stopApp() {

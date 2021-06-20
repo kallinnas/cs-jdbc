@@ -27,16 +27,25 @@ public class CustomerFacade extends AbsFacade {
     private CustomerMenuUI ui;
     @NonNull
     private CouponDao couponDao;
-    private final CustomerDao customerDao = new CustomerDBDao();
+    @NonNull
+    private CustomerDao customerDao;
     private boolean isNotRequiredType = true;
 
 
     AbsFacade performLogin(String email, String password) throws InvalidLoginException {
-        UserDao userDao = new UserDBDao();
-        user = userDao.getUserByEmailAndPassword(email, password);
+        user = new UserDBDao().getUserByEmailAndPassword(email, password);
+        initThis(new CustomerMenuUI(), new CouponDBDao(), new CustomerDBDao());
         customer = customerDao.getCustomerById(user.getClient().getId());
-        if (user != null) return new CustomerFacade(new CustomerMenuUI(), new CouponDBDao());
+        customerDao.setCustomer(customer);
+        ui.setFacade(this);
+        if (user != null) return this;
         else throw new InvalidLoginException("No user with such email " + email + "!");
+    }
+
+    private void initThis(CustomerMenuUI ui, CouponDBDao couponDBDao, CustomerDBDao customerDBDao) {
+        this.ui = ui;
+        this.couponDao = couponDBDao;
+        this.customerDao = customerDBDao;
     }
 
     public void runCustomerFacade() {

@@ -8,6 +8,7 @@ import db.Schema;
 import ex.NoSuchCompanyException;
 import ex.NoSuchCustomerException;
 import facade.CustomerFacade;
+import lombok.Setter;
 import model.Customer;
 
 import java.sql.Connection;
@@ -17,9 +18,11 @@ import java.sql.SQLException;
 
 public class CustomerDBDao implements CustomerDao {
 
+    @Setter
+    protected Customer customer;
+
     private Connection connection = null;
     private PreparedStatement preStmt = null;
-    private Customer customer = null;
 
     @Override
     public Customer getCustomer() {

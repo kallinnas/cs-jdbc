@@ -28,15 +28,15 @@ public class DBUtilSetter {
         return coupons;
     }
 
-    public static Coupon resultSetToCoupon(ResultSet resultRow) throws SQLException {
+    public static Coupon resultSetToCoupon(ResultSet rs) throws SQLException {
         Coupon coupon = new Coupon();
-        coupon.setId(resultRow.getLong(1));
-        coupon.setCompanyId(resultRow.getLong(2));
-        coupon.setTitle(resultRow.getString(3));
-        coupon.setStartDate(resultRow.getDate(4).toLocalDate());
-        coupon.setPrice(resultRow.getDouble(5));
-        coupon.setDescription(resultRow.getString(6));
-        coupon.setImageURL(resultRow.getString(7));
+        coupon.setId(rs.getLong(1));
+        coupon.setCompanyId(rs.getLong(2));
+        coupon.setTitle(rs.getString(3));
+        coupon.setStartDate(rs.getDate(4).toLocalDate());
+        coupon.setPrice(rs.getDouble(5));
+        coupon.setDescription(rs.getString(6));
+        coupon.setImageURL(rs.getString(7));
         return coupon;
     }
 
@@ -89,6 +89,6 @@ public class DBUtilSetter {
         preStmt.setDouble(2, coupon.getPrice());
         preStmt.setString(3, coupon.getDescription());
         preStmt.setString(4, coupon.getImageURL());
-        preStmt.setLong(5, coupon.getCompanyId());
+        preStmt.setLong(5, coupon.getId());
     }
 }

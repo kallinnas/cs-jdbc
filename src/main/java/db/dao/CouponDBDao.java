@@ -18,7 +18,7 @@ public class CouponDBDao implements CouponDao {
     private Connection connection = null;
     private PreparedStatement preStmt = null;
     private CallableStatement callStmt = null;
-    private Coupon coupon = null;
+    private Coupon coupon;
     private Collection<Coupon> coupons = null;
 
     @Override
@@ -49,7 +49,7 @@ public class CouponDBDao implements CouponDao {
             preStmt.setString(1, title);
             coupon = DBUtilSetter.resultSetToCouponSet(preStmt.executeQuery()).iterator().next();
         } catch (SQLException e) {
-            throw new NoSuchCouponException();
+            throw new NoSuchCouponException("Unable to get coupon by such title:" + title);
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
             StatementUtils.closeAll(preStmt);
@@ -97,10 +97,12 @@ public class CouponDBDao implements CouponDao {
         try {
             preStmt = connection.prepareStatement(Schema.SELECT_COUPON_BY_ID);
             preStmt.setLong(1, id);
-            coupon = DBUtilSetter.resultSetToCouponSet(preStmt.executeQuery()).iterator().next();
+            ResultSet rs = preStmt.executeQuery();
+            rs.next();
+            coupon = DBUtilSetter.resultSetToCoupon(rs);
         } catch (SQLException e) {
             String msg = String.format("Unable to get coupon by id (%d)! (%s) ", id, e.getMessage());
-            throw new NoSuchCouponException();
+            throw new NoSuchCouponException(msg);
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
             StatementUtils.closeAll(preStmt);
@@ -216,7 +218,9 @@ public class CouponDBDao implements CouponDao {
         try {
             callStmt = connection.prepareCall("{call update_coupon(?,?,?,?,?)}");
             DBUtilSetter.applyUpdatedCouponValuesOnStatement(callStmt, coupon);
-            coupon = DBUtilSetter.resultSetToCouponSet(preStmt.executeQuery()).iterator().next();
+            ResultSet rs = callStmt.executeQuery();
+            rs.next();
+            coupon = DBUtilSetter.resultSetToCoupon(rs);
         } catch (SQLException e) {
             throw new SystemMalfunctionException("Unable to update coupon. " + e.getMessage());
         } finally {

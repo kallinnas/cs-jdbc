@@ -6,7 +6,6 @@ import ex.InvalidLoginException;
 import ex.UserAlreadyExistException;
 import model.Coupon;
 import model.LoginType;
-import facade.ui.DisplayDBResult;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,14 +58,17 @@ public abstract class AbsFacade {
         return userDao.getUserRoleByEmail(email);
     }
 
+    /**
+     * Method displays table with all DB coupons.
+     * Method is using by outside package - must be public.
+     */
     public void getAllCoupons() {
-        coupons = couponDao.getAllCoupons();
-        DisplayDBResult.showCouponResult(coupons);
+        DisplayDBResult.showCouponResult(couponDao.getAllCoupons());
         closeMenu();
     }
 
     /**
-     * Method print out message for returning ti the previous menu.
+     * Method prints out message for returning to the previous menu.
      * Other facades that inheritance from AbsFacade should be able
      * to use this method - must be protected.
      */

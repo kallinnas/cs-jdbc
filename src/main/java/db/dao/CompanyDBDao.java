@@ -20,8 +20,7 @@ public class CompanyDBDao implements CompanyDao {
 
     @Setter
     private Company company;
-    private Coupon coupon;
-    private Collection<Coupon> coupons;
+
     private Connection connection = null;
     private PreparedStatement preStmt = null;
 
@@ -87,6 +86,7 @@ public class CompanyDBDao implements CompanyDao {
 
     @Override
     public Collection<Coupon> getCompanyCoupons(long id) {
+        Collection<Coupon> coupons;
         try {
             connection = ConnectionPool.getInstance().getConnection();
             preStmt = connection.prepareStatement(Schema.SELECT_COMPANY_COUPONS);
@@ -102,6 +102,7 @@ public class CompanyDBDao implements CompanyDao {
         }
         return coupons;
     }
+
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      Check and change to the local variable callStmt */
     @Override
     public Collection<Company> getAllCompanies() {
