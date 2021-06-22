@@ -25,7 +25,7 @@ public class AdminFacade extends AbsFacade {
     private CustomerDao customerDao;
     private UserDao userDao;
 
-    AdminFacade performLogin(String email, String password) throws InvalidLoginException {
+    AdminFacade initFacade(String email, String password) throws InvalidLoginException {
         if (email.equals(LOGIN) && password.equals(PASSWORD))
             return new AdminFacade(new CouponDBDao(), new CompanyDBDao(), new CustomerDBDao(), new UserDBDao());
         else

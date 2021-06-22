@@ -24,9 +24,9 @@ public class CustomerMenuUI implements MenuUI {
                 case 3:
                     accountMenu();
                 case 4:
-                    new LoginController().logout();
+                    new GuestMenuUI().logout();
                 case 5:
-                    LoginController.stopApp();
+                    GuestMenuUI.stopApp();
                 default:
                     throw new NumberFormatException();
             }

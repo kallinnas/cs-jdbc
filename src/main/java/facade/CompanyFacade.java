@@ -58,7 +58,7 @@ public class CompanyFacade extends AbsFacade {
         try {
             System.out.print("Lets set a name for your company: ");
             company.setName(AbsFacade.reader.readLine());
-            System.out.print("\nWhat about the logo? Add url: ");
+            System.out.print("What about the logo? Add url: ");
             company.setImageURL(reader.readLine());
             try {
                 company = companyDao.updateCompany(company);

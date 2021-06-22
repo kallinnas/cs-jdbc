@@ -1,6 +1,7 @@
 package facade.ui;
 
 import ex.InvalidLoginException;
+import ex.UserAlreadyExistException;
 import facade.AbsFacade;
 import facade.AdminFacade;
 import facade.CompanyFacade;
@@ -13,16 +14,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Data
-public class LoginController {
+public class GuestMenuUI {
     private static String email;
     private static String password;
     private static LoginType type;
 
+    private MenuUI menuUI;
     private CompanyMenuUI companyMenuUI;
     private CustomerMenuUI customerMenuUI;
     private AdminMenuUI adminMenuUI;
-
-    private MenuUI menuUI;
 
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -31,10 +31,17 @@ public class LoginController {
 
     private static final String WELCOME_MSG = "Hello and Welcome to \033[32mCOUPON SYSTEM DB\033[0m!";
     private static final String WRONG_INSERT_MSG = "Wrong command number. Try more. ";
-    private static final String LOG_OR_REG_MSG = "To \033[32midentify\033[0m yourself " +
-            "press \033[32m1\033[0m, for new \033[32mregistration\033[0m " +
-            "press \033[32m2\033[0m  or" +
-            " press \033[32m3\033[0m to \033[32mQuit\033[0m than press enter: ";
+    private static final String LOG_OR_REG_MSG = "To \033[32midentify\033[0m yourself press " +
+            "\033[32m1\033[0m, for new " +
+            "\033[32mregistration\033[0m press " +
+            "\033[32m2\033[0m  or press " +
+            "\033[32m3\033[0m to " +
+            "\033[32mQuit\033[0m than press enter: ";
+    private static final String REGISTER = "To \033[32mregistrate\033[0m as a " +
+            "\033[32mcustomer\033[0m press - " +
+            "\033[32m1\033[0m or as a " +
+            "\033[32mcompany\033[0m press - " +
+            "\033[32m2\033[0m and than enter: ";
 
     public void run() {
         appRunning = true;
@@ -44,18 +51,53 @@ public class LoginController {
             if (!loginIn) {
                 authorisationUser();
             }
-
-
         }
 
+    }
+
+    private void registrationUser() {
+        System.out.print(REGISTER);
+        try {
+            switch (MenuUI.readCommandNumber()) {
+                case 1:
+                    System.out.print("Registrate your email address: ");
+                    email = reader.readLine();
+                    System.out.print("Create your password:");
+                    password= reader.readLine();
+                    AbsFacade.registerUser(email, password, LoginType.CUSTOMER);
+                    initGuestMenuUI(email, password);
+                    break;
+                case 2:
+                    System.out.print("Registrate company email address: ");
+                    email = reader.readLine();
+                    System.out.print("Create your password: ");
+                    password= reader.readLine();
+                    AbsFacade.registerUser(email, password, LoginType.COMPANY);;
+                    initGuestMenuUI(email, password);
+                    break;
+                default:
+                    throw new NumberFormatException();
+            }
+        } catch (NumberFormatException | InvalidLoginException | IOException e) {
+            System.out.println(WRONG_INSERT_MSG + e.getMessage());
+        } catch (UserAlreadyExistException e) {
+            System.out.println("User with such email *" + email +"* already exist!" + e.getMessage());
+        }
     }
 
     void logout() {
         loginIn = false;
         type = null;
+        closeAllMenus();
         authorisationUser();
     }
 
+    private void closeAllMenus() {
+        companyMenuUI = null;
+        customerMenuUI = null;
+        adminMenuUI = null;
+    }
+// check!
     static void stopApp() {
         appRunning = false;
         System.exit(0);
@@ -67,13 +109,16 @@ public class LoginController {
         try {
             switch (MenuUI.readCommandNumber()) {
                 case 1:
-                    initLoginController();
+                    System.out.print("Email: ");
+                    email = reader.readLine();
+                    System.out.print("Password: ");
+                    initGuestMenuUI(email, reader.readLine());
                     break;
                 case 2:
-                    registerUser();
+                    registrationUser();
                     break;
                 case 3:
-                    LoginController.stopApp();
+                    GuestMenuUI.stopApp();
                     break;
                 default:
                     throw new NumberFormatException();
@@ -82,17 +127,10 @@ public class LoginController {
             System.out.println(WRONG_INSERT_MSG);
             authorisationUser();
         }
-        if (adminMenuUI.facade != null || companyMenuUI.facade != null
-                || customerMenuUI.facade != null) loginIn = true;
     }
 
-    private void initLoginController() {
+    public void initGuestMenuUI(String email, String password) {
         try {
-            System.out.print("Email: ");
-            email = reader.readLine();
-            System.out.print("Password: ");
-            password = reader.readLine();
-
             type = new CustomerFacade().userRole(email);
             switch (type) {
                 case COMPANY:
@@ -101,6 +139,7 @@ public class LoginController {
                     companyMenuUI.facade.runCompanyFacade();
                     break;
                 case CUSTOMER:
+                    customerMenuUI = new CustomerMenuUI();
                     customerMenuUI.setFacade((CustomerFacade) AbsFacade.login(email, password, LoginType.CUSTOMER));
                     customerMenuUI.facade.runCustomerFacade();
                     break;
@@ -111,15 +150,10 @@ public class LoginController {
                 default:
                     System.out.println("No user with such email address: " + email + ". Try again or registrate yourself.");
             }
-        } catch (IOException | InvalidLoginException e) {
+        } catch (InvalidLoginException e) {
             System.out.println("Unable to authenticate user with such email and password");
-            initLoginController();
+            authorisationUser();
         }
     }
-
-    private static void registerUser() {
-
-    }
-
 
 }

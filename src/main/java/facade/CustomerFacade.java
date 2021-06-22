@@ -32,7 +32,7 @@ public class CustomerFacade extends AbsFacade {
     private boolean isNotRequiredType = true;
 
 
-    AbsFacade performLogin(String email, String password) throws InvalidLoginException {
+    AbsFacade initFacade(String email, String password) throws InvalidLoginException {
         user = new UserDBDao().getUserByEmailAndPassword(email, password);
         initThis(new CustomerMenuUI(), new CouponDBDao(), new CustomerDBDao());
         customer = customerDao.getCustomerById(user.getClient().getId());
@@ -58,7 +58,7 @@ public class CustomerFacade extends AbsFacade {
         try {
             System.out.print("Lets set your first name for your account: ");
             customer.setFirstName(reader.readLine());
-            System.out.print("And, of course your last name:: ");
+            System.out.print("And, of course your last name: ");
             customer.setLastName(reader.readLine());
             try {
                 customer = customerDao.updateCustomer(customer);

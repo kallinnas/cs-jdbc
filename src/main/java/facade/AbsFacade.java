@@ -4,19 +4,14 @@ import common.SystemMalfunctionException;
 import db.dao.*;
 import ex.InvalidLoginException;
 import ex.UserAlreadyExistException;
-import model.Coupon;
+import facade.ui.GuestMenuUI;
 import model.LoginType;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collection;
 
 public abstract class AbsFacade {
-
-    private CouponDao couponDao = new CouponDBDao();
-    private UserDao userDao = new UserDBDao();
-    private Collection<Coupon> coupons;
 
     static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -26,10 +21,10 @@ public abstract class AbsFacade {
         switch (type) {
             case ADMIN:
                 AdminFacade adminFacade = new AdminFacade();
-                return adminFacade.performLogin(email, password);
+                return adminFacade.initFacade(email, password);
             case CUSTOMER:
                 CustomerFacade customerFacade = new CustomerFacade();
-                return customerFacade.performLogin(email, password);
+                return customerFacade.initFacade(email, password);
             case COMPANY:
                 CompanyFacade companyFacade = new CompanyFacade();
                 return companyFacade.initFacade(email, password);
@@ -38,24 +33,25 @@ public abstract class AbsFacade {
         }
     }
 
-    public void registerUser(String email, String password, LoginType type) throws InvalidLoginException, UserAlreadyExistException {
-        if (!userDao.userEmailIsPresent(email)) {
+    public static AbsFacade registerUser(String email, String password, LoginType type) throws UserAlreadyExistException, InvalidLoginException {
+        UserDao dao = new UserDBDao();
+        if (!dao.userEmailIsPresent(email)) {
             switch (type) {
                 case COMPANY:
-                    userDao.createUserCompany(email, password);
-                    login(email, password, type);
-                    break;
+                    dao.createUserCompany(email, password);
+                    new GuestMenuUI().initGuestMenuUI(email, password);
                 case CUSTOMER:
-                    userDao.createUserCustomer(email, password);
-                    login(email, password, type);
-                    break;
+                    dao.createUserCustomer(email, password);
+                    new GuestMenuUI().initGuestMenuUI(email, password);
+                default:
+                    throw new NumberFormatException();
             }
         } else throw new UserAlreadyExistException("User with such email *" + email + "* already exist in DB");
     }
 
     public LoginType userRole(String email) {
         if (email.equals("admin")) return LoginType.ADMIN;
-        return userDao.getUserRoleByEmail(email);
+        return new UserDBDao().getUserRoleByEmail(email);
     }
 
     /**
@@ -63,7 +59,7 @@ public abstract class AbsFacade {
      * Method is using by outside package - must be public.
      */
     public void getAllCoupons() {
-        DisplayDBResult.showCouponResult(couponDao.getAllCoupons());
+        DisplayDBResult.showCouponResult(new CouponDBDao().getAllCoupons());
         closeMenu();
     }
 

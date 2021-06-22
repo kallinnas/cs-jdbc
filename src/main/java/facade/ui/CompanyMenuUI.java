@@ -24,9 +24,9 @@ public class CompanyMenuUI implements MenuUI {
                 case 2:
                     updateMenu();
                 case 3:
-                    new LoginController().logout();
+                    new GuestMenuUI().logout();
                 case 4:
-                    LoginController.stopApp();
+                    GuestMenuUI.stopApp();
                 default:
                     throw new NumberFormatException();
             }
