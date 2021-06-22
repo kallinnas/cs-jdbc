@@ -11,7 +11,7 @@ import model.User;
 import facade.ui.CustomerMenuUI;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor
@@ -74,17 +74,23 @@ public class CustomerFacade extends AbsFacade {
     public void purchaseCoupon() {
         try {
             while (isNotRequiredType) {
-                System.out.println("Enter coupon id to purchase it: ");
-                coupon = couponDao.getCouponById(reader.read());
+                System.out.print("Enter coupon id to purchase it: ");
+                coupon = couponDao.getCouponById(Long.parseLong(reader.readLine()));
                 isNotRequiredType = false;
             }
         } catch (IOException | NoSuchCouponException e) {
             System.out.println(WRONG_INSERT_MSG);
             purchaseCoupon();
         }
-        coupon = couponDao.purchaseCoupon(customer.getId(), this.coupon.getId());
-        System.out.println("Coupon " + coupon.getTitle() + " id " + coupon.getId() + " was purchased successfully!");
-        ui.couponMenu();
+        if (Arrays.stream(couponDao.getCouponsIDByCustomerId(customer.getId())).noneMatch(x -> x == coupon.getId())) {
+            coupon = couponDao.purchaseCoupon(customer.getId(), this.coupon.getId());
+            System.out.println("Coupon " + coupon.getTitle() + " id " + coupon.getId() + " was purchased successfully!");
+            ui.couponMenu();
+        } else {
+            System.out.println("Customer already has this coupon!");
+            isNotRequiredType = true;
+            purchaseCoupon();
+        }
     }
 
     public void sendCoupon() {
@@ -92,7 +98,8 @@ public class CustomerFacade extends AbsFacade {
             while (isNotRequiredType) {
                 System.out.println("Enter coupon id that you want to gift: ");
                 long id = reader.read();
-                coupons = couponDao.getCouponsByCustomerId(customer.getId());
+                //!!!!!!!!!!!!!!!!!!!!!!
+//                coupons = couponDao.getCouponsByCustomerId(customer.getId());
                 if (coupons.stream().noneMatch(c -> c.getId() == id)) {
                     System.out.println("You have no coupon with id " + id + " in your collection!");
                     ui.couponMenu();
@@ -115,7 +122,14 @@ public class CustomerFacade extends AbsFacade {
             System.out.println(WRONG_INSERT_MSG);
         }
         System.out.println("Coupon #" + coupon.getId() + " " + coupon.getTitle() +
-                " was sent to customer #"+ customer.getId() +" successfully!");
+                " was sent to customer #" + customer.getId() + " successfully!");
+        ui.couponMenu();
+    }
+
+    public void getAllCustomerCoupons() {
+        coupons = couponDao.getCouponsByCustomerId(user.getClient().getId());
+        DisplayDBResult.showCouponResult(coupons);
+        closeMenu();
         ui.couponMenu();
     }
 }

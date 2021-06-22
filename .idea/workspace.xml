@@ -8,22 +8,12 @@
   <component name="ChangeListManager">
     <list default="true" id="d369484d-6f7d-48d4-b066-8ee288fae1f6" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/AppRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AppRunner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facade/AbsFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/AbsFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facade/AdminFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/AdminFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/db/Schema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/Schema.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/CouponDBDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/CouponDBDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/db/dao/CouponDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/db/dao/CouponDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/facade/CustomerFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/CustomerFacade.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facade/ui/CompanyMenuUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/ui/CompanyMenuUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/facade/ui/CustomerMenuUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/ui/CustomerMenuUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/facade/ui/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/facade/ui/GuestMenuUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/AppRunner.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/AppRunner.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/AbsFacade$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AbsFacade$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/AbsFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AbsFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/AdminFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/AdminFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/CustomerFacade.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/CustomerFacade.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/ui/CompanyMenuUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/ui/CompanyMenuUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/ui/CustomerMenuUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/facade/ui/CustomerMenuUI.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/ui/LoginController$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/facade/ui/LoginController.class" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -379,7 +369,8 @@
       <workItem from="1623914270624" duration="3902000" />
       <workItem from="1624173181976" duration="21344000" />
       <workItem from="1624330041578" duration="5873000" />
-      <workItem from="1624364659000" duration="1231000" />
+      <workItem from="1624364659000" duration="2426000" />
+      <workItem from="1624373359609" duration="8353000" />
     </task>
     <servers />
   </component>
@@ -403,67 +394,12 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/db/DBUtilSetter.java</url>
-          <line>86</line>
-          <properties class="db.DBUtilSetter" method="applyUpdatedCouponValuesOnStatement">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="120" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/db/dao/CouponDBDao.java</url>
-          <line>215</line>
-          <properties class="db.dao.CouponDBDao" method="updateCoupon">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="169" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/facade/CompanyFacade.java</url>
-          <line>34</line>
-          <properties class="facade.CompanyFacade" method="initFacade">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="187" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/facade/CustomerFacade.java</url>
-          <line>34</line>
-          <properties class="facade.CustomerFacade" method="initFacade">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="188" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/facade/AbsFacade.java</url>
           <line>35</line>
           <properties class="facade.AbsFacade" method="registerUser">
             <option name="EMULATED" value="true" />
           </properties>
           <option name="timeStamp" value="192" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/facade/ui/GuestMenuUI.java</url>
-          <line>131</line>
-          <properties class="facade.ui.GuestMenuUI" method="initGuestMenuUI">
-            <option name="EMULATED" value="true" />
-          </properties>
-          <option name="timeStamp" value="193" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/db/dao/CouponDBDao.java</url>
-          <line>222</line>
-          <option name="timeStamp" value="161" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/facade/ui/GuestMenuUI.java</url>
-          <line>142</line>
-          <option name="timeStamp" value="184" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/facade/ui/GuestMenuUI.java</url>
-          <line>141</line>
-          <option name="timeStamp" value="185" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

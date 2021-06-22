@@ -30,7 +30,9 @@ public class CouponDBDao implements CouponDao {
             preStmt.executeUpdate();
             preStmt = connection.prepareStatement(Schema.SELECT_COUPON_BY_TITLE);
             preStmt.setString(1, coupon.getTitle());
-            coupon = DBUtilSetter.resultSetToCouponSet(preStmt.executeQuery()).iterator().next();
+            ResultSet rs = preStmt.executeQuery();
+            rs.next();
+            coupon = DBUtilSetter.resultSetToCoupon(rs);
         } catch (SQLException e) {
             String msg = String.format("Unable to create new coupon! (%s) ", e.getMessage());
             throw new SystemMalfunctionException(msg);
@@ -47,7 +49,9 @@ public class CouponDBDao implements CouponDao {
         try {
             preStmt = connection.prepareStatement(Schema.SELECT_COUPON_BY_TITLE);
             preStmt.setString(1, title);
-            coupon = DBUtilSetter.resultSetToCouponSet(preStmt.executeQuery()).iterator().next();
+            ResultSet rs = preStmt.executeQuery();
+            rs.next();
+            coupon = DBUtilSetter.resultSetToCoupon(rs);
         } catch (SQLException e) {
             throw new NoSuchCouponException("Unable to get coupon by such title:" + title);
         } finally {
@@ -89,6 +93,29 @@ public class CouponDBDao implements CouponDao {
             ConnectionPool.getInstance().putConnection(connection);
             StatementUtils.closeAll(callStmt);
         }
+    }
+
+    @Override
+    public Collection<Coupon> getCouponsByCustomerId(long id) {
+        coupons = new ArrayList<>();
+        long[] array = getCouponsIDByCustomerId(id);
+        connection = ConnectionPool.getInstance().getConnection();
+        try {
+            for (long coupon_id : array) {
+                preStmt = connection.prepareStatement(Schema.SELECT_COUPON_BY_ID);
+                preStmt.setLong(1, coupon_id);
+                ResultSet couponResult = preStmt.executeQuery();
+                couponResult.next();
+                coupons.add(DBUtilSetter.resultSetToCoupon(couponResult));
+            }
+        } catch (SQLException e) {
+            String msg = String.format("Unable to get coupons with customer_id (%d)! (%s) ", id, e.getMessage());
+            throw new SystemMalfunctionException(msg);
+        } finally {
+            ConnectionPool.getInstance().putConnection(connection);
+            StatementUtils.closeAll(preStmt);
+        }
+        return coupons;
     }
 
     @Override
@@ -198,18 +225,23 @@ public class CouponDBDao implements CouponDao {
     }
 
     @Override
-    public Collection<Coupon> getCouponsByCustomerId(long id) {
+    public long[] getCouponsIDByCustomerId(long id) {
+        long[] couponsId;
         connection = ConnectionPool.getInstance().getConnection();
         try {
-            preStmt = connection.prepareStatement(Schema.SELECT_COUPON_BY_CUSTOMER_ID);
-            coupons = DBUtilSetter.resultSetToCouponSet(preStmt.executeQuery());
+            preStmt = connection.prepareStatement(Schema.SELECT_COUPON_BY_CUSTOMER_ID,
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            preStmt.setLong(1, id);
+            ResultSet rs = preStmt.executeQuery();
+            rs.last();
+            couponsId = DBUtilSetter.resultSetToArray(rs);
         } catch (SQLException e) {
             throw new SystemMalfunctionException("Unable to get all coupons. " + e.getMessage());
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
             StatementUtils.closeAll(preStmt);
         }
-        return coupons;
+        return couponsId;
     }
 
     @Override
@@ -238,7 +270,8 @@ public class CouponDBDao implements CouponDao {
             callStmt.setLong(1, customer_id);
             callStmt.setLong(2, coupon_id);
             ResultSet rs = callStmt.executeQuery();
-            coupon = DBUtilSetter.resultSetToCouponSet(rs).iterator().next();
+            rs.next();
+            coupon = DBUtilSetter.resultSetToCoupon(rs);
         } catch (SQLException e) {
             String msg = String.format("Unable to sell coupon with id (%d)! (%s) ", coupon_id, e.getMessage());
             throw new SystemMalfunctionException(msg);

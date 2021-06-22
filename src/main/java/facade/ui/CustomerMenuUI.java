@@ -45,7 +45,7 @@ public class CustomerMenuUI implements MenuUI {
                     facade.getAllCoupons();
                     break;
                 case 2:
-//                    facade.getAllCustomerCoupons();
+                    facade.getAllCustomerCoupons();
                     break;
                 case 3:
                     searchCouponMenu();

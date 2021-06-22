@@ -11,7 +11,6 @@ public interface CouponDao {
 
     Collection<Coupon> getCouponsByCompanyId(long id);
 
-
     Collection<Coupon> getCouponsStartFromDate(LocalDate startDate);
 
     Collection<Coupon> getCouponsStartBeforeDate(LocalDate startDate);
@@ -22,7 +21,7 @@ public interface CouponDao {
 
     Collection<Coupon> getAllCoupons();
 
-    Collection<Coupon> getCouponsByCustomerId(long id);
+    long[] getCouponsIDByCustomerId(long id);
 
     Coupon getCouponById(long id) throws NoSuchCouponException;
 
@@ -37,4 +36,6 @@ public interface CouponDao {
     void removeCouponFromCustomer(long customer_id, long coupon_id);
 
     void removeCoupon(long id) throws SQLException;
+
+    Collection<Coupon> getCouponsByCustomerId(long id);
 }

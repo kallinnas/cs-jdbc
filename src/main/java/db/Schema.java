@@ -125,13 +125,13 @@ public class Schema {
     public static final String GENERATE_UPDATE_COUPON_OWNER = DROP_IF + " `update_coupon_owner`; " +
             "CREATE PROCEDURE `update_coupon_owner`(IN CUSTOMER_ID INT, IN COUPON_ID INT) " +
             "BEGIN " +
-            "UPDATE " +
+            "INSERT " +
             TABLE_NAME_CUSTOMER_COUPON + " SET " +
             COL_CUSTOMER_ID + "=CUSTOMER_ID," +
             COL_COUPON_ID + "=COUPON_ID;" +
             "SELECT * FROM " + TABLE_NAME_COUPON +
-            " WHERE " + COL_ID + "=LAST_INSERT_ID();" +
-            "END;";
+            " WHERE " + COL_ID + "=COUPON_ID;" +
+            "END";
 
     public static final String GENERATE_UPDATE_COUPON = DROP_IF + " `update_coupon`; " +
             "CREATE PROCEDURE `update_coupon`(IN COUPON_TITLE VARCHAR(255), IN COUPON_PRICE DOUBLE, " +

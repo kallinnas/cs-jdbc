@@ -2,7 +2,10 @@ package db;
 
 import model.*;
 
-import java.sql.*;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -50,11 +53,22 @@ public class DBUtilSetter {
     }
 
     public static Customer resultSetToCustomer(ResultSet resultRow) throws SQLException {
-        Customer customer =new Customer();
+        Customer customer = new Customer();
         customer.setId(resultRow.getLong(1));
         customer.setFirstName(resultRow.getString(2));
         customer.setLastName(resultRow.getString(3));
         return customer;
+    }
+
+    public static long[] resultSetToArray(ResultSet rs) throws SQLException {
+        int length = rs.getRow();
+        long[] array = new long[length];
+        rs.first();
+        for (int i = 0; i < length; rs.next()) {
+            array[i] = rs.getLong(2);
+            i++;
+        }
+        return array;
     }
 
     /* STMT SETTERS */
@@ -91,4 +105,5 @@ public class DBUtilSetter {
         preStmt.setString(4, coupon.getImageURL());
         preStmt.setLong(5, coupon.getId());
     }
+
 }
