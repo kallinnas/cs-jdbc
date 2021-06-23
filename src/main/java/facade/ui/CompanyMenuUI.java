@@ -24,9 +24,9 @@ public class CompanyMenuUI implements MenuUI {
                 case 2:
                     updateMenu();
                 case 3:
-                    new GuestMenuUI().logout();
+                    new MenuUIController().logout();
                 case 4:
-                    GuestMenuUI.stopApp();
+                    MenuUIController.stopApp();
                 default:
                     throw new NumberFormatException();
             }
@@ -73,34 +73,6 @@ public class CompanyMenuUI implements MenuUI {
     public void companyMenu() {
     }
 
-    @Override
-    public void searchCouponMenu() {
-        System.out.println(SEARCH_COUPON);
-        try {
-            switch (MenuUI.readCommandNumber()) {
-                case 1:
-                    facade.searchCouponById();
-                case 2:
-                    facade.searchCouponByTitle();
-                case 3:
-                    facade.searchCouponsStartFromDate();
-                case 4:
-                    facade.searchCouponsStartBeforeDate();
-                case 5:
-                    facade.searchCouponsByPriceLessThan();
-                case 6:
-                    facade.searchCouponsByPriceMoreThan();
-                case 7:
-                    couponMenu();
-                default:
-                    throw new NumberFormatException();
-            }
-        } catch (NumberFormatException | IOException e) {
-            System.out.println(WRONG_INSERT_MSG);
-            searchCouponMenu();
-        }
-        searchCouponMenu();
-    }
 
     @Override
     public void accountMenu() {

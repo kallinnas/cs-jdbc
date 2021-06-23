@@ -23,10 +23,6 @@ public class AdminMenuUI implements MenuUI {
 
     }
 
-    @Override
-    public void searchCouponMenu() {
-
-    }
 
     @Override
     public void accountMenu() {

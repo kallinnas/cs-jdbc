@@ -4,7 +4,7 @@ import common.SystemMalfunctionException;
 import db.dao.*;
 import ex.InvalidLoginException;
 import ex.UserAlreadyExistException;
-import facade.ui.GuestMenuUI;
+import facade.ui.MenuUIController;
 import model.LoginType;
 
 import java.io.BufferedReader;
@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 
 public abstract class AbsFacade {
 
-    static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     final String WRONG_INSERT_MSG = "Wrong command number. Try more. ";
 
@@ -39,10 +39,10 @@ public abstract class AbsFacade {
             switch (type) {
                 case COMPANY:
                     dao.createUserCompany(email, password);
-                    new GuestMenuUI().initGuestMenuUI(email, password);
+                    new MenuUIController().initGuestMenuUI(email, password);
                 case CUSTOMER:
                     dao.createUserCustomer(email, password);
-                    new GuestMenuUI().initGuestMenuUI(email, password);
+                    new MenuUIController().initGuestMenuUI(email, password);
                 default:
                     throw new NumberFormatException();
             }
@@ -68,7 +68,7 @@ public abstract class AbsFacade {
      * Other facades that inheritance from AbsFacade should be able
      * to use this method - must be protected.
      */
-    protected void closeMenu() {
+    public static void closeMenu() {
         String GO_BACK_MSG = "Return to menu just press Enter";
         System.out.println(GO_BACK_MSG);
         try {

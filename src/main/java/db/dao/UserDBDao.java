@@ -89,8 +89,15 @@ public class UserDBDao implements UserDao {
 
     private void consoleShowResult(ResultSet rs) throws SQLException {
         rs.next();
-        System.out.println("New customer with email *" + rs.getString(4) +
-                "* was created under #" + rs.getInt(1) + " successfully!");
+        switch (rs.getInt(2)) {
+            case 1:
+                System.out.println("New customer with email *" + rs.getString(4) +
+                        "* was created under #" + rs.getInt(1) + " successfully!");
+                break;
+            case 2:
+                System.out.println("New user with email *" + rs.getString(4) +
+                        "* was created under #" + rs.getInt(1) + " successfully!");
+        }
     }
 
     public LoginType getUserRoleByEmail(String email) {

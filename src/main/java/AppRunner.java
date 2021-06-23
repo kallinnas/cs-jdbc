@@ -1,7 +1,7 @@
 import db.StoredProceduresLoaderDB;
 import ex.InvalidLoginException;
 import ex.UserAlreadyExistException;
-import facade.ui.GuestMenuUI;
+import facade.ui.MenuUIController;
 
 import java.io.IOException;
 
@@ -9,7 +9,7 @@ public class AppRunner {
 
     public static void main(String[] args) throws InvalidLoginException, UserAlreadyExistException, InterruptedException, IOException {
         StoredProceduresLoaderDB.storeProceduresIntoDB();
-        GuestMenuUI controller = new GuestMenuUI();
+        MenuUIController controller = new MenuUIController();
         controller.run();
 
 

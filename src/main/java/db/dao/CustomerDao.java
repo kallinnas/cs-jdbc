@@ -8,7 +8,7 @@ public interface CustomerDao {
 
     Customer updateCustomer(Customer customer) throws NoSuchCustomerException;
 
-    Customer getCustomerById(long id);
+    Customer getCustomerById(long id) throws NoSuchCustomerException;
 
     void setCustomer(Customer customer);
 }

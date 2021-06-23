@@ -1,5 +1,6 @@
 package facade;
 
+import common.SystemMalfunctionException;
 import db.dao.*;
 import ex.InvalidLoginException;
 import ex.NoSuchCouponException;
@@ -35,7 +36,11 @@ public class CustomerFacade extends AbsFacade {
     AbsFacade initFacade(String email, String password) throws InvalidLoginException {
         user = new UserDBDao().getUserByEmailAndPassword(email, password);
         initThis(new CustomerMenuUI(), new CouponDBDao(), new CustomerDBDao());
-        customer = customerDao.getCustomerById(user.getClient().getId());
+        try {
+            customer = customerDao.getCustomerById(user.getClient().getId());
+        } catch (NoSuchCustomerException e) {
+            // ignore
+        }
         customerDao.setCustomer(customer);
         ui.setFacade(this);
         if (user != null) return this;
@@ -94,35 +99,42 @@ public class CustomerFacade extends AbsFacade {
     }
 
     public void sendCoupon() {
+        isNotRequiredType = true;
+        long newOwnerId = 0;
         try {
             while (isNotRequiredType) {
-                System.out.println("Enter coupon id that you want to gift: ");
-                long id = reader.read();
-                //!!!!!!!!!!!!!!!!!!!!!!
-//                coupons = couponDao.getCouponsByCustomerId(customer.getId());
-                if (coupons.stream().noneMatch(c -> c.getId() == id)) {
-                    System.out.println("You have no coupon with id " + id + " in your collection!");
+                System.out.print("Enter coupon id that you want to gift: ");
+                long coupon_id = Long.parseLong(reader.readLine());
+                coupons = couponDao.getCouponsByCustomerId(customer.getId());
+                if (coupons.stream().noneMatch(c -> c.getId() == coupon_id)) {
+                    System.out.println("You have no coupon with id " + coupon_id + " in your collection!");
                     ui.couponMenu();
                 } else {
-                    coupon = coupons.stream().filter(c -> c.getId() == id).findFirst().get();
+                    coupon = coupons.stream().filter(c -> c.getId() == coupon_id).findFirst().get();
                     try {
                         while (isNotRequiredType) {
-                            System.out.println("Enter customer id to send a coupon: ");
-                            long newOwnerId = reader.read();
-                            isNotRequiredType = false;
+                            System.out.print("Enter customer id to send a coupon: ");
+                            newOwnerId = Long.parseLong(reader.readLine());
+                            if (customerDao.getCustomerById(newOwnerId) != null) isNotRequiredType = false;
                         }
-                    } catch (IOException e) {
-                        System.out.println(WRONG_INSERT_MSG);
+                    } catch (IOException | NoSuchCustomerException e) {
+                        System.out.println(WRONG_INSERT_MSG + e.getMessage());
+                        ui.couponMenu();
                     }
-                    couponDao.purchaseCoupon(customer.getId(), coupon.getId());
-                    couponDao.removeCouponFromCustomer(customer.getId(), coupon.getId());
+                    if (couponDao.getCouponsByCustomerId(newOwnerId).stream().noneMatch(c -> c.getId() == coupon_id)) {
+                        couponDao.purchaseCoupon(newOwnerId, coupon.getId());
+                        couponDao.removeCouponFromCustomer(customer.getId(), coupon.getId());
+                    } else
+                        System.out.println("Unable to send as a gift required coupon. Customer with id #" + newOwnerId +
+                                " already has coupon with id #" + coupon_id + ".");
+                    ui.couponMenu();
                 }
             }
         } catch (IOException e) {
             System.out.println(WRONG_INSERT_MSG);
         }
         System.out.println("Coupon #" + coupon.getId() + " " + coupon.getTitle() +
-                " was sent to customer #" + customer.getId() + " successfully!");
+                " was sent to customer #" + newOwnerId + " successfully!");
         ui.couponMenu();
     }
 

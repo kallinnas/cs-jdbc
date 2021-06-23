@@ -62,7 +62,7 @@ public class CustomerDBDao implements CustomerDao {
     }
 
     @Override
-    public Customer getCustomerById(long id) {
+    public Customer getCustomerById(long id) throws NoSuchCustomerException {
         connection = ConnectionPool.getInstance().getConnection();
         try{
             preStmt = connection.prepareStatement(Schema.SELECT_CUSTOMER_BY_ID);
@@ -71,8 +71,8 @@ public class CustomerDBDao implements CustomerDao {
             rs.next();
             customer = DBUtilSetter.resultSetToCustomer(rs);
         }catch (SQLException e) {
-            String msg = String.format("Unable to update customer by id#(%d)! (%s) ", customer.getId(), e.getMessage());
-            throw new SystemMalfunctionException(msg);
+            String msg = String.format("Unable to get customer by id#(%d)! (%s) ", id, e.getMessage());
+            throw new NoSuchCustomerException(msg);
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
             StatementUtils.closeAll(preStmt);

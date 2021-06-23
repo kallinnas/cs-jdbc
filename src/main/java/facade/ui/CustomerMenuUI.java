@@ -24,9 +24,9 @@ public class CustomerMenuUI implements MenuUI {
                 case 3:
                     accountMenu();
                 case 4:
-                    new GuestMenuUI().logout();
+                    new MenuUIController().logout();
                 case 5:
-                    GuestMenuUI.stopApp();
+                    MenuUIController.stopApp();
                 default:
                     throw new NumberFormatException();
             }
@@ -74,10 +74,6 @@ public class CustomerMenuUI implements MenuUI {
 
     }
 
-    @Override
-    public void searchCouponMenu() {
-
-    }
 
     @Override
     public void accountMenu() {

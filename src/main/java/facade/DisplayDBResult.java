@@ -22,7 +22,7 @@ public class DisplayDBResult {
             "                     ImageURL                     |";
     //2021-06-13
 
-    static void showCouponResult(Collection<Coupon> coupons) {
+    public static void showCouponResult(Collection<Coupon> coupons) {
         System.out.println(tableBorder);
         System.out.println(tableHeadCoupon);
         System.out.println(tableBorder);

@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Data
-public class GuestMenuUI {
+public class MenuUIController {
     private static String email;
     private static String password;
     private static LoginType type;
@@ -118,7 +118,7 @@ public class GuestMenuUI {
                     registrationUser();
                     break;
                 case 3:
-                    GuestMenuUI.stopApp();
+                    MenuUIController.stopApp();
                     break;
                 default:
                     throw new NumberFormatException();
