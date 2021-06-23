@@ -1,6 +1,8 @@
 package facade.ui;
 
+import db.dao.CompanyDBDao;
 import db.dao.CouponDBDao;
+import ex.NoSuchCompanyException;
 import ex.NoSuchCouponException;
 import facade.AbsFacade;
 import facade.DisplayDBResult;
@@ -17,15 +19,12 @@ import java.util.Collections;
 public interface MenuUI {
 
     String WRONG_INSERT_MSG = "Wrong command number. Try more. ";
-    String SEARCH_COUPON = "FIND BY:\n1.Id\n2.Title\n3.Coupons start from date\n4.Coupons start before date\n5.Price less than\n6.Price more than\n7.Go back <--";
+    String SEARCH_COUPON = "FIND BY:\n1.Id\n2.Title\n3.Coupons start from date\n4.Coupons start before date" +
+            "\n5.Price less than\n6.Price more than\n7.Company ID\n8.Go back <--";
 
     void mainMenu();
 
     void couponMenu();
-
-    void companyMenu();
-
-    void accountMenu();
 
     void updateMenu();
 
@@ -52,12 +51,35 @@ public interface MenuUI {
                 case 6:
                     searchCouponsByPriceMoreThan();
                 case 7:
+                    searchCouponsByCompanyId();
+                case 8:
                     couponMenu();
                 default:
                     throw new NumberFormatException();
             }
         } catch (NumberFormatException | IOException e) {
             System.out.println(WRONG_INSERT_MSG);
+        }
+        searchCouponMenu();
+    }
+
+    default void searchCouponsByCompanyId() {
+        while (true) {
+            long id = 0;
+            System.out.print("Enter company id:");
+            try {
+                id = Long.parseLong(AbsFacade.reader.readLine());
+                if (new CompanyDBDao().getCompanyById(id) == null) {
+                    System.out.println("There is no company with such id #" + id);
+                    searchCouponMenu();
+                }
+                DisplayDBResult.showCouponResult(new CouponDBDao().getCouponsByCompanyId(id));
+                AbsFacade.closeMenu();
+                break;
+            } catch (IOException | NumberFormatException | NoSuchCompanyException e) {
+                System.out.println(WRONG_INSERT_MSG);
+                searchCouponMenu();
+            }
         }
         searchCouponMenu();
     }

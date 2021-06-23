@@ -159,7 +159,7 @@ public class CompanyDBDao implements CompanyDao {
     }
 
     @Override
-    public Company getCompanyById(long id) {
+    public Company getCompanyById(long id) throws NoSuchCompanyException {
         connection = ConnectionPool.getInstance().getConnection();
         try {
             preStmt = connection.prepareStatement(Schema.SELECT_COMPANY_BY_ID);
@@ -168,7 +168,7 @@ public class CompanyDBDao implements CompanyDao {
             rs.next();
             company = DBUtilSetter.resultSetToCompany(rs, 1);
         } catch (SQLException e) {
-            throw new SystemMalfunctionException("Unable to get company!");
+            throw new NoSuchCompanyException("Unable to get company!");
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
             StatementUtils.closeAll(preStmt);

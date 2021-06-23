@@ -69,15 +69,6 @@ public class CompanyMenuUI implements MenuUI {
         couponMenu();
     }
 
-    @Override
-    public void companyMenu() {
-    }
-
-
-    @Override
-    public void accountMenu() {
-
-    }
 
     @Override
     public void updateMenu() {

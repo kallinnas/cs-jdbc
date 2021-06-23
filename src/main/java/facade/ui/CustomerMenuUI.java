@@ -1,6 +1,8 @@
 package facade.ui;
 
+import facade.AbsFacade;
 import facade.CustomerFacade;
+import facade.DisplayDBResult;
 import lombok.Setter;
 
 import java.io.IOException;
@@ -9,7 +11,7 @@ public class CustomerMenuUI implements MenuUI {
 
     @Setter
     protected CustomerFacade facade;
-    private final String MAIN_MENU = "1.Go to coupons\n2.Go to companies\n3.My Account\n4.Logout\n5.Quit\nUse command numbers to perform: ";
+    private final String MAIN_MENU = "1.Go to coupons\n2.Show all companies\n3.My Account\n4.Logout\n5.Quit\nUse command numbers to perform: ";
     private final String COUPON_MENU = "1.Show all coupons\n2.My coupons\n3.Search coupon\n4.Purchase coupon\n5.Send coupon\n6.Go back <--";
 
     @Override
@@ -20,9 +22,12 @@ public class CustomerMenuUI implements MenuUI {
                 case 1:
                     couponMenu();
                 case 2:
-                    companyMenu();
+                    AbsFacade.getAllCompanies();
+                    break;
                 case 3:
-                    accountMenu();
+                    DisplayDBResult.showMyAccount(facade.getUser());
+                    AbsFacade.closeMenu();
+                    break;
                 case 4:
                     new MenuUIController().logout();
                 case 5:
@@ -69,16 +74,6 @@ public class CustomerMenuUI implements MenuUI {
         couponMenu();
     }
 
-    @Override
-    public void companyMenu() {
-
-    }
-
-
-    @Override
-    public void accountMenu() {
-
-    }
 
     @Override
     public void updateMenu() {

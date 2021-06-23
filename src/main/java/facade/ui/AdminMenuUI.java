@@ -18,16 +18,6 @@ public class AdminMenuUI implements MenuUI {
 
     }
 
-    @Override
-    public void companyMenu() {
-
-    }
-
-
-    @Override
-    public void accountMenu() {
-
-    }
 
     @Override
     public void updateMenu() {

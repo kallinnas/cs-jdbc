@@ -1,49 +1,57 @@
 package facade;
 
+import db.dao.CustomerDBDao;
+import ex.NoSuchCustomerException;
+import model.Company;
 import model.Coupon;
+import model.Customer;
+import model.User;
 
 import java.util.Collection;
 
 public class DisplayDBResult {
     private static int charAmount = 0;
-    private final static double spaceForID = 8;
-    private final static double spaceForCompanyID = 6;
-    private final static double spaceForDate = 10;
-    private final static double spaceForPrice = 10;
-    private final static double spaceForTitle = 50;
-    private final static double spaceForDescription = 50;
-    private final static double spaceForImageUrl = 50;
-    private final static String tableBorder = "________________________________________________________________" +
+    private final static double SPACE_FOR_ID = 8;
+    private final static double SPACE_FOR_COMPANY_ID = 6;
+    private final static double SPACE_FOR_DATE = 10;
+    private final static double SPACE_FOR_PRICE = 10;
+    private final static double SPACE_FOR_TITLE = 50;
+    private final static double SPACE_FOR_DESCRIPTION = 50;
+    private final static double SPACE_FOR_IMAGE_URL = 50;
+    private final static String TABLE_BORDER = "________________________________________________________________" +
             "________________________________________________________________" +
             "________________________________________________________________";
-    private final static String tableHeadCoupon = "|   Id   |Com_Id|   Date   |   Price  |" +
+    private final static String TABLE_HEAD_COUPON = "|   Id   |Com_Id|   Date   |   Price  |" +
             "                       Title                      |" +
             "                   Description                    |" +
             "                     ImageURL                     |";
-    //2021-06-13
+    private final static String TABLE_HEAD_COMPANY = "|   Id   |"+
+            "                   Company Name                   |" +
+            "                                                           " +
+            "Company ImageURL                                                       |";
 
     public static void showCouponResult(Collection<Coupon> coupons) {
-        System.out.println(tableBorder);
-        System.out.println(tableHeadCoupon);
-        System.out.println(tableBorder);
+        System.out.println(TABLE_BORDER);
+        System.out.println(TABLE_HEAD_COUPON);
+        System.out.println(TABLE_BORDER);
         for (Coupon coupon : coupons) {
             System.out.print("|");
-            columnDigitBuilder(spaceForID, coupon.getId());
+            columnDigitBuilder(SPACE_FOR_ID, coupon.getId());
             System.out.print("|");
-            columnDigitBuilder(spaceForCompanyID, coupon.getCompanyId());
+            columnDigitBuilder(SPACE_FOR_COMPANY_ID, coupon.getCompanyId());
             System.out.print("|");
-            columnStringBuilder(spaceForDate, coupon.getStartDate().toString());
+            columnStringBuilder(SPACE_FOR_DATE, coupon.getStartDate().toString());
             System.out.print("|");
-            columnDigitBuilder(spaceForPrice, coupon.getPrice());
+            columnDigitBuilder(SPACE_FOR_PRICE, coupon.getPrice());
             System.out.print("|");
-            columnStringBuilder(spaceForTitle, coupon.getTitle());
+            columnStringBuilder(SPACE_FOR_TITLE, coupon.getTitle());
             System.out.print("|");
-            columnStringBuilder(spaceForDescription, coupon.getDescription());
+            columnStringBuilder(SPACE_FOR_DESCRIPTION, coupon.getDescription());
             System.out.print("|");
-            columnStringBuilder(spaceForImageUrl, coupon.getImageURL());
+            columnStringBuilder(SPACE_FOR_IMAGE_URL, coupon.getImageURL());
             System.out.println("|");
         }
-        System.out.println(tableBorder);
+        System.out.println(TABLE_BORDER);
     }
 
     private static void columnStringBuilder(double spaceForContext, String context) {
@@ -105,5 +113,36 @@ public class DisplayDBResult {
 
     private static void countCharAmount(String context) {
         charAmount = (int) context.chars().count();
+    }
+
+    public static void showCompanyResult(Collection<Company> companies) {
+        System.out.println(TABLE_BORDER);
+        System.out.println(TABLE_HEAD_COMPANY);
+        System.out.println(TABLE_BORDER);
+        for (Company company : companies) {
+            System.out.print("|");
+            columnDigitBuilder(SPACE_FOR_ID, company.getId());
+            System.out.print("|");
+            columnStringBuilder(SPACE_FOR_DESCRIPTION, company.getName());
+            System.out.print("|");
+            columnStringBuilder(130, company.getImageURL());
+            System.out.println("|");
+        }
+        System.out.println(TABLE_BORDER);
+    }
+
+
+    public static void showMyAccount(User user) {
+        Customer customer = null;
+        try {
+            customer = new CustomerDBDao().getCustomerById(user.getClient().getId());
+        } catch (NoSuchCustomerException e) {
+            // ignore
+        }
+        System.out.println("\033[32mUser ID:\033[0m " + user.getId() + "    \033[32mEmail:\033[0m " + user.getEmail());
+        System.out.println("\033[32mCustomer ID:\033[0m " + customer.getId() +
+                "   \033[32mFirst Name:\033[0m " + customer.getFirstName() +
+                "   \033[32mLast Name:\033[0m " + customer.getLastName());
+
     }
 }

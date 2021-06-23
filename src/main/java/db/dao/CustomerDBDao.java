@@ -5,7 +5,6 @@ import common.SystemMalfunctionException;
 import db.ConnectionPool;
 import db.DBUtilSetter;
 import db.Schema;
-import ex.NoSuchCompanyException;
 import ex.NoSuchCustomerException;
 import facade.CustomerFacade;
 import lombok.Setter;

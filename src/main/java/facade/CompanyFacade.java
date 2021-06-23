@@ -35,7 +35,11 @@ public class CompanyFacade extends AbsFacade {
     AbsFacade initFacade(String email, String password) throws InvalidLoginException {
         user = new UserDBDao().getUserByEmailAndPassword(email, password);
         initThis(new CompanyMenuUI(), new CouponDBDao(), new CompanyDBDao());
-        company = companyDao.getCompanyById(user.getClient().getId());
+        try {
+            company = companyDao.getCompanyById(user.getClient().getId());
+        } catch (NoSuchCompanyException e) {
+            // ignore
+        }
         companyDao.setCompany(company);
         ui.setFacade(this);
         if (user != null) return this;

@@ -59,9 +59,6 @@ public class AdminFacade extends AbsFacade {
         if (any.isPresent()) companyDao.updateCompany(company);
     }
 
-    public Collection<Company> getAllCompanies() {
-        return companyDao.getAllCompanies();
-    }
 
     public Company getCompanyById(long id) throws NoSuchCompanyException {
         Optional<Company> company = companyDao.getAllCompaniesAndCoupons().stream()

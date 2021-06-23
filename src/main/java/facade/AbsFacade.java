@@ -63,6 +63,12 @@ public abstract class AbsFacade {
         closeMenu();
     }
 
+
+    public static void getAllCompanies(){
+        DisplayDBResult.showCompanyResult(new CompanyDBDao().getAllCompanies());
+        closeMenu();
+    }
+
     /**
      * Method prints out message for returning to the previous menu.
      * Other facades that inheritance from AbsFacade should be able

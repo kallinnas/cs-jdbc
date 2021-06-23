@@ -24,5 +24,5 @@ public interface CompanyDao {
 
     Collection<Company> getAllCompaniesAndCoupons();
 
-    Company getCompanyById(long id);
+    Company getCompanyById(long id) throws NoSuchCompanyException;
 }
