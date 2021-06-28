@@ -16,6 +16,10 @@ public abstract class AbsFacade {
     public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     final String WRONG_INSERT_MSG = "Wrong command number. Try more. ";
+    final String NO_COUPON = "There is no coupon with such id #%d in your DB.";
+    final String SUCCESS_SENT = "Coupon #%d %s was sent to customer #%d successfully!";
+    final String CUSTOMER_HAS_COUPON = "Unable to send as a gift required coupon. Customer with id #%d already has coupon with id #%d.";
+
 
     public static AbsFacade login(String email, String password, LoginType type) throws InvalidLoginException {
         switch (type) {
@@ -50,7 +54,7 @@ public abstract class AbsFacade {
     }
 
     public LoginType userRole(String email) {
-        if (email.equals("admin")) return LoginType.ADMIN;
+        if (email.equals("a")) return LoginType.ADMIN;
         return new UserDBDao().getUserRoleByEmail(email);
     }
 
@@ -59,12 +63,12 @@ public abstract class AbsFacade {
      * Method is using by outside package - must be public.
      */
     public void getAllCoupons() {
-        DisplayDBResult.showCouponResult(new CouponDBDao().getAllCoupons());
+        DisplayDBResult.showCouponsResult(new CouponDBDao().getAllCoupons());
         closeMenu();
     }
 
 
-    public static void getAllCompanies(){
+    public static void getAllCompanies() {
         DisplayDBResult.showCompanyResult(new CompanyDBDao().getAllCompanies());
         closeMenu();
     }

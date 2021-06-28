@@ -102,8 +102,7 @@ public class UserDBDao implements UserDao {
 
     public LoginType getUserRoleByEmail(String email) {
         connection = ConnectionPool.getInstance().getConnection();
-        LoginType type = null;
-
+        LoginType type;
         try {
             preStmt = connection.prepareStatement(Schema.SELECT_USER_ROLE_BY_EMAIL);
             preStmt.setString(1, email);

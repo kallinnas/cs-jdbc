@@ -1,5 +1,6 @@
 package facade;
 
+import db.dao.CouponDBDao;
 import db.dao.CustomerDBDao;
 import ex.NoSuchCustomerException;
 import model.Company;
@@ -30,29 +31,6 @@ public class DisplayDBResult {
             "                                                           " +
             "Company ImageURL                                                       |";
 
-    public static void showCouponResult(Collection<Coupon> coupons) {
-        System.out.println(TABLE_BORDER);
-        System.out.println(TABLE_HEAD_COUPON);
-        System.out.println(TABLE_BORDER);
-        for (Coupon coupon : coupons) {
-            System.out.print("|");
-            columnDigitBuilder(SPACE_FOR_ID, coupon.getId());
-            System.out.print("|");
-            columnDigitBuilder(SPACE_FOR_COMPANY_ID, coupon.getCompanyId());
-            System.out.print("|");
-            columnStringBuilder(SPACE_FOR_DATE, coupon.getStartDate().toString());
-            System.out.print("|");
-            columnDigitBuilder(SPACE_FOR_PRICE, coupon.getPrice());
-            System.out.print("|");
-            columnStringBuilder(SPACE_FOR_TITLE, coupon.getTitle());
-            System.out.print("|");
-            columnStringBuilder(SPACE_FOR_DESCRIPTION, coupon.getDescription());
-            System.out.print("|");
-            columnStringBuilder(SPACE_FOR_IMAGE_URL, coupon.getImageURL());
-            System.out.println("|");
-        }
-        System.out.println(TABLE_BORDER);
-    }
 
     private static void columnStringBuilder(double spaceForContext, String context) {
         countCharAmount(context);
@@ -131,6 +109,53 @@ public class DisplayDBResult {
         System.out.println(TABLE_BORDER);
     }
 
+    public static void showCouponsResult(Collection<Coupon> coupons) {
+        System.out.println(TABLE_BORDER);
+        System.out.println(TABLE_HEAD_COUPON);
+        System.out.println(TABLE_BORDER);
+        for (Coupon coupon : coupons) {
+            System.out.print("|");
+            columnDigitBuilder(SPACE_FOR_ID, coupon.getId());
+            System.out.print("|");
+            columnDigitBuilder(SPACE_FOR_COMPANY_ID, coupon.getCompanyId());
+            System.out.print("|");
+            columnStringBuilder(SPACE_FOR_DATE, coupon.getStartDate().toString());
+            System.out.print("|");
+            columnDigitBuilder(SPACE_FOR_PRICE, coupon.getPrice());
+            System.out.print("|");
+            columnStringBuilder(SPACE_FOR_TITLE, coupon.getTitle());
+            System.out.print("|");
+            columnStringBuilder(SPACE_FOR_DESCRIPTION, coupon.getDescription());
+            System.out.print("|");
+            columnStringBuilder(SPACE_FOR_IMAGE_URL, coupon.getImageURL());
+            System.out.println("|");
+        }
+        System.out.println(TABLE_BORDER);
+    }
+
+    public static void showCouponResult(Collection<Coupon> coupons) {
+        System.out.println(TABLE_BORDER);
+        System.out.println(TABLE_HEAD_COUPON);
+        System.out.println(TABLE_BORDER);
+        for (Coupon coupon : coupons) {
+            System.out.print("|");
+            columnDigitBuilder(SPACE_FOR_ID, coupon.getId());
+            System.out.print("|");
+            columnDigitBuilder(SPACE_FOR_COMPANY_ID, coupon.getCompanyId());
+            System.out.print("|");
+            columnStringBuilder(SPACE_FOR_DATE, coupon.getStartDate().toString());
+            System.out.print("|");
+            columnDigitBuilder(SPACE_FOR_PRICE, coupon.getPrice());
+            System.out.print("|");
+            columnStringBuilder(SPACE_FOR_TITLE, coupon.getTitle());
+            System.out.print("|");
+            columnStringBuilder(SPACE_FOR_DESCRIPTION, coupon.getDescription());
+            System.out.print("|");
+            columnStringBuilder(SPACE_FOR_IMAGE_URL, coupon.getImageURL());
+            System.out.println("|");
+        }
+        System.out.println(TABLE_BORDER);
+    }
 
     public static void showMyAccount(User user) {
         Customer customer = null;
@@ -143,6 +168,9 @@ public class DisplayDBResult {
         System.out.println("\033[32mCustomer ID:\033[0m " + customer.getId() +
                 "   \033[32mFirst Name:\033[0m " + customer.getFirstName() +
                 "   \033[32mLast Name:\033[0m " + customer.getLastName());
-
+        Collection<Coupon> coupons = new CouponDBDao().getCouponsByCustomerId(customer.getId());
+        if (!coupons.isEmpty()) {
+            DisplayDBResult.showCouponsResult(coupons);
+        }
     }
 }

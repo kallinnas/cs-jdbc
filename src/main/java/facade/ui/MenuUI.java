@@ -73,7 +73,7 @@ public interface MenuUI {
                     System.out.println("There is no company with such id #" + id);
                     searchCouponMenu();
                 }
-                DisplayDBResult.showCouponResult(new CouponDBDao().getCouponsByCompanyId(id));
+                DisplayDBResult.showCouponsResult(new CouponDBDao().getCouponsByCompanyId(id));
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | NumberFormatException | NoSuchCompanyException e) {
@@ -90,7 +90,7 @@ public interface MenuUI {
             try {
                 double price = Double.parseDouble(AbsFacade.reader.readLine());
                 Collection<Coupon> coupons = new CouponDBDao().getCouponsByPriceMoreThan(price);
-                DisplayDBResult.showCouponResult(coupons);
+                DisplayDBResult.showCouponsResult(coupons);
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | NumberFormatException e) {
@@ -106,7 +106,7 @@ public interface MenuUI {
             try {
                 double price = Double.parseDouble(AbsFacade.reader.readLine());
                 Collection<Coupon> coupons = new CouponDBDao().getCouponsByPriceLessThan(price);
-                DisplayDBResult.showCouponResult(coupons);
+                DisplayDBResult.showCouponsResult(coupons);
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | NumberFormatException e) {
@@ -122,7 +122,7 @@ public interface MenuUI {
             try {
                 LocalDate startDate = LocalDate.parse(AbsFacade.reader.readLine());
                 Collection<Coupon> coupons = new CouponDBDao().getCouponsStartBeforeDate(startDate);
-                DisplayDBResult.showCouponResult(coupons);
+                DisplayDBResult.showCouponsResult(coupons);
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | DateTimeException e) {
@@ -138,7 +138,7 @@ public interface MenuUI {
             try {
                 LocalDate startDate = LocalDate.parse(AbsFacade.reader.readLine());
                 Collection<Coupon> coupons = new CouponDBDao().getCouponsStartFromDate(startDate);
-                DisplayDBResult.showCouponResult(coupons);
+                DisplayDBResult.showCouponsResult(coupons);
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | DateTimeException e) {
@@ -153,7 +153,7 @@ public interface MenuUI {
         String title = "";
         try {
             Coupon coupon = new CouponDBDao().getCouponByTitle(title = AbsFacade.reader.readLine());
-            DisplayDBResult.showCouponResult(Collections.singletonList(coupon));
+            DisplayDBResult.showCouponsResult(Collections.singletonList(coupon));
             AbsFacade.closeMenu();
         } catch (IOException e) {
             System.out.println(WRONG_INSERT_MSG);
@@ -171,7 +171,7 @@ public interface MenuUI {
             try {
                 id = Long.parseLong(AbsFacade.reader.readLine());
                 Coupon coupon = new CouponDBDao().getCouponById(id);
-                DisplayDBResult.showCouponResult(Collections.singleton(coupon));
+                DisplayDBResult.showCouponsResult(Collections.singleton(coupon));
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | NumberFormatException e) {

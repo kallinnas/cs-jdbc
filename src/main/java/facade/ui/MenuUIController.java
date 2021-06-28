@@ -144,6 +144,7 @@ public class MenuUIController {
                     customerMenuUI.facade.runCustomerFacade();
                     break;
                 case ADMIN:
+                    adminMenuUI = new AdminMenuUI();
                     adminMenuUI.setFacade((AdminFacade) AbsFacade.login(email, password, LoginType.ADMIN));
                     adminMenuUI.facade.runAdminFacade();
                     break;

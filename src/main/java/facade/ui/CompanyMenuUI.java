@@ -11,8 +11,8 @@ public class CompanyMenuUI implements MenuUI {
     protected CompanyFacade facade;
 
     private final String MAIN_MENU = "1.Go to coupons\n2.Go to company\n3.Logout\n4.Quit\nUse command numbers to perform: ";
-    private final String COMPANY_COUPON_MENU = "1.Create coupon\n2.My coupons\n3.Search coupon\n4.Update coupon\n5.Remove coupon\n6.Go back <--";
-    private final String COMPANY_UPDATE_MENU = "1.Update company\n2.Go back <--";
+    private final String COUPON_MENU = "1.Create coupon\n2.My coupons\n3.Search coupon\n4.Update coupon\n5.Remove coupon\n6.Go back <--";
+    private final String UPDATE_MENU = "1.Update company\n2.Go back <--";
 
     @Override
     public void mainMenu() {
@@ -38,7 +38,7 @@ public class CompanyMenuUI implements MenuUI {
 
     @Override
     public void couponMenu() {
-        System.out.println(COMPANY_COUPON_MENU);
+        System.out.println(COUPON_MENU);
         try {
             switch (MenuUI.readCommandNumber()) {
                 case 1:
@@ -72,7 +72,7 @@ public class CompanyMenuUI implements MenuUI {
 
     @Override
     public void updateMenu() {
-        System.out.println(COMPANY_UPDATE_MENU);
+        System.out.println(UPDATE_MENU);
         try {
             switch (MenuUI.readCommandNumber()) {
                 case 1:

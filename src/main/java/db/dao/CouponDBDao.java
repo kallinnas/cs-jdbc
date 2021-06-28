@@ -12,6 +12,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 public class CouponDBDao implements CouponDao {
 
@@ -116,6 +117,23 @@ public class CouponDBDao implements CouponDao {
             StatementUtils.closeAll(preStmt);
         }
         return coupons;
+    }
+    @Override
+    public Optional<Coupon> getOptCouponById(long id) {
+        connection = ConnectionPool.getInstance().getConnection();
+        try {
+            preStmt = connection.prepareStatement(Schema.SELECT_COUPON_BY_ID);
+            preStmt.setLong(1, id);
+            ResultSet rs = preStmt.executeQuery();
+            rs.next();
+            coupon = DBUtilSetter.resultSetToCoupon(rs);
+        } catch (SQLException e) {
+            return Optional.empty();
+        } finally {
+            ConnectionPool.getInstance().putConnection(connection);
+            StatementUtils.closeAll(preStmt);
+        }
+        return Optional.of(coupon);
     }
 
     @Override

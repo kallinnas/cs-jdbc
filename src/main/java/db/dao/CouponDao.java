@@ -6,6 +6,7 @@ import model.Coupon;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.Optional;
 
 public interface CouponDao {
 
@@ -22,6 +23,8 @@ public interface CouponDao {
     Collection<Coupon> getAllCoupons();
 
     long[] getCouponsIDByCustomerId(long id);
+
+    Optional<Coupon> getOptCouponById(long id);
 
     Coupon getCouponById(long id) throws NoSuchCouponException;
 

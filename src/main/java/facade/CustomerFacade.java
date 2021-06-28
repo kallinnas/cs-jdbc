@@ -1,6 +1,5 @@
 package facade;
 
-import common.SystemMalfunctionException;
 import db.dao.*;
 import ex.InvalidLoginException;
 import ex.NoSuchCouponException;
@@ -13,6 +12,7 @@ import facade.ui.CustomerMenuUI;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Getter
 @NoArgsConstructor
@@ -99,48 +99,51 @@ public class CustomerFacade extends AbsFacade {
     }
 
     public void sendCoupon() {
-        isNotRequiredType = true;
-        long newOwnerId = 0;
+        AtomicLong ownerId = new AtomicLong(0);
         try {
+            isNotRequiredType = true;
             while (isNotRequiredType) {
                 System.out.print("Enter coupon id that you want to gift: ");
-                long coupon_id = Long.parseLong(reader.readLine());
-                coupons = couponDao.getCouponsByCustomerId(customer.getId());
-                if (coupons.stream().noneMatch(c -> c.getId() == coupon_id)) {
-                    System.out.println("You have no coupon with id " + coupon_id + " in your collection!");
-                    ui.couponMenu();
-                } else {
-                    coupon = coupons.stream().filter(c -> c.getId() == coupon_id).findFirst().get();
-                    try {
-                        while (isNotRequiredType) {
-                            System.out.print("Enter customer id to send a coupon: ");
-                            newOwnerId = Long.parseLong(reader.readLine());
-                            if (customerDao.getCustomerById(newOwnerId) != null) isNotRequiredType = false;
-                        }
-                    } catch (IOException | NoSuchCustomerException e) {
-                        System.out.println(WRONG_INSERT_MSG + e.getMessage());
-                        ui.couponMenu();
-                    }
-                    if (couponDao.getCouponsByCustomerId(newOwnerId).stream().noneMatch(c -> c.getId() == coupon_id)) {
-                        couponDao.purchaseCoupon(newOwnerId, coupon.getId());
-                        couponDao.removeCouponFromCustomer(customer.getId(), coupon.getId());
-                    } else
-                        System.out.println("Unable to send as a gift required coupon. Customer with id #" + newOwnerId +
-                                " already has coupon with id #" + coupon_id + ".");
-                    ui.couponMenu();
-                }
+                getExistCoupon(Long.parseLong(reader.readLine()));
             }
-        } catch (IOException e) {
+
+            isNotRequiredType = true;
+            while (isNotRequiredType) {
+                System.out.print("Enter customer id to send a coupon: ");
+                ownerId.set(Long.parseLong(reader.readLine()));
+                if (customerDao.getCustomerById(ownerId.get()) != null) isNotRequiredType = false;
+            }
+
+            couponDao.getCouponsByCustomerId(ownerId.get()).stream()
+                    .filter(c -> c.getId() == coupon.getId())
+                    .findAny().ifPresentOrElse((value) -> {
+                        System.out.println(String.format(CUSTOMER_HAS_COUPON, ownerId.get(), coupon.getId()));
+                        ui.couponMenu();
+                    },
+                    () -> {
+                        couponDao.purchaseCoupon(ownerId.get(), coupon.getId());
+                        couponDao.removeCouponFromCustomer(customer.getId(), coupon.getId());
+                    });
+        } catch (IOException | NoSuchCustomerException e) {
             System.out.println(WRONG_INSERT_MSG);
         }
-        System.out.println("Coupon #" + coupon.getId() + " " + coupon.getTitle() +
-                " was sent to customer #" + newOwnerId + " successfully!");
+        System.out.println(String.format(SUCCESS_SENT, coupon.getId(), coupon.getTitle(), ownerId.get()));
         ui.couponMenu();
+    }
+
+    private void getExistCoupon(long id) {
+        couponDao.getCouponsByCustomerId(customer.getId())
+                .stream().filter(c -> c.getId() == id)
+                .findAny().ifPresentOrElse((value) -> {
+                    coupon = value;
+                    isNotRequiredType = false;
+                },
+                () -> System.out.println(String.format(NO_COUPON, id)));
     }
 
     public void getAllCustomerCoupons() {
         coupons = couponDao.getCouponsByCustomerId(user.getClient().getId());
-        DisplayDBResult.showCouponResult(coupons);
+        DisplayDBResult.showCouponsResult(coupons);
         closeMenu();
         ui.couponMenu();
     }
