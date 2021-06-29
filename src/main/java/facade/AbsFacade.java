@@ -4,6 +4,7 @@ import common.SystemMalfunctionException;
 import db.dao.*;
 import ex.InvalidLoginException;
 import ex.UserAlreadyExistException;
+import facade.ui.MenuUI;
 import facade.ui.MenuUIController;
 import model.LoginType;
 
@@ -13,10 +14,10 @@ import java.io.InputStreamReader;
 
 public abstract class AbsFacade {
 
-    public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-    final String WRONG_INSERT_MSG = "Wrong command number. Try more. ";
-    final String NO_COUPON = "There is no coupon with such id #%d in your DB.";
+    public static final String WRONG_INSERT_MSG = "Wrong command number. Try more. ";
+    public static final String NO_COUPON = "There is no coupon with such id #%d in your DB.";
+    public static final String NO_COMPANY_ID = "There is no company with such id #%d in DB.";
+    public static final String NO_COMPANY_NAME = "There is no company with such name %s in DB.";
     final String SUCCESS_SENT = "Coupon #%d %s was sent to customer #%d successfully!";
     final String CUSTOMER_HAS_COUPON = "Unable to send as a gift required coupon. Customer with id #%d already has coupon with id #%d.";
 
@@ -37,9 +38,10 @@ public abstract class AbsFacade {
         }
     }
 
+    // check if need be void
     public static AbsFacade registerUser(String email, String password, LoginType type) throws UserAlreadyExistException, InvalidLoginException {
         UserDao dao = new UserDBDao();
-        if (!dao.userEmailIsPresent(email)) {
+        if (!dao.userEmailIsPresent(email) && !email.equals(AdminFacade.getLOGIN())) {
             switch (type) {
                 case COMPANY:
                     dao.createUserCompany(email, password);
@@ -67,7 +69,6 @@ public abstract class AbsFacade {
         closeMenu();
     }
 
-
     public static void getAllCompanies() {
         DisplayDBResult.showCompanyResult(new CompanyDBDao().getAllCompanies());
         closeMenu();
@@ -82,9 +83,8 @@ public abstract class AbsFacade {
         String GO_BACK_MSG = "Return to menu just press Enter";
         System.out.println(GO_BACK_MSG);
         try {
-            reader.readLine();
-        } catch (IOException e) {
-            // ignore
+            MenuUI.readContext();
+        } catch (IOException e) {// ignore
         }
     }
 

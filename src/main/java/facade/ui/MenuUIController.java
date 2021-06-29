@@ -9,12 +9,10 @@ import facade.CustomerFacade;
 import lombok.Data;
 import model.LoginType;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 @Data
-public class MenuUIController {
+public class MenuUIController{
     private static String email;
     private static String password;
     private static LoginType type;
@@ -23,8 +21,6 @@ public class MenuUIController {
     private CompanyMenuUI companyMenuUI;
     private CustomerMenuUI customerMenuUI;
     private AdminMenuUI adminMenuUI;
-
-    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     private static boolean appRunning = false;
     static boolean loginIn = false;
@@ -61,17 +57,17 @@ public class MenuUIController {
             switch (MenuUI.readCommandNumber()) {
                 case 1:
                     System.out.print("Registrate your email address: ");
-                    email = reader.readLine();
+                    email = MenuUI.readContext();
                     System.out.print("Create your password:");
-                    password= reader.readLine();
+                    password= MenuUI.readContext();
                     AbsFacade.registerUser(email, password, LoginType.CUSTOMER);
                     initGuestMenuUI(email, password);
                     break;
                 case 2:
                     System.out.print("Registrate company email address: ");
-                    email = reader.readLine();
+                    email = MenuUI.readContext();
                     System.out.print("Create your password: ");
-                    password= reader.readLine();
+                    password= MenuUI.readContext();
                     AbsFacade.registerUser(email, password, LoginType.COMPANY);;
                     initGuestMenuUI(email, password);
                     break;
@@ -97,12 +93,12 @@ public class MenuUIController {
         customerMenuUI = null;
         adminMenuUI = null;
     }
+
 // check!
     static void stopApp() {
         appRunning = false;
         System.exit(0);
     }
-
 
     private void authorisationUser() {
         System.out.print(LOG_OR_REG_MSG);
@@ -110,9 +106,9 @@ public class MenuUIController {
             switch (MenuUI.readCommandNumber()) {
                 case 1:
                     System.out.print("Email: ");
-                    email = reader.readLine();
+                    email = MenuUI.readContext();
                     System.out.print("Password: ");
-                    initGuestMenuUI(email, reader.readLine());
+                    initGuestMenuUI(email, MenuUI.readContext());
                     break;
                 case 2:
                     registrationUser();

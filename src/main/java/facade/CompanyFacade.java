@@ -3,7 +3,7 @@ package facade;
 import db.dao.*;
 import ex.InvalidLoginException;
 import ex.NoSuchCompanyException;
-import ex.NoSuchCouponException;
+import facade.ui.MenuUI;
 import lombok.*;
 import model.Company;
 import model.Coupon;
@@ -12,8 +12,6 @@ import facade.ui.CompanyMenuUI;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.DateTimeException;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,6 +22,7 @@ public class CompanyFacade extends AbsFacade {
     private User user;
     private Company company;
     private Coupon coupon;
+
     @NonNull
     private CompanyMenuUI ui;
     @NonNull
@@ -37,8 +36,7 @@ public class CompanyFacade extends AbsFacade {
         initThis();
         try {
             company = companyDao.getCompanyById(user.getClient().getId());
-        } catch (NoSuchCompanyException e) {
-            // ignore
+        } catch (NoSuchCompanyException e) {// ignore
         }
         companyDao.setCompany(company);
         ui.setFacade(this);
@@ -61,14 +59,14 @@ public class CompanyFacade extends AbsFacade {
     public void updateCompany() {
         try {
             System.out.print("Lets set a name for your company: ");
-            company.setName(AbsFacade.reader.readLine());
+            company.setName(MenuUI.readContext());
             System.out.print("What about the logo? Add url: ");
-            company.setImageURL(reader.readLine());
+            company.setImageURL(MenuUI.readContext());
             try {
                 company = companyDao.updateCompany(company);
-                System.out.println("Company name " + company.getName() + " was just set successfully!");
-            } catch (NoSuchCompanyException e) {
-                // ignored
+                System.out.println("Company name " + company.getName() +
+                        " was just set successfully!");
+            } catch (NoSuchCompanyException e) {// ignored
             }
         } catch (IOException e) {
             System.out.println(WRONG_INSERT_MSG);
@@ -76,10 +74,35 @@ public class CompanyFacade extends AbsFacade {
     }
 
     public void getAllCompanyCoupons() {
-        List<Coupon> coupons = couponDao.getCouponsByCompanyId(user.getClient().getId()).stream()
+        val coupons = couponDao.getCouponsByCompanyId(user.getClient().getId()).stream()
                 .sorted(Comparator.comparingLong(Coupon::getId))
                 .collect(Collectors.toList());
         DisplayDBResult.showCouponsResult(coupons);
+        closeMenu();
+        ui.couponMenu();
+    }
+
+    public void createCompanyCoupon() {
+        isNotRequiredType = true;
+        coupon = new Coupon(user.getClient().getId());
+        try {
+            System.out.println("Coupon title: ");
+            coupon.setTitle(MenuUI.readContext());
+            while (isNotRequiredType) {
+                System.out.println("Coupon price(double): ");
+                coupon.setPrice(Double.parseDouble(MenuUI.readContext()));
+                isNotRequiredType = false;
+            }
+            System.out.println("Coupon description: ");
+            coupon.setDescription(MenuUI.readContext());
+            System.out.println("Coupon image: ");
+            coupon.setImageURL(MenuUI.readContext());
+        } catch (IOException | NumberFormatException e) {
+            System.out.println(WRONG_INSERT_MSG);
+        }
+        coupon = couponDao.createCoupon(coupon);
+        System.out.println("New coupon #" + coupon.getId() + " " +
+                coupon.getTitle() + " was created successfully!");
         closeMenu();
         ui.couponMenu();
     }
@@ -90,22 +113,60 @@ public class CompanyFacade extends AbsFacade {
         try {
             while (isNotRequiredType) {
                 System.out.print("Insert id of coupon that you want to delete:");
-                id = Long.parseLong(reader.readLine());
-                getExistCoupon(id);
+                getExistCoupon(id = Long.parseLong(MenuUI.readContext()));
             }
             DisplayDBResult.showCouponsResult(Collections.singleton(coupon));
             beforeRemove(id);
         } catch (IOException | SQLException e) {
-            System.out.print("No coupon with such id or wrong insert.");
+            System.out.print(String.format(NO_COUPON, id));
             removeCoupon();
         }
         closeMenu();
         ui.couponMenu();
     }
 
+    public void updateCoupon() {
+        isNotRequiredType = true;
+        try {
+            while (isNotRequiredType) {
+                System.out.print("Insert id of coupon that you want to update:");
+                getExistCoupon(Long.parseLong(MenuUI.readContext()));
+            }
+            System.out.print("Update coupon title from " + coupon.getTitle() + " to:");
+            coupon.setTitle(MenuUI.readContext());
+            isNotRequiredType = true;
+            while (isNotRequiredType) {
+                System.out.print("Update coupon price from " + coupon.getPrice() + " to:");
+                coupon.setPrice(Double.parseDouble(MenuUI.readContext()));
+                isNotRequiredType = false;
+            }
+            System.out.print("Update coupon description " + coupon.getDescription() + " to:");
+            coupon.setDescription(MenuUI.readContext());
+            System.out.print("Update coupon image from " + coupon.getImageURL() + " to:");
+            coupon.setImageURL(MenuUI.readContext());
+        } catch (IOException e) {
+            System.out.print("No coupon with such id or wrong insert.");
+            updateCoupon();
+        }
+        DisplayDBResult.showCouponsResult(Collections
+                .singleton(couponDao.updateCoupon(coupon)));
+        closeMenu();
+        ui.couponMenu();
+    }
+
+    // Takes off the load from update and remove Coupon methods
+    private void getExistCoupon(long id) {
+        couponDao.getCouponsByCompanyId(company.getId()).stream()
+                .filter(c -> c.getId() == id).findAny()
+                .ifPresentOrElse((value) -> {
+                    coupon = value;
+                    isNotRequiredType = false;
+                }, () -> System.out.println(String.format(NO_COUPON, id)));
+    }
+
     private void beforeRemove(long id) throws IOException, SQLException {
         System.out.print("Are you sure that you want to delete this coupon? Y/N ");
-        String userAnswer = reader.readLine();
+        val userAnswer = MenuUI.readContext();
         switch (userAnswer.toLowerCase()) {
             case "y":
                 couponDao.removeCoupon(id);
@@ -118,179 +179,6 @@ public class CompanyFacade extends AbsFacade {
                 System.out.println(WRONG_INSERT_MSG);
                 beforeRemove(id);
         }
-    }
-
-    // Takes off the load from update and remove Coupon methods
-    private void getExistCoupon(long id) {
-        val coupons = couponDao.getCouponsByCompanyId(company.getId());
-        val optional = coupons.stream().filter(c -> c.getId() == id).findFirst();
-        if (optional.isPresent()) {
-            coupon = optional.get();
-            isNotRequiredType = false;
-        } else {
-            System.out.println(String.format(NO_COUPON, id));
-        }
-    }
-
-    public void updateCoupon() {
-        isNotRequiredType = true;
-        try {
-            while (isNotRequiredType) {
-                System.out.print("Insert id of coupon that you want to update:");
-                long id = Long.parseLong(reader.readLine());
-                getExistCoupon(id);
-            }
-            System.out.print("Update coupon title from " + coupon.getTitle() + " to:");
-            coupon.setTitle(reader.readLine());
-            isNotRequiredType = true;
-            while (isNotRequiredType) {
-                System.out.print("Update coupon price from " + coupon.getPrice() + " to:");
-                double price = Double.parseDouble(reader.readLine());
-                coupon.setPrice(price);
-                isNotRequiredType = false;
-            }
-            System.out.print("Update coupon description " + coupon.getDescription() + " to:");
-            coupon.setDescription(reader.readLine());
-            System.out.print("Update coupon image from " + coupon.getImageURL() + " to:");
-            coupon.setImageURL(reader.readLine());
-        } catch (IOException e) {
-            System.out.print("No coupon with such id or wrong insert.");
-            updateCoupon();
-        }
-        DisplayDBResult.showCouponsResult(Collections.singleton(couponDao.updateCoupon(coupon)));
-        closeMenu();
-        ui.couponMenu();
-    }
-
-    public void createCompanyCoupon() {
-        isNotRequiredType = true;
-        coupon = new Coupon();
-        coupon.setCompanyId(user.getClient().getId());
-        try {
-            System.out.println("Coupon title: ");
-            coupon.setTitle(reader.readLine());
-            while (isNotRequiredType) {
-                System.out.println("Coupon price(double): ");
-                double price = Double.parseDouble(reader.readLine());
-                coupon.setPrice(price);
-                isNotRequiredType = false;
-            }
-            System.out.println("Coupon description: ");
-            coupon.setDescription(reader.readLine());
-            System.out.println("Coupon image: ");
-            coupon.setImageURL(reader.readLine());
-        } catch (IOException | NumberFormatException e) {
-            System.out.println(WRONG_INSERT_MSG);
-        }
-        Coupon c = couponDao.createCoupon(coupon);
-        System.out.println("New coupon #" + c.getId() + " " + c.getTitle() + " was created successfully!");
-        closeMenu();
-        ui.couponMenu();
-    }
-
-    public void searchCouponByTitle() {
-        System.out.println("Enter coupon title:");
-        String title = "";
-        try {
-            coupon = couponDao.getCouponByTitle(title = reader.readLine());
-            DisplayDBResult.showCouponsResult(Collections.singletonList(coupon));
-            closeMenu();
-        } catch (IOException e) {
-            System.out.println(WRONG_INSERT_MSG);
-        } catch (NoSuchCouponException e) {
-            System.out.println("No coupon with such title: " + title);
-            ui.searchCouponMenu();
-        }
-        ui.searchCouponMenu();
-    }
-
-    public void searchCouponById() {
-        isNotRequiredType = true;
-        while (isNotRequiredType) {
-            long id = 0;
-            System.out.print("Enter coupon id:");
-            try {
-                id = Long.parseLong(reader.readLine());
-                isNotRequiredType = false;
-                coupon = couponDao.getCouponById(id);
-                DisplayDBResult.showCouponsResult(Collections.singleton(coupon));
-                closeMenu();
-            } catch (IOException | NumberFormatException e) {
-                System.out.println(WRONG_INSERT_MSG);
-            } catch (NoSuchCouponException e) {
-                System.out.println("There is no coupon with such id: " + id);
-            }
-        }
-        ui.searchCouponMenu();
-    }
-
-    public void searchCouponsStartFromDate() {
-        isNotRequiredType = true;
-        while (isNotRequiredType) {
-            System.out.print("Enter start from date as yyyy-mm-dd:");
-            try {
-                LocalDate startDate = LocalDate.parse(reader.readLine());
-                isNotRequiredType = false;
-                Collection<Coupon> coupons = couponDao.getCouponsStartFromDate(startDate);
-                DisplayDBResult.showCouponsResult(coupons);
-                closeMenu();
-            } catch (IOException | DateTimeException e) {
-                System.out.println(WRONG_INSERT_MSG);
-            }
-        }
-        ui.searchCouponMenu();
-    }
-
-    public void searchCouponsStartBeforeDate() {
-        isNotRequiredType = true;
-        while (isNotRequiredType) {
-            System.out.print("Enter start before date as yyyy-mm-dd:");
-            try {
-                LocalDate startDate = LocalDate.parse(reader.readLine());
-                isNotRequiredType = false;
-                Collection<Coupon> coupons = couponDao.getCouponsStartBeforeDate(startDate);
-                DisplayDBResult.showCouponsResult(coupons);
-                closeMenu();
-            } catch (IOException | DateTimeException e) {
-                System.out.println(WRONG_INSERT_MSG);
-            }
-        }
-        ui.searchCouponMenu();
-    }
-
-    public void searchCouponsByPriceLessThan() {
-        isNotRequiredType = true;
-        while (isNotRequiredType) {
-            System.out.print("Enter price:");
-            try {
-                double price = Double.parseDouble(reader.readLine());
-                isNotRequiredType = false;
-                Collection<Coupon> coupons = couponDao.getCouponsByPriceLessThan(price);
-                DisplayDBResult.showCouponsResult(coupons);
-                closeMenu();
-            } catch (IOException | NumberFormatException e) {
-                System.out.println(WRONG_INSERT_MSG);
-            }
-        }
-        ui.searchCouponMenu();
-    }
-
-    public void searchCouponsByPriceMoreThan() {
-        isNotRequiredType = true;
-        while (isNotRequiredType) {
-            System.out.print("Enter price:");
-            try {
-                double price = Double.parseDouble(reader.readLine());
-                isNotRequiredType = false;
-                Collection<Coupon> coupons = couponDao.getCouponsByPriceMoreThan(price);
-                DisplayDBResult.showCouponsResult(coupons);
-                closeMenu();
-            } catch (IOException | NumberFormatException e) {
-                System.out.println(WRONG_INSERT_MSG);
-                ui.searchCouponMenu();
-            }
-        }
-        ui.searchCouponMenu();
     }
 
 

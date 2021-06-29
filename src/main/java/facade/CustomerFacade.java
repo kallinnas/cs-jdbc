@@ -4,6 +4,7 @@ import db.dao.*;
 import ex.InvalidLoginException;
 import ex.NoSuchCouponException;
 import ex.NoSuchCustomerException;
+import facade.ui.MenuUI;
 import lombok.*;
 import model.Coupon;
 import model.Customer;
@@ -38,8 +39,7 @@ public class CustomerFacade extends AbsFacade {
         initThis(new CustomerMenuUI(), new CouponDBDao(), new CustomerDBDao());
         try {
             customer = customerDao.getCustomerById(user.getClient().getId());
-        } catch (NoSuchCustomerException e) {
-            // ignore
+        } catch (NoSuchCustomerException e) {// ignore
         }
         customerDao.setCustomer(customer);
         ui.setFacade(this);
@@ -62,9 +62,9 @@ public class CustomerFacade extends AbsFacade {
     private void updateCustomer() {
         try {
             System.out.print("Lets set your first name for your account: ");
-            customer.setFirstName(reader.readLine());
+            customer.setFirstName(MenuUI.readContext());
             System.out.print("And, of course your last name: ");
-            customer.setLastName(reader.readLine());
+            customer.setLastName(MenuUI.readContext());
             try {
                 customer = customerDao.updateCustomer(customer);
                 System.out.println(customer.getFirstName() + " " + customer.getLastName() + " your name was successfully updated!");
@@ -80,7 +80,7 @@ public class CustomerFacade extends AbsFacade {
         try {
             while (isNotRequiredType) {
                 System.out.print("Enter coupon id to purchase it: ");
-                coupon = couponDao.getCouponById(Long.parseLong(reader.readLine()));
+                coupon = couponDao.getCouponById(Long.parseLong(MenuUI.readContext()));
                 isNotRequiredType = false;
             }
         } catch (IOException | NoSuchCouponException e) {
@@ -104,13 +104,13 @@ public class CustomerFacade extends AbsFacade {
             isNotRequiredType = true;
             while (isNotRequiredType) {
                 System.out.print("Enter coupon id that you want to gift: ");
-                getExistCoupon(Long.parseLong(reader.readLine()));
+                getExistCoupon(Long.parseLong(MenuUI.readContext()));
             }
 
             isNotRequiredType = true;
             while (isNotRequiredType) {
                 System.out.print("Enter customer id to send a coupon: ");
-                ownerId.set(Long.parseLong(reader.readLine()));
+                ownerId.set(Long.parseLong(MenuUI.readContext()));
                 if (customerDao.getCustomerById(ownerId.get()) != null) isNotRequiredType = false;
             }
 

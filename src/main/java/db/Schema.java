@@ -29,10 +29,20 @@ public class Schema {
     /* Procedure names */
     private static final String DROP_IF = "DROP PROCEDURE IF EXISTS";
 
+    /* USER */
+    public static final String DELETE_USER_COMPANY = "DELETE FROM " +
+            TABLE_NAME_USER + " WHERE " +
+            COL_ROLE + "=2 AND " +
+            COL_CLIENT_ID + "=?";
+
     /* COMPANY */
     public static final String SELECT_COMPANY_BY_ID = "SELECT * FROM " +
             TABLE_NAME_COMPANY + " WHERE " +
             COL_ID + "=?";
+
+    public static final String SELECT_COMPANY_BY_NAME = "SELECT * FROM " +
+            TABLE_NAME_COMPANY + " WHERE " +
+            COL_NAME + "=?";
 
     public static final String INSERT_COMPANY_NAME_LOGO = "INSERT INTO " +
             TABLE_NAME_COMPANY + " (" +
@@ -65,6 +75,9 @@ public class Schema {
             COL_TITLE + "=?";
 
     /* COUPON */
+    public static final String DELETE_COMPANY_COUPONS = "DELETE FROM " +
+            TABLE_NAME_COUPON + " WHERE " +
+            COL_COMPANY_ID + "=?";
 
 
     public static final String SELECT_COUPON_BY_CUSTOMER_ID = "SELECT * FROM " +
@@ -98,6 +111,10 @@ public class Schema {
             TABLE_NAME_COUPON + " WHERE " + COL_ID + "=?";
 
     /* CUSTOMER */
+    public static final String DELETE_COMPANY_COUPONS_FROM_CUSTOMER = "DELETE FROM " +
+            TABLE_NAME_CUSTOMER_COUPON + " WHERE " +
+            COL_COUPON_ID + "=?";
+
     public static final String UPDATE_CUSTOMER = "UPDATE " +
             TABLE_NAME_CUSTOMER + " SET " +
             COL_FIRST_NAME + "=?," +

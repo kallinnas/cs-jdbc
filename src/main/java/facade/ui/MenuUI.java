@@ -6,34 +6,100 @@ import ex.NoSuchCompanyException;
 import ex.NoSuchCouponException;
 import facade.AbsFacade;
 import facade.DisplayDBResult;
-import model.Coupon;
+import lombok.val;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Collections;
 
 public interface MenuUI {
 
-    String WRONG_INSERT_MSG = "Wrong command number. Try more. ";
     String SEARCH_COUPON = "FIND BY:\n1.Id\n2.Title\n3.Coupons start from date\n4.Coupons start before date" +
             "\n5.Price less than\n6.Price more than\n7.Company ID\n8.Go back <--";
+    String SEARCH_COMPANY_MENU = "SEARCH BY:\n1.ID\n2.Company name\n3.Go back <--";
+
 
     void mainMenu();
 
     void couponMenu();
 
-    void updateMenu();
+    void companyMenu();
 
+    /* METHODS TO READ FROM CONSOLE */
     static int readCommandNumber() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        return Integer.parseInt(reader.readLine());
+        return Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
     }
 
-    /* default methods for search coupon for all menus */
+    static String readContext() throws IOException {
+        return new BufferedReader(new InputStreamReader(System.in)).readLine();
+    }
+
+    /* DEFAULT METHODS TO SEARCH COMPANY FOR EACH USER ENTITY */
+    default void searchCompanyMenu() {
+        System.out.println(SEARCH_COMPANY_MENU);
+        try {
+            switch (MenuUI.readCommandNumber()) {
+                case 1:
+                    searchCompanyById();
+                    break;
+                case 2:
+                    searchCompanyByName();
+                    break;
+                case 3:
+                    companyMenu();
+                    break;
+                default:
+                    throw new NumberFormatException();
+            }
+        } catch (NumberFormatException | IOException e) {
+            System.out.println(AbsFacade.WRONG_INSERT_MSG);
+        }
+        searchCompanyMenu();
+    }
+
+    default void searchCompanyByName() {
+        while (true) {
+            String name = "";
+            System.out.print("Enter company name:");
+            try {
+                name = readContext();
+                DisplayDBResult.showCompanyResult(new CompanyDBDao().getCompanyByName(name));
+                AbsFacade.closeMenu();
+                break;
+            } catch (IOException e) {
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
+            } catch (NoSuchCompanyException e) {
+                System.out.println(String.format(AbsFacade.NO_COMPANY_NAME, name));
+            }
+        }
+        searchCompanyMenu();
+    }
+
+    default void searchCompanyById() {
+        while (true) {
+            long id = 0;
+            System.out.print("Enter company id:");
+            try {
+                id = Long.parseLong(readContext());
+                DisplayDBResult.showCompanyResult(Collections
+                        .singleton(new CompanyDBDao().getCompanyById(id)));
+                AbsFacade.closeMenu();
+                break;
+            } catch (IOException e) {
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
+            } catch (NoSuchCompanyException e) {
+                System.out.println(String.format(AbsFacade.NO_COMPANY_ID, id));
+            }
+        }
+        searchCompanyMenu();
+    }
+
+
+
+    /* DEFAULT METHODS TO SEARCH COUPON FOR EACH USER ENTITY */
     default void searchCouponMenu() {
         System.out.println(SEARCH_COUPON);
         try {
@@ -58,7 +124,7 @@ public interface MenuUI {
                     throw new NumberFormatException();
             }
         } catch (NumberFormatException | IOException e) {
-            System.out.println(WRONG_INSERT_MSG);
+            System.out.println(AbsFacade.WRONG_INSERT_MSG);
         }
         searchCouponMenu();
     }
@@ -68,17 +134,16 @@ public interface MenuUI {
             long id = 0;
             System.out.print("Enter company id:");
             try {
-                id = Long.parseLong(AbsFacade.reader.readLine());
-                if (new CompanyDBDao().getCompanyById(id) == null) {
-                    System.out.println("There is no company with such id #" + id);
-                    searchCouponMenu();
+                id = Long.parseLong(readContext());
+                if (new CompanyDBDao().getCompanyById(id) != null) {
+                    DisplayDBResult.showCouponsResult(new CouponDBDao().getCouponsByCompanyId(id));
+                    AbsFacade.closeMenu();
+                    break;
                 }
-                DisplayDBResult.showCouponsResult(new CouponDBDao().getCouponsByCompanyId(id));
-                AbsFacade.closeMenu();
-                break;
-            } catch (IOException | NumberFormatException | NoSuchCompanyException e) {
-                System.out.println(WRONG_INSERT_MSG);
-                searchCouponMenu();
+            } catch (IOException | NumberFormatException e) {
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
+            } catch (NoSuchCompanyException e) {
+                System.out.println("There is no company with such id #" + id);
             }
         }
         searchCouponMenu();
@@ -88,13 +153,13 @@ public interface MenuUI {
         while (true) {
             System.out.print("Enter price:");
             try {
-                double price = Double.parseDouble(AbsFacade.reader.readLine());
-                Collection<Coupon> coupons = new CouponDBDao().getCouponsByPriceMoreThan(price);
+                val price = Double.parseDouble(readContext());
+                val coupons = new CouponDBDao().getCouponsByPriceMoreThan(price);
                 DisplayDBResult.showCouponsResult(coupons);
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | NumberFormatException e) {
-                System.out.println(WRONG_INSERT_MSG);
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
             }
         }
         searchCouponMenu();
@@ -104,13 +169,13 @@ public interface MenuUI {
         while (true) {
             System.out.print("Enter price:");
             try {
-                double price = Double.parseDouble(AbsFacade.reader.readLine());
-                Collection<Coupon> coupons = new CouponDBDao().getCouponsByPriceLessThan(price);
+                val price = Double.parseDouble(readContext());
+                val coupons = new CouponDBDao().getCouponsByPriceLessThan(price);
                 DisplayDBResult.showCouponsResult(coupons);
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | NumberFormatException e) {
-                System.out.println(WRONG_INSERT_MSG);
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
             }
         }
         searchCouponMenu();
@@ -120,13 +185,13 @@ public interface MenuUI {
         while (true) {
             System.out.print("Enter start before date as yyyy-mm-dd:");
             try {
-                LocalDate startDate = LocalDate.parse(AbsFacade.reader.readLine());
-                Collection<Coupon> coupons = new CouponDBDao().getCouponsStartBeforeDate(startDate);
+                val startDate = LocalDate.parse(readContext());
+                val coupons = new CouponDBDao().getCouponsStartBeforeDate(startDate);
                 DisplayDBResult.showCouponsResult(coupons);
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | DateTimeException e) {
-                System.out.println(WRONG_INSERT_MSG);
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
             }
         }
         searchCouponMenu();
@@ -136,13 +201,13 @@ public interface MenuUI {
         while (true) {
             System.out.print("Enter start from date as yyyy-mm-dd:");
             try {
-                LocalDate startDate = LocalDate.parse(AbsFacade.reader.readLine());
-                Collection<Coupon> coupons = new CouponDBDao().getCouponsStartFromDate(startDate);
+                val startDate = LocalDate.parse(readContext());
+                val coupons = new CouponDBDao().getCouponsStartFromDate(startDate);
                 DisplayDBResult.showCouponsResult(coupons);
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | DateTimeException e) {
-                System.out.println(WRONG_INSERT_MSG);
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
             }
         }
         searchCouponMenu();
@@ -152,14 +217,13 @@ public interface MenuUI {
         System.out.println("Enter coupon title:");
         String title = "";
         try {
-            Coupon coupon = new CouponDBDao().getCouponByTitle(title = AbsFacade.reader.readLine());
+            val coupon = new CouponDBDao().getCouponByTitle(title = readContext());
             DisplayDBResult.showCouponsResult(Collections.singletonList(coupon));
             AbsFacade.closeMenu();
         } catch (IOException e) {
-            System.out.println(WRONG_INSERT_MSG);
+            System.out.println(AbsFacade.WRONG_INSERT_MSG);
         } catch (NoSuchCouponException e) {
-            System.out.println("No coupon with such title: " + title);
-            searchCouponMenu();
+            System.out.println("No coupon with title as: " + title);
         }
         searchCouponMenu();
     }
@@ -169,15 +233,15 @@ public interface MenuUI {
             long id = 0;
             System.out.print("Enter coupon id:");
             try {
-                id = Long.parseLong(AbsFacade.reader.readLine());
-                Coupon coupon = new CouponDBDao().getCouponById(id);
+                id = Long.parseLong(readContext());
+                val coupon = new CouponDBDao().getCouponById(id);
                 DisplayDBResult.showCouponsResult(Collections.singleton(coupon));
                 AbsFacade.closeMenu();
                 break;
             } catch (IOException | NumberFormatException e) {
-                System.out.println(WRONG_INSERT_MSG);
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
             } catch (NoSuchCouponException e) {
-                System.out.println("There is no coupon with such id: " + id);
+                System.out.println(String.format(AbsFacade.NO_COUPON, id));
             }
         }
         searchCouponMenu();

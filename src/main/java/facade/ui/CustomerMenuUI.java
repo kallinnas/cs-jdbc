@@ -11,8 +11,9 @@ public class CustomerMenuUI implements MenuUI {
 
     @Setter
     protected CustomerFacade facade;
-    private final String MAIN_MENU = "1.Go to coupons\n2.Show all companies\n3.My Account\n4.Logout\n5.Quit\nUse command numbers to perform: ";
+    private final String MAIN_MENU = "1.Go to coupons\n2.Go to companies\n3.My Account\n4.Logout\n5.Quit\nUse command numbers to perform: ";
     private final String COUPON_MENU = "1.Show all coupons\n2.My coupons\n3.Search coupon\n4.Purchase coupon\n5.Send coupon\n6.Go back <--";
+    private final String COMPANY_MENU = "1.Show all companies\n2.Search company\n3.Go back <--";;
 
     @Override
     public void mainMenu() {
@@ -22,7 +23,7 @@ public class CustomerMenuUI implements MenuUI {
                 case 1:
                     couponMenu();
                 case 2:
-                    AbsFacade.getAllCompanies();
+                    companyMenu();
                     break;
                 case 3:
                     DisplayDBResult.showMyAccount(facade.getUser());
@@ -36,7 +37,7 @@ public class CustomerMenuUI implements MenuUI {
                     throw new NumberFormatException();
             }
         } catch (NumberFormatException | IOException e) {
-            System.out.println(WRONG_INSERT_MSG);
+            System.out.println(AbsFacade.WRONG_INSERT_MSG);
         }
         mainMenu();
     }
@@ -68,29 +69,32 @@ public class CustomerMenuUI implements MenuUI {
                     throw new NumberFormatException();
             }
         } catch (NumberFormatException | IOException e) {
-            System.out.println(WRONG_INSERT_MSG);
+            System.out.println(AbsFacade.WRONG_INSERT_MSG);
             couponMenu();
         }
         couponMenu();
     }
 
-
     @Override
-    public void updateMenu() {
-//        System.out.println(COMPANY_UPDATE_MENU);
-//        try {
-//            switch (readCommandNumber()) {
-//                case 1:
-//                    CompanyUI.updateCompany();
-//                case 2:
-//                    MenuUI.companyUpdateMenu();
-//                case 3:
-//                    RunUI.logout();
-//            }
-//        }catch (NumberFormatException | IOException e) {
-//            System.out.println(WRONG_INSERT_MSG);
-//            mainMenu();
-//        }
+    public void companyMenu() {
+        System.out.println(COMPANY_MENU);
+        try {
+            switch (MenuUI.readCommandNumber()) {
+                case 1:
+                    AbsFacade.getAllCompanies();
+                    break;
+                case 2:
+                    searchCompanyMenu();
+                    break;
+                case 3:
+                    mainMenu();
+                default:
+                    throw new NumberFormatException();
+            }
+        } catch (NumberFormatException | IOException e) {
+            System.out.println(AbsFacade.WRONG_INSERT_MSG);
+        }
+        companyMenu();
     }
 
 }

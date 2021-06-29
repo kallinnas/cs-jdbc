@@ -6,15 +6,12 @@ import db.ConnectionPool;
 import db.DBUtilSetter;
 import db.Schema;
 import ex.NoSuchCompanyException;
-import lombok.Data;
 import lombok.Setter;
 import model.Company;
 import model.Coupon;
 
 import java.sql.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CompanyDBDao implements CompanyDao {
 
@@ -23,11 +20,12 @@ public class CompanyDBDao implements CompanyDao {
 
     private Connection connection = null;
     private PreparedStatement preStmt = null;
+    private CallableStatement callStmt = null;
 
     /**
-     * @return Exist company after update its name and imageURL for logo.
      * @param company initialized with id, name, imageURL to update company
      *                with same company_id.
+     * @return Exist company after update its name and imageURL for logo.
      */
     @Override
     public Company updateCompany(Company company) throws NoSuchCompanyException {
@@ -67,14 +65,29 @@ public class CompanyDBDao implements CompanyDao {
     }
 
     @Override
-    public void removeCompany(long id) throws NoSuchCompanyException {
+    public void removeCompany(long id) {
+        connection = ConnectionPool.getInstance().getConnection();
         try {
-            connection = ConnectionPool.getInstance().getConnection();
+            getCompanyCoupons(id).forEach(c -> {
+                try {
+                    preStmt = connection.prepareStatement(Schema.DELETE_COMPANY_COUPONS_FROM_CUSTOMER);
+                    preStmt.setLong(1, c.getId());
+                    preStmt.execute();
+                } catch (SQLException e) {
+                    String msg = String.format("Unable to remove company by id#%d! (%s) ", id, e.getMessage());
+                    throw new SystemMalfunctionException(msg);
+                }
+            });
+
+            preStmt = connection.prepareStatement(Schema.DELETE_COMPANY_COUPONS);
+            preStmt.setLong(1, id);
+            preStmt.execute();
             preStmt = connection.prepareStatement(Schema.DELETE_COMPANY);
             preStmt.setLong(1, id);
-            if (preStmt.executeUpdate() == 0) {
-                throw new NoSuchCompanyException("No company with such id#" + id);
-            }
+            preStmt.execute();
+            preStmt = connection.prepareStatement(Schema.DELETE_USER_COMPANY);
+            preStmt.setLong(1, id);
+            preStmt.execute();
         } catch (SQLException e) {
             String msg = String.format("Unable to remove company by id#((%d))! (%s) ", id, e.getMessage());
             throw new SystemMalfunctionException(msg);
@@ -103,16 +116,15 @@ public class CompanyDBDao implements CompanyDao {
         return coupons;
     }
 
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!      Check and change to the local variable callStmt */
     @Override
     public Collection<Company> getAllCompanies() {
-        Set<Company> companies = new HashSet<>();
+        Collection<Company> companies = new ArrayList<>();
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            preStmt = connection.prepareCall("{call get_companies()}");
-            boolean hasResult = preStmt.execute();
+            callStmt = connection.prepareCall("{call get_companies()}");
+            boolean hasResult = callStmt.execute();
             if (hasResult) {
-                ResultSet rs = preStmt.getResultSet();
+                ResultSet rs = callStmt.getResultSet();
                 while (rs.next()) {
                     companies.add(DBUtilSetter.resultSetToCompany(rs, 1));
                 }
@@ -121,7 +133,7 @@ public class CompanyDBDao implements CompanyDao {
             throw new SystemMalfunctionException("Unable to get all companies! " + e.getMessage());
         } finally {
             ConnectionPool.getInstance().putConnection(connection);
-            StatementUtils.closeAll(preStmt);
+            StatementUtils.closeAll(callStmt);
         }
         return companies;
     }
@@ -174,6 +186,40 @@ public class CompanyDBDao implements CompanyDao {
             StatementUtils.closeAll(preStmt);
         }
         return company;
+    }
+
+    @Override
+    public Collection<Company> getCompanyByName(String name) throws NoSuchCompanyException {
+        connection = ConnectionPool.getInstance().getConnection();
+        try {
+            preStmt = connection.prepareStatement(Schema.SELECT_COMPANY_BY_NAME);
+            preStmt.setString(1, name);
+            ResultSet rs = preStmt.executeQuery();
+            return DBUtilSetter.resultSetToCompanySet(rs);
+        } catch (SQLException e) {
+            throw new NoSuchCompanyException("Unable to get company!");
+        } finally {
+            ConnectionPool.getInstance().putConnection(connection);
+            StatementUtils.closeAll(preStmt);
+        }
+    }
+
+    @Override
+    public Optional<Company> getOptCompanyById(long id) {
+        connection = ConnectionPool.getInstance().getConnection();
+        try {
+            preStmt = connection.prepareStatement(Schema.SELECT_COMPANY_BY_ID);
+            preStmt.setLong(1, id);
+            ResultSet rs = preStmt.executeQuery();
+            rs.next();
+            company = DBUtilSetter.resultSetToCompany(rs, 1);
+        } catch (SQLException e) {
+            return Optional.empty();
+        } finally {
+            ConnectionPool.getInstance().putConnection(connection);
+            StatementUtils.closeAll(preStmt);
+        }
+        return Optional.of(company);
     }
 
     @Override

@@ -5,6 +5,7 @@ import model.Company;
 import model.Coupon;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface CompanyDao {
 
@@ -12,7 +13,7 @@ public interface CompanyDao {
 
     Company getCompany();
 
-    void removeCompany(long id) throws NoSuchCompanyException;
+    void removeCompany(long id);
 
     Company updateCompany(Company company) throws NoSuchCompanyException;
 
@@ -25,4 +26,8 @@ public interface CompanyDao {
     Collection<Company> getAllCompaniesAndCoupons();
 
     Company getCompanyById(long id) throws NoSuchCompanyException;
+
+    Collection<Company> getCompanyByName(String name) throws NoSuchCompanyException;
+
+    Optional<Company> getOptCompanyById(long id);
 }

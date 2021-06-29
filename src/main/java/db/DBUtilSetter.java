@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,10 +27,14 @@ public class DBUtilSetter {
 
     public static Set<Coupon> resultSetToCouponSet(ResultSet resultRow) throws SQLException {
         Set<Coupon> coupons = new HashSet<>();
-        while (resultRow.next()) {
-            coupons.add(resultSetToCoupon(resultRow));
-        }
+        while (resultRow.next()) coupons.add(resultSetToCoupon(resultRow));
         return coupons;
+    }
+
+    public static Collection<Company> resultSetToCompanySet(ResultSet rs) throws SQLException {
+        Collection<Company> companies = new ArrayList<>();
+        while (rs.next()) companies.add(resultSetToCompany(rs, 1));
+        return companies;
     }
 
     public static Coupon resultSetToCoupon(ResultSet rs) throws SQLException {
@@ -105,5 +111,6 @@ public class DBUtilSetter {
         preStmt.setString(4, coupon.getImageURL());
         preStmt.setLong(5, coupon.getId());
     }
+
 
 }

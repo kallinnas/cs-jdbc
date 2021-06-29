@@ -14,7 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class ConnectionPool {
     private static ConnectionPool instance;
     private BlockingQueue<Connection> connections;
-    private static final int MAX_CONNECTIONS = 1;
+    private static final int MAX_CONNECTIONS = 3;
     private static final String CONFIG_DB_PROPERTIES = "src/main/resources/config.properties";
     private static final String CREATE_TABLES = "src/main/resources/createTables";
     private static final String DROP_TABLES = "src/main/resources/dropTables";
