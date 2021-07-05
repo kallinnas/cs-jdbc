@@ -8,19 +8,17 @@ import facade.ui.MenuUI;
 import facade.ui.MenuUIController;
 import model.LoginType;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public abstract class AbsFacade {
 
     public static final String WRONG_INSERT_MSG = "Wrong command number. Try more. ";
     public static final String NO_COUPON = "There is no coupon with such id #%d in your DB.";
     public static final String NO_COMPANY_ID = "There is no company with such id #%d in DB.";
+    public static final String NO_CUSTOMER_ID = "There is no customer with such id #%d in DB.";
     public static final String NO_COMPANY_NAME = "There is no company with such name %s in DB.";
     final String SUCCESS_SENT = "Coupon #%d %s was sent to customer #%d successfully!";
     final String CUSTOMER_HAS_COUPON = "Unable to send as a gift required coupon. Customer with id #%d already has coupon with id #%d.";
-
 
     public static AbsFacade login(String email, String password, LoginType type) throws InvalidLoginException {
         switch (type) {
@@ -39,9 +37,10 @@ public abstract class AbsFacade {
     }
 
     // check if need be void
-    public static AbsFacade registerUser(String email, String password, LoginType type) throws UserAlreadyExistException, InvalidLoginException {
+    public static AbsFacade registerUser(String email, String password, LoginType type) throws UserAlreadyExistException {
         UserDao dao = new UserDBDao();
-        if (!dao.userEmailIsPresent(email) && !email.equals(AdminFacade.getLOGIN())) {
+        if (!dao.userEmailIsPresent(email) &&
+                !email.equals(AdminFacade.getLOGIN())) {
             switch (type) {
                 case COMPANY:
                     dao.createUserCompany(email, password);
@@ -55,8 +54,9 @@ public abstract class AbsFacade {
         } else throw new UserAlreadyExistException("User with such email *" + email + "* already exist in DB");
     }
 
+
     public LoginType userRole(String email) {
-        if (email.equals("a")) return LoginType.ADMIN;
+        if (email.equals(AdminFacade.getLOGIN())) return LoginType.ADMIN;
         return new UserDBDao().getUserRoleByEmail(email);
     }
 
@@ -81,7 +81,7 @@ public abstract class AbsFacade {
      */
     public static void closeMenu() {
         String GO_BACK_MSG = "Return to menu just press Enter";
-        System.out.println(GO_BACK_MSG);
+        System.out.print(GO_BACK_MSG);
         try {
             MenuUI.readContext();
         } catch (IOException e) {// ignore

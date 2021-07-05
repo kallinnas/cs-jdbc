@@ -26,6 +26,21 @@ public class ConnectionPool {
         }
     }
 
+    public void reloadDB() {
+        String line;
+        Statement statement;
+        StringBuilder sb = new StringBuilder();
+        try {
+            statement = getConnection().createStatement();
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(DROP_TABLES));
+            while ((line = bufferedReader.readLine()) != null) sb.append(line);
+            statement.executeUpdate(sb.toString());
+        } catch (SQLException | IOException e) {
+            String msg = String.format("Unable to reload DB (%s) ", e.getMessage());
+            throw new SystemMalfunctionException(msg);
+        }
+    }
+
     public Connection getConnection() {
         try {
             return connections.take();
@@ -40,18 +55,6 @@ public class ConnectionPool {
             connections.put(connection);
         } catch (InterruptedException e) {
             String msg = String.format("Unable to get Connection! (%s) ", e.getMessage());
-            throw new SystemMalfunctionException(msg);
-        }
-    }
-
-    synchronized void closeAllConnections() {
-        Connection connection;
-        try {
-            while ((connection = connections.poll()) != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            String msg = String.format("Unable to close all connections! (%s) ", e.getMessage());
             throw new SystemMalfunctionException(msg);
         }
     }
@@ -76,8 +79,8 @@ public class ConnectionPool {
         return connection;
     }
 
-    private void executeTablesSQL(Connection connection) {
-        Statement statement = null;
+    public void executeTablesSQL(Connection connection) {
+        Statement statement;
         try {
             statement = connection.createStatement();
             BufferedReader bufferedReader = new BufferedReader(new FileReader(CREATE_TABLES));

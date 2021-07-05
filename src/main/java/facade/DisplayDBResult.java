@@ -30,6 +30,10 @@ public class DisplayDBResult {
             "                   Company Name                   |" +
             "                                                           " +
             "Company ImageURL                                                       |";
+    private static final String TABLE_HEAD_CUSTOMER = "|   Id   |"+
+            "                  Customer First Name             |" +
+            "                                                           " +
+            "Customer Last Name                                                     |";
 
 
     private static void columnStringBuilder(double spaceForContext, String context) {
@@ -133,25 +137,17 @@ public class DisplayDBResult {
         System.out.println(TABLE_BORDER);
     }
 
-    public static void showCouponResult(Collection<Coupon> coupons) {
+    public static void showCustomerResult(Collection<Customer> customers) {
         System.out.println(TABLE_BORDER);
-        System.out.println(TABLE_HEAD_COUPON);
+        System.out.println(TABLE_HEAD_CUSTOMER);
         System.out.println(TABLE_BORDER);
-        for (Coupon coupon : coupons) {
+        for (Customer customer : customers) {
             System.out.print("|");
-            columnDigitBuilder(SPACE_FOR_ID, coupon.getId());
+            columnDigitBuilder(SPACE_FOR_ID, customer.getId());
             System.out.print("|");
-            columnDigitBuilder(SPACE_FOR_COMPANY_ID, coupon.getCompanyId());
+            columnDigitBuilder(SPACE_FOR_DESCRIPTION, customer.getFirstName());
             System.out.print("|");
-            columnStringBuilder(SPACE_FOR_DATE, coupon.getStartDate().toString());
-            System.out.print("|");
-            columnDigitBuilder(SPACE_FOR_PRICE, coupon.getPrice());
-            System.out.print("|");
-            columnStringBuilder(SPACE_FOR_TITLE, coupon.getTitle());
-            System.out.print("|");
-            columnStringBuilder(SPACE_FOR_DESCRIPTION, coupon.getDescription());
-            System.out.print("|");
-            columnStringBuilder(SPACE_FOR_IMAGE_URL, coupon.getImageURL());
+            columnStringBuilder(130, customer.getLastName());
             System.out.println("|");
         }
         System.out.println(TABLE_BORDER);
@@ -173,4 +169,6 @@ public class DisplayDBResult {
             DisplayDBResult.showCouponsResult(coupons);
         }
     }
+
+
 }

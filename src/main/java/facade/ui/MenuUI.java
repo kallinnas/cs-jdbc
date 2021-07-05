@@ -39,7 +39,7 @@ public interface MenuUI {
 
     /* DEFAULT METHODS TO SEARCH COMPANY FOR EACH USER ENTITY */
     default void searchCompanyMenu() {
-        System.out.println(SEARCH_COMPANY_MENU);
+        System.out.print(SEARCH_COMPANY_MENU);
         try {
             switch (MenuUI.readCommandNumber()) {
                 case 1:
@@ -101,7 +101,7 @@ public interface MenuUI {
 
     /* DEFAULT METHODS TO SEARCH COUPON FOR EACH USER ENTITY */
     default void searchCouponMenu() {
-        System.out.println(SEARCH_COUPON);
+        System.out.print(SEARCH_COUPON);
         try {
             switch (readCommandNumber()) {
                 case 1:
@@ -118,6 +118,7 @@ public interface MenuUI {
                     searchCouponsByPriceMoreThan();
                 case 7:
                     searchCouponsByCompanyId();
+                    searchCouponMenu();
                 case 8:
                     couponMenu();
                 default:
@@ -146,7 +147,6 @@ public interface MenuUI {
                 System.out.println("There is no company with such id #" + id);
             }
         }
-        searchCouponMenu();
     }
 
     default void searchCouponsByPriceMoreThan() {

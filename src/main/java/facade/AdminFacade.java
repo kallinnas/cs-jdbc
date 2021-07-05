@@ -1,5 +1,6 @@
 package facade;
 
+import db.ConnectionPool;
 import db.dao.*;
 import ex.InvalidLoginException;
 import ex.NoSuchCompanyException;
@@ -9,12 +10,15 @@ import facade.ui.MenuUI;
 import lombok.*;
 import model.Company;
 import model.Coupon;
+import model.Customer;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static facade.ui.MenuUI.readContext;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,10 +42,9 @@ public class AdminFacade extends AbsFacade {
 
     private boolean isNotRequiredType;
 
+    private Customer customer;
     private Company company;
     private Coupon coupon;
-    private Collection<Coupon> coupons;
-
 
     AbsFacade initFacade(String email, String password) throws InvalidLoginException {
         if (email.equals(LOGIN) && password.equals(PASSWORD)) {
@@ -60,10 +63,29 @@ public class AdminFacade extends AbsFacade {
         this.userDao = new UserDBDao();
     }
 
+    /* ADMIN */
     public void runAdminFacade() {
         System.out.println("Welcome to Admin control panel!");
         ui.mainMenu();
     }
+
+    public void reloadDB() throws IOException {
+        System.out.print("Are you sure that you want to remove all data from DB? Y/N ");
+        val userAnswer = readContext();
+        switch (userAnswer.toLowerCase()) {
+            case "y":
+                ConnectionPool.getInstance().reloadDB();
+                ConnectionPool.getInstance().executeTablesSQL(ConnectionPool.getInstance().getConnection());
+                System.out.println("DB was reloaded successfully! All data destroyed.");
+                break;
+            case "n":
+                System.out.println("DB was not reloaded.");
+                break;
+            default:
+                System.out.println(WRONG_INSERT_MSG);
+        }
+    }
+
 
     /* COMPANY */
     public void removeCompany() {
@@ -72,7 +94,7 @@ public class AdminFacade extends AbsFacade {
         try {
             while (isNotRequiredType) {
                 System.out.print("Insert id of company that you want to delete:");
-                getExistCompany(id = Long.parseLong(MenuUI.readContext()));
+                getExistCompany(id = Long.parseLong(readContext()));
             }
             DisplayDBResult.showCompanyResult(Collections.singleton(company));
             beforeRemoveCompany(id);
@@ -84,20 +106,19 @@ public class AdminFacade extends AbsFacade {
         ui.companyMenu();
     }
 
-
     public void updateCompany() {
         long id = 0;
         try {
             System.out.print("Enter id # of company for an update, to get back press just enter:");
-            val s = MenuUI.readContext();
+            val s = readContext();
             if (!s.equals("")) {
                 id = Long.parseLong(s);
                 company = companyDao.getCompanyById(id);
                 if (company != null) {
                     System.out.print("Update name company: ");
-                    company.setName(MenuUI.readContext());
+                    company.setName(readContext());
                     System.out.print("Update logo-url: ");
-                    company.setImageURL(MenuUI.readContext());
+                    company.setImageURL(readContext());
                     company = companyDao.updateCompany(company);
                     System.out.println("Company name " + company.getName() +
                             " was just set successfully!");
@@ -112,14 +133,6 @@ public class AdminFacade extends AbsFacade {
         }
     }
 
-    public Company getCompanyById(long id) throws NoSuchCompanyException {
-        val company = companyDao.getAllCompaniesAndCoupons().stream()
-                .filter(c -> c.getId() == id)
-                .findAny();
-        if (company.isPresent()) return company.get();
-        else throw new NoSuchCompanyException("Company with id " + id + " is not exist!");
-    }
-
 
     /* COUPON */
     public void updateCoupon() {
@@ -127,22 +140,22 @@ public class AdminFacade extends AbsFacade {
         try {
             while (isNotRequiredType) {
                 System.out.print("Insert id of coupon that you want to update:");
-                val id = Long.parseLong(MenuUI.readContext());
+                val id = Long.parseLong(readContext());
                 getExistCoupon(id);
             }
             System.out.print("Update coupon title from " + coupon.getTitle() + " to:");
-            coupon.setTitle(MenuUI.readContext());
+            coupon.setTitle(readContext());
             isNotRequiredType = true;
             while (isNotRequiredType) {
                 System.out.print("Update coupon price from " + coupon.getPrice() + " to:");
-                double price = Double.parseDouble(MenuUI.readContext());
+                double price = Double.parseDouble(readContext());
                 coupon.setPrice(price);
                 isNotRequiredType = false;
             }
             System.out.print("Update coupon description " + coupon.getDescription() + " to:");
-            coupon.setDescription(MenuUI.readContext());
+            coupon.setDescription(readContext());
             System.out.print("Update coupon image from " + coupon.getImageURL() + " to:");
-            coupon.setImageURL(MenuUI.readContext());
+            coupon.setImageURL(readContext());
         } catch (IOException e) {
             System.out.print(WRONG_INSERT_MSG);
             updateCoupon();
@@ -159,7 +172,7 @@ public class AdminFacade extends AbsFacade {
         try {
             while (isNotRequiredType) {
                 System.out.print("Insert id of coupon that you want to delete:");
-                getExistCoupon(id = Long.parseLong(MenuUI.readContext()));
+                getExistCoupon(id = Long.parseLong(readContext()));
             }
             DisplayDBResult.showCouponsResult(Collections.singleton(coupon));
             beforeRemoveCoupon(id);
@@ -177,12 +190,12 @@ public class AdminFacade extends AbsFacade {
             isNotRequiredType = true;
             while (isNotRequiredType) {
                 System.out.print("Enter coupon id that you want to send: ");
-                getExistCoupon(Long.parseLong(MenuUI.readContext()));
+                getExistCoupon(Long.parseLong(readContext()));
             }
             isNotRequiredType = true;
             while (isNotRequiredType) {
                 System.out.print("Enter customer id to send a coupon: ");
-                ownerId.set(Long.parseLong(MenuUI.readContext()));
+                ownerId.set(Long.parseLong(readContext()));
                 if (customerDao.getCustomerById(ownerId.get()) != null) isNotRequiredType = false;
             }
             couponDao.getCouponsByCustomerId(ownerId.get()).stream()
@@ -198,6 +211,122 @@ public class AdminFacade extends AbsFacade {
         System.out.println(String.format(SUCCESS_SENT, coupon.getId(), coupon.getTitle(), ownerId.get()));
         ui.couponMenu();
     }
+
+
+    /* CUSTOMER */
+    public void getAllCustomers() {
+        DisplayDBResult.showCustomerResult(customerDao.getAllCustomers());
+        closeMenu();
+    }
+
+    public void searchCustomerById() {
+        while (true) {
+            long id = 0;
+            System.out.print("Enter customer id:");
+            try {
+                id = Long.parseLong(readContext());
+                DisplayDBResult.showCustomerResult(Collections
+                        .singleton(new CustomerDBDao().getCustomerById(id)));
+                AbsFacade.closeMenu();
+                break;
+            } catch (IOException e) {
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
+            } catch (NoSuchCustomerException e) {
+                System.out.println(String.format(AbsFacade.NO_CUSTOMER_ID, id));
+            }
+        }
+        ui.searchCustomerMenu();
+    }
+
+    public void searchCustomerByFirstName() {
+        while (true) {
+            String name = "";
+            System.out.print("Enter customer's first name:");
+            try {
+                name = MenuUI.readContext();
+                val customers = new CustomerDBDao().getCustomerByFirstName(name);
+                if (customers.isEmpty()) {
+                    throw new NoSuchCustomerException(String.format(AbsFacade.NO_COMPANY_NAME, name));
+                }
+                DisplayDBResult.showCustomerResult(customers);
+                AbsFacade.closeMenu();
+                break;
+            } catch (IOException e) {
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
+            } catch (NoSuchCustomerException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        ui.searchCustomerMenu();
+    }
+
+    public void searchCustomerByLastName() {
+        while (true) {
+            String name = "";
+            System.out.print("Enter customer's last name:");
+            try {
+                name = MenuUI.readContext();
+                val customers = new CustomerDBDao().getCustomerByLastName(name);
+                if (customers.isEmpty()) {
+                    throw new NoSuchCustomerException(String.format(AbsFacade.NO_COMPANY_NAME, name));
+                }
+                DisplayDBResult.showCustomerResult(customers);
+                AbsFacade.closeMenu();
+                break;
+            } catch (IOException e) {
+                System.out.println(AbsFacade.WRONG_INSERT_MSG);
+            } catch (NoSuchCustomerException e) {
+                System.out.println(String.format(AbsFacade.NO_COMPANY_NAME, name));
+            }
+        }
+        ui.searchCustomerMenu();
+    }
+
+    public void updateCustomer() {
+        long id = 0;
+        try {
+            System.out.print("Enter id # of customer for an update, to get back press just enter:");
+            val s = readContext();
+            if (!s.equals("")) {
+                id = Long.parseLong(s);
+                customer = customerDao.getCustomerById(id);
+                if (customer != null) {
+                    System.out.print("Update customer's first name " + customer.getFirstName() + " to: ");
+                    customer.setFirstName(readContext());
+                    System.out.print("Update customer's last name " + customer.getLastName() + " to: ");
+                    customer.setLastName(readContext());
+                    customer = customerDao.updateCustomer(customer);
+                    System.out.println("Customer first name " + customer.getFirstName() +
+                            " was just set successfully!");
+                }
+            } else ui.customerMenu();
+        } catch (IOException e) {
+            System.out.println(WRONG_INSERT_MSG);
+            updateCustomer();
+        } catch (NoSuchCustomerException e) {
+            System.out.println(String.format(NO_CUSTOMER_ID, id));
+            updateCustomer();
+        }
+    }
+
+    public void removeCustomer() {
+        isNotRequiredType = true;
+        long id = 0;
+        try {
+            while (isNotRequiredType) {
+                System.out.print("Insert id of customer that you want to delete:");
+                getExistCustomer(id = Long.parseLong(readContext()));
+            }
+            DisplayDBResult.showCustomerResult(Collections.singleton(customer));
+            beforeRemoveCustomer(id);
+        } catch (IOException e) {
+            System.out.print(WRONG_INSERT_MSG);
+            removeCompany();
+        }
+        closeMenu();
+        ui.customerMenu();
+    }
+
 
     // Takes off the load from update and remove Coupon methods
     private void getExistCoupon(long id) {
@@ -216,9 +345,17 @@ public class AdminFacade extends AbsFacade {
                 }, () -> System.out.println(String.format(NO_COMPANY_ID, id)));
     }
 
+    private void getExistCustomer(long id) {
+        customerDao.getOptCustomerById(id)
+                .ifPresentOrElse((value) -> {
+                    customer = value;
+                    isNotRequiredType = false;
+                }, () -> System.out.println(String.format(NO_CUSTOMER_ID, id)));
+    }
+
     private void beforeRemoveCoupon(long id) throws IOException, SQLException {
         System.out.print("Are you sure that you want to delete this coupon? Y/N ");
-        val userAnswer = MenuUI.readContext();
+        val userAnswer = readContext();
         switch (userAnswer.toLowerCase()) {
             case "y":
                 couponDao.removeCoupon(id);
@@ -235,7 +372,7 @@ public class AdminFacade extends AbsFacade {
 
     private void beforeRemoveCompany(long id) throws IOException {
         System.out.print("Are you sure that you want to delete this company? Y/N ");
-        val userAnswer = MenuUI.readContext();
+        val userAnswer = readContext();
         switch (userAnswer.toLowerCase()) {
             case "y":
                 companyDao.removeCompany(id);
@@ -249,4 +386,22 @@ public class AdminFacade extends AbsFacade {
                 beforeRemoveCompany(id);
         }
     }
+
+    private void beforeRemoveCustomer(long id) throws IOException {
+        System.out.print("Are you sure that you want to delete this customer? Y/N ");
+        val userAnswer = readContext();
+        switch (userAnswer.toLowerCase()) {
+            case "y":
+                customerDao.removeCustomer(id);
+                System.out.println("Customer was removed successfully!");
+                break;
+            case "n":
+                System.out.println("Customer was not removed.");
+                break;
+            default:
+                System.out.println(WRONG_INSERT_MSG);
+                beforeRemoveCustomer(id);
+        }
+    }
+
 }

@@ -107,7 +107,7 @@ public class CompanyDBDao implements CompanyDao {
             ResultSet rs = preStmt.executeQuery();
             coupons = DBUtilSetter.resultSetToCouponSet(rs);
         } catch (SQLException e) {
-            String msg = String.format("Unable to update company by id#(%d)! (%s) ", id, e.getMessage());
+            String msg = String.format("Unable to get company coupons by company_id#(%d)! (%s) ", id, e.getMessage());
             throw new SystemMalfunctionException(msg);
         } finally {
             ConnectionPool.getInstance().putConnection(connection);

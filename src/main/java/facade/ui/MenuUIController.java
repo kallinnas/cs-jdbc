@@ -12,7 +12,7 @@ import model.LoginType;
 import java.io.IOException;
 
 @Data
-public class MenuUIController{
+public class MenuUIController {
     private static String email;
     private static String password;
     private static LoginType type;
@@ -37,7 +37,7 @@ public class MenuUIController{
             "\033[32mcustomer\033[0m press - " +
             "\033[32m1\033[0m or as a " +
             "\033[32mcompany\033[0m press - " +
-            "\033[32m2\033[0m and than enter: ";
+            "\033[32m2\033[0m, press \033[32m3\033[0m to return back: ";
 
     public void run() {
         appRunning = true;
@@ -59,7 +59,7 @@ public class MenuUIController{
                     System.out.print("Registrate your email address: ");
                     email = MenuUI.readContext();
                     System.out.print("Create your password:");
-                    password= MenuUI.readContext();
+                    password = MenuUI.readContext();
                     AbsFacade.registerUser(email, password, LoginType.CUSTOMER);
                     initGuestMenuUI(email, password);
                     break;
@@ -67,18 +67,22 @@ public class MenuUIController{
                     System.out.print("Registrate company email address: ");
                     email = MenuUI.readContext();
                     System.out.print("Create your password: ");
-                    password= MenuUI.readContext();
-                    AbsFacade.registerUser(email, password, LoginType.COMPANY);;
+                    password = MenuUI.readContext();
+                    AbsFacade.registerUser(email, password, LoginType.COMPANY);
+                    ;
                     initGuestMenuUI(email, password);
                     break;
+                case 3:
+                    authorisationUser();
                 default:
                     throw new NumberFormatException();
             }
-        } catch (NumberFormatException | InvalidLoginException | IOException e) {
+        } catch (NumberFormatException | IOException e) {
             System.out.println(WRONG_INSERT_MSG + e.getMessage());
         } catch (UserAlreadyExistException e) {
-            System.out.println("User with such email *" + email +"* already exist!" + e.getMessage());
+            System.out.println("User with such email *" + email + "* already exist!" + e.getMessage());
         }
+        registrationUser();
     }
 
     void logout() {
@@ -94,7 +98,7 @@ public class MenuUIController{
         adminMenuUI = null;
     }
 
-// check!
+    // check!
     static void stopApp() {
         appRunning = false;
         System.exit(0);
@@ -123,6 +127,7 @@ public class MenuUIController{
             System.out.println(WRONG_INSERT_MSG);
             authorisationUser();
         }
+        authorisationUser();
     }
 
     public void initGuestMenuUI(String email, String password) {

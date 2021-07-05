@@ -30,10 +30,22 @@ public class Schema {
     private static final String DROP_IF = "DROP PROCEDURE IF EXISTS";
 
     /* USER */
+    public static final String SELECT_USER_BY_EMAIL = "SELECT * FROM " +
+            TABLE_NAME_USER + " WHERE " + COL_EMAIL + "=?";
+
+    public static final String SELECT_USER_ROLE_BY_EMAIL = "SELECT " + COL_ROLE + " FROM " +
+            TABLE_NAME_USER + " WHERE " + COL_EMAIL + "=?";
+
     public static final String DELETE_USER_COMPANY = "DELETE FROM " +
             TABLE_NAME_USER + " WHERE " +
             COL_ROLE + "=2 AND " +
             COL_CLIENT_ID + "=?";
+
+    public static final String DELETE_USER_CUSTOMER = "DELETE FROM " +
+            TABLE_NAME_USER + " WHERE " +
+            COL_ROLE + "=1 AND " +
+            COL_CLIENT_ID + "=?";
+
 
     /* COMPANY */
     public static final String SELECT_COMPANY_BY_ID = "SELECT * FROM " +
@@ -63,6 +75,8 @@ public class Schema {
             TABLE_NAME_COMPANY + " WHERE " +
             COL_ID + "=?";
 
+
+    /* COUPON */
     public static final String CREATE_COUPON = "INSERT INTO " +
             TABLE_NAME_COUPON + " (" +
             COL_COMPANY_ID + "," +
@@ -74,7 +88,6 @@ public class Schema {
             TABLE_NAME_COUPON + " WHERE " +
             COL_TITLE + "=?";
 
-    /* COUPON */
     public static final String DELETE_COMPANY_COUPONS = "DELETE FROM " +
             TABLE_NAME_COUPON + " WHERE " +
             COL_COMPANY_ID + "=?";
@@ -107,10 +120,21 @@ public class Schema {
             TABLE_NAME_COUPON + " WHERE " +
             COL_ID + "=?";
 
-    public static final String DELETE_COUPON = "DELETE FROM " +
-            TABLE_NAME_COUPON + " WHERE " + COL_ID + "=?";
-
     /* CUSTOMER */
+    public static final String DELETE_CUSTOMER = "DELETE FROM " +
+            TABLE_NAME_CUSTOMER + " WHERE " +
+            COL_ID + "=?";
+
+    public static final String SELECT_CUSTOMER_BY_LAST_NAME = "SELECT * FROM " +
+            TABLE_NAME_CUSTOMER + " WHERE " +
+            COL_LAST_NAME + "=?";
+
+    public static final String SELECT_CUSTOMER_BY_FIRST_NAME = "SELECT * FROM " +
+            TABLE_NAME_CUSTOMER + " WHERE " +
+            COL_FIRST_NAME + "=?";
+
+    public static final String SELECT_ALL_CUSTOMERS = "SELECT * FROM " + TABLE_NAME_CUSTOMER;
+
     public static final String DELETE_COMPANY_COUPONS_FROM_CUSTOMER = "DELETE FROM " +
             TABLE_NAME_CUSTOMER_COUPON + " WHERE " +
             COL_COUPON_ID + "=?";
@@ -130,12 +154,6 @@ public class Schema {
             TABLE_NAME_CUSTOMER_COUPON + " WHERE " +
             COL_CUSTOMER_ID + "=? AND " + COL_COUPON_ID + "=?";
 
-    /* USER */
-    public static final String SELECT_USER_BY_EMAIL = "SELECT * FROM " +
-            TABLE_NAME_USER + " WHERE " + COL_EMAIL + "=?";
-
-    public static final String SELECT_USER_ROLE_BY_EMAIL = "SELECT " + COL_ROLE + " FROM " +
-            TABLE_NAME_USER + " WHERE " + COL_EMAIL + "=?";
 
     /*             ****************** STORED PROCEDURES*******************      */
 
@@ -200,7 +218,9 @@ public class Schema {
     public static final String GENERATE_PROC_DELETE_COUPON = DROP_IF + " `delete_coupon`; " +
             "CREATE PROCEDURE `delete_coupon`(IN COU_ID INT)" +
             "BEGIN " +
-            "DELETE FROM " + TABLE_NAME_COUPON + " WHERE " + COL_ID + "=COU_ID; " +
+            "DELETE FROM " + TABLE_NAME_CUSTOMER_COUPON +
+            " WHERE " + COL_COUPON_ID + "=COU_ID;" +
+            "DELETE FROM " + TABLE_NAME_COUPON + " WHERE " + COL_ID + "=LAST_INSERT_ID(); " +
             "END";
 
     public static final String GENERATE_PROC_USER_LOGIN = DROP_IF + "`user_login`; " +
